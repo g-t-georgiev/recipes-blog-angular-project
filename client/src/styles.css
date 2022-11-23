@@ -1,9 +1,23 @@
 @import url('./assets/styles/typography.css');
 
+:root {
+    --font-family: Poppins;
+    --font-weight--main: 400;
+    --font-style--main: normal;
+    --font-size: 14px;
+}
+
 *,
 *::after,
 *::before {
     box-sizing: border-box;
     padding: 0;
     margin: 0;
+}
+
+body {
+    font-family: var(--font-family);
+    font-size: var(--font-size);
+    font-weight: var(--font-weight--main);
+    font-style: var(--font-style--main);
 }
