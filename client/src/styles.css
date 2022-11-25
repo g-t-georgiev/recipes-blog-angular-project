@@ -3,8 +3,9 @@
 :root {
     --background-color--primary: #f5f1f0;
     --color--primary: #222;
-    --color--secondary: #0374b5;
-
+    --color--active: hsl(220, 90%, 35%);
+    --color--secondary: hsl(220, 90%, 56%);
+    
     --font-family: Poppins;
     --font-weight--primary: 400;
     --font-style--primary: normal;
@@ -34,8 +35,8 @@ a {
     color: var(--color--primary);
 }
 
-a:active {
-    color: var(--color--secondary);
+a:active { 
+    color: var(--color--active);
 }
 
 a:hover {
