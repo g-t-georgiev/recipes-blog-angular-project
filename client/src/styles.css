@@ -30,6 +30,13 @@ body {
     font-weight: var(--font-weight--primary);
 }
 
+.theme--dark {
+    --background-color--primary: #1a191e;
+    --color--primary: #f5f1f0;
+    --color--active: hsl(340, 81%, 35%);
+    --color--secondary: hsl(340, 81%, 60%);
+}
+
 a {
     text-decoration: underline;
     color: var(--color--primary);
