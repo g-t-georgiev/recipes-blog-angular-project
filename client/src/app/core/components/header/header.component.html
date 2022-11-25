@@ -1,1 +1,17 @@
-<p>header works!</p>
+<header>
+
+    <h2>Recipes</h2>
+
+    <nav>
+
+        <a routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" ariaCurrentWhenActive="page">Home</a>
+        <a routerLink="/recipes" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" ariaCurrentWhenActive="page">Recipes</a>
+        
+        <ng-container>
+            <a routerLink="/users/login" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" ariaCurrentWhenActive="page">Sign in</a>
+            <a routerLink="/users/register" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" ariaCurrentWhenActive="page">Sign up</a>
+        </ng-container>
+
+    </nav>
+
+</header>
