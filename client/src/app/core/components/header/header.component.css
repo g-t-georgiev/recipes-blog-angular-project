@@ -2,7 +2,6 @@
     --header-logo__font-size: 1.5rem;
 
     --header-link__font-size: 1.3rem;
-    --header-link__color: darkgreen;
 }
 
 header {
@@ -23,7 +22,6 @@ nav {
 }
 
 nav a {
-    color: var(--header-link__color);
     font-size: var(--header-link__font-size);
 }
 
