@@ -22,7 +22,6 @@ input[type="checkbox"] + label::before {
     height: 100%;
 
     background-color: var(--toggle-switch__bg-color);
-    color: #222;
     outline: 2px solid var(--toggle-switch__bg-color);
 
     border-radius: 25%/50%;
@@ -36,34 +35,21 @@ input[type="checkbox"]:checked + label::before {
 }
 
 input[type="checkbox"] + label::after {
-    content: '\2012';
+    content: '';
 
     position: absolute;
     top: 0;
     left: -50%;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
     width: 23%;
     height: 100%;
 
     background-color: var(--toggle-switch__fg-color);
-    color: #222;
-
-    font-size: 1rem;
-    line-height: 2;
-
     border-radius: 50%;
+
     transition: left .3s ease-in-out;
 }
 
 input[type="checkbox"]:checked + label::after {
-    content: '\002b';
-
-    font-size: 1.5rem;
-    line-height: 1.5;
-
     left: -22%;
 }
