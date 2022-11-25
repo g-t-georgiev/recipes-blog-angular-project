@@ -1,8 +1,9 @@
 @import url('./assets/styles/typography.css');
 
 :root {
-    --background-color-primary: #f5f1f0;
-    --color-primary: #222; 
+    --background-color--primary: #f5f1f0;
+    --color--primary: #222;
+    --color--secondary: #0374b5;
 
     --font-family: Poppins;
     --font-weight--primary: 400;
@@ -19,8 +20,8 @@
 }
 
 body {
-    background-color: var(--background-color-primary);
-    color: var(--color-primary);
+    background-color: var(--background-color--primary);
+    color: var(--color--primary);
 
     font-family: var(--font-family);
     font-size: var(--font-size);
@@ -29,14 +30,14 @@ body {
 }
 
 a {
-    text-decoration: none;
-    color: #0374b5;
+    text-decoration: underline;
+    color: var(--color--primary);
 }
 
 a:active {
-    color: #bf32a4;
+    color: var(--color--secondary);
 }
 
 a:hover {
-    text-decoration: underline;
+    color: var(--color--secondary);
 }
