@@ -5,11 +5,14 @@ import { HomeComponent } from './components/home/home.component';
 
 
 @NgModule({
-  declarations: [
-    HomeComponent
-  ],
-  imports: [
-    CommonModule
-  ]
+	declarations: [
+		HomeComponent
+	],
+	imports: [
+		CommonModule
+	],
+	exports: [
+		HomeComponent
+	]
 })
 export class ViewsModule { }
