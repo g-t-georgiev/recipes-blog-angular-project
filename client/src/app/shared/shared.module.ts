@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DarkModeSwitchComponent } from './components/dark-mode-switch/dark-mode-switch.component';
+import { FormsModule } from '@angular/forms';
 
 
 
@@ -9,7 +10,8 @@ import { DarkModeSwitchComponent } from './components/dark-mode-switch/dark-mode
 		DarkModeSwitchComponent
 	],
 	imports: [
-		CommonModule
+		CommonModule,
+		FormsModule
 	],
 	exports: [
 		DarkModeSwitchComponent
