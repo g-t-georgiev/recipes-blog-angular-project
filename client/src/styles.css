@@ -21,3 +21,7 @@ body {
     font-weight: var(--font-weight--main);
     font-style: var(--font-style--main);
 }
+
+a {
+    text-decoration: none;
+}
