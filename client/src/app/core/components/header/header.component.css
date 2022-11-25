@@ -27,6 +27,7 @@ nav a {
 
 .active {
     color: #bf32a4;
+    text-decoration: underline;
 }
 
 .logo {
