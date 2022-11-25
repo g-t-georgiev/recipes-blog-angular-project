@@ -1,0 +1,32 @@
+:host {
+    --header-logo__font-size: 1.5rem;
+
+    --header-link__font-size: 1.3rem;
+    --header-link__color: darkgreen;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+
+    padding-block: 1rem;
+    padding-inline: 1.5rem;
+
+    
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+
+    flex-basis: 25%;
+}
+
+nav a {
+    color: var(--header-link__color);
+    font-size: var(--header-link__font-size);
+}
+
+.logo {
+    font-size: var(--header-logo__font-size);
+}
