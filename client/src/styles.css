@@ -1,10 +1,13 @@
 @import url('./assets/styles/typography.css');
 
 :root {
+    --background-color-primary: #f5f1f0;
+    --color-primary: #222; 
+
     --font-family: Poppins;
-    --font-weight--main: 400;
-    --font-style--main: normal;
-    --font-size: 14px;
+    --font-weight--primary: 400;
+    --font-style--primary: normal;
+    --font-size: 16px;
 }
 
 *,
@@ -16,12 +19,24 @@
 }
 
 body {
+    background-color: var(--background-color-primary);
+    color: var(--color-primary);
+
     font-family: var(--font-family);
     font-size: var(--font-size);
-    font-weight: var(--font-weight--main);
-    font-style: var(--font-style--main);
+    font-style: var(--font-style--primary);
+    font-weight: var(--font-weight--primary);
 }
 
 a {
     text-decoration: none;
+    color: #0374b5;
+}
+
+a:active {
+    color: #bf32a4;
+}
+
+a:hover {
+    text-decoration: underline;
 }
