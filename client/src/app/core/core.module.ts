@@ -1,8 +1,9 @@
-import { NgModule } from '@angular/core';
+import { ModuleWithProviders, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from './components/header/header.component';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
+import { DarkModeSwitchService } from './services/dark-mode-switch.service';
 
 
 
@@ -19,4 +20,15 @@ import { SharedModule } from '../shared/shared.module';
 		HeaderComponent
 	]
 })
-export class CoreModule { }
+export class CoreModule {
+
+	static forRoot(): ModuleWithProviders<CoreModule> {
+		return {
+			ngModule: CoreModule,
+			providers: [
+				DarkModeSwitchService
+			]
+		}
+	}
+
+}
