@@ -9,9 +9,7 @@ import { DarkModeSwitchService } from './core/services/dark-mode-switch.service'
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit, OnDestroy {
-
-    private darkModeToggleSubscription!: Subscription;
+export class AppComponent implements OnInit {
 
     constructor(
         private themeService: DarkModeSwitchService,
@@ -20,7 +18,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
 
-        this.darkModeToggleSubscription = this.state.select(globalState => globalState.darkModeOn).subscribe({
+        this.state.select(globalState => globalState.darkModeOn).subscribe({
             next: (darkModeOn: boolean): void => {
 
                 // console.log(
@@ -37,10 +35,6 @@ export class AppComponent implements OnInit, OnDestroy {
             ({ matches }) => this.themeService.switchDarkMode(matches)
         );
 
-    }
-
-    ngOnDestroy(): void {
-        this.darkModeToggleSubscription.unsubscribe?.();
     }
 
 }
