@@ -16,7 +16,7 @@ import { IRootState, darkModeReducer } from './+state';
     imports: [
         BrowserModule,
         AppRoutingModule,
-        CoreModule,
+        CoreModule.forRoot(),
         StoreModule.forRoot<IRootState>({
             darkModeOn: darkModeReducer
         }, {})
