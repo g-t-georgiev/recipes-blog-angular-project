@@ -5,8 +5,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
 import { HomeComponent } from './home/home.component';
-import { SharedModule } from './shared/shared.module';
 import { StoreModule } from '@ngrx/store';
+import { IRootState, darkModeReducer } from './+state';
 
 @NgModule({
     declarations: [
@@ -17,7 +17,9 @@ import { StoreModule } from '@ngrx/store';
         BrowserModule,
         AppRoutingModule,
         CoreModule,
-        StoreModule.forRoot({}, {})
+        StoreModule.forRoot<IRootState>({
+            darkModeOn: darkModeReducer
+        }, {})
     ],
     providers: [],
     bootstrap: [AppComponent]
