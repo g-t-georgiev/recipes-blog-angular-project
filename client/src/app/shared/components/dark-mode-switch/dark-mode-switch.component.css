@@ -47,7 +47,7 @@ input[type="checkbox"] + label::after {
     background-color: var(--toggle-switch__fg-color);
     border-radius: 50%;
 
-    transition: left .3s ease-in-out;
+    transition: left .1s ease-in-out;
 }
 
 input[type="checkbox"]:checked + label::after {
