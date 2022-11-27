@@ -1,0 +1,40 @@
+{
+	"name": "recipes-blog-api",
+	"version": "1.0.0",
+	"description": "REST API for the angular front-end application Recipes Blog",
+	"type": "module",
+	"main": "index.js",
+	"scripts": {
+		"start": "node .",
+		"devStart": "nodemon ."
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/g-t-georgiev/recipes-blog-angular-project.git#main"
+	},
+	"keywords": [
+		"REST", 
+		"api", 
+		"recipe-blog", 
+		"recipes", 
+		"blog"
+	],
+	"author": "Georgi Georgiev",
+	"license": "UNLICENSED",
+	"bugs": {
+		"url": "https://github.com/g-t-georgiev/recipes-blog-angular-project/issues"
+	},
+	"homepage": "https://github.com/g-t-georgiev/recipes-blog-angular-project/tree/main#readme",
+	"dependencies": {
+		"bcrypt": "^5.1.0",
+		"cookie-parser": "^1.4.6",
+		"cors": "^2.8.5",
+		"dotenv": "^16.0.3",
+		"express": "^4.18.2",
+		"jsonwebtoken": "^8.5.1",
+		"mongoose": "^6.7.3"
+	},
+	"devDependencies": {
+		"nodemon": "^2.0.20"
+	}
+}
