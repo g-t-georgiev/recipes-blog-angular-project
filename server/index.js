@@ -1,28 +1,28 @@
-import express from 'express';
-import dotenv from 'dotenv';
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
+(async function() {
+	try {
 
-import dbConnector from './config/db.js';
+		(await import('dotenv')).config();
+		// console.log(process.env);
 
-dotenv.config();
+		const express = (await import('express')).default;
+		const { dirname } = await import('path');
+		const { fileURLToPath } = await import('url');
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
+		const envConfig = (await import('./config/env.config.js')).default;
+		const expressConfig = (await import('./config/express.config.js')).default;
+		const dbConnector = (await import('./config/db.config.js')).default
 
-// attach resolved base path to global object
-// to be available across application scope
-globalThis.__basedir = __dirname;
+		const __dirname = dirname(fileURLToPath(import.meta.url));
+		globalThis.__basedir = __dirname;
 
-const { default: envConfig } = await import('./config/config.js');
-const { default: setupExpress } = await import('./config/express.js');
+		await dbConnector();
 
-dbConnector()
-	.then(() => {
-		
 		const app = express();
-		setupExpress(app);
+		expressConfig(app);
 
 		app.listen(envConfig.port, console.log(`Listening on port ${envConfig.port}!`));
-		
-	})
-	.catch(console.error);
+
+	} catch (err) {
+		console.error(err);
+	}
+})();
