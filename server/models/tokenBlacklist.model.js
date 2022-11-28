@@ -1,6 +1,6 @@
-const mongoose = await import('mongoose');
+import mongoose from 'mongoose';
 
-const env = process.env.NODE_ENV ?? 'development';
+import * as appConfig from '../app.config.js';
 
 const documentExpireTimeOptions = {
     production: 30 * 24 * 3600, // 30 days
@@ -14,6 +14,9 @@ const tokenBlacklistSchema = new Schema({
     token: String,
 }, { timestamps: true });
 
-tokenBlacklistSchema.index({ createdAt: 1 }, { expireAfterSeconds: documentExpireTimeOptions[env] });
+tokenBlacklistSchema.index(
+    { createdAt: 1 }, 
+    { expireAfterSeconds: documentExpireTimeOptions[appConfig.NODE_ENV] }
+);
 
 export const TokenBlacklist = model('TokenBlacklist', tokenBlacklistSchema);

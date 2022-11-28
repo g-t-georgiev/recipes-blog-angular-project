@@ -1,8 +1,10 @@
-const mongoose = await import('mongoose');
-const bcrypt = await import('bcrypt');
+import mongoose from 'mongoose';
+import bcrypt from 'bcrypt';
+
+import * as appConfig from '../app.config.js';
 
 const { Schema, model } = mongoose;
-const saltRounds = Number(process.env.SALTROUNDS) || 5;
+const saltRounds = Number(appConfig.SALTROUNDS) || 5;
 
 const userSchema = new Schema({
     email: {
