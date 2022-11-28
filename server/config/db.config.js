@@ -1,5 +1,7 @@
-const mongoose = await import('mongoose');
-const { default: envConfig } = await import('./config.js');
+import mongoose from 'mongoose';
+
+import envConfig from './env.config.js';
+
 
 const connectOptions = {
 	useNewUrlParser: true,
