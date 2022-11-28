@@ -1,4 +1,4 @@
-const { Theme, Post } = await import('../models/index.js');
+import { Theme } from '../models/index.js';
 
 /**
  * 
@@ -8,102 +8,29 @@ const { Theme, Post } = await import('../models/index.js');
  * @returns {void}
  */
 
-export function getThemes(req, res, next) {
-    Theme.find({})
-        .populate([
-            {
-                path: 'authorId',
-                select: {
-                    username: 1
+export async function getThemes(req, res, next) {
+
+    try {
+
+        const themes = await Theme
+            .find({})
+            .populate([
+                {
+                    path: 'authorId',
+                    select: {
+                        username: 1
+                    }
                 }
-            }
-        ])
-        .then(themes => res.json(themes))
-        .catch(next);
-}
+            ]);
 
-/**
- * 
- * @param {Request} req 
- * @param {Response} res 
- * @param {Callback} next 
- * @returns {void}
- */
-
-export function getTheme(req, res, next) {
-    const { themeId } = req.params;
-
-    Theme.findById(themeId)
-        .populate([
-            {
-                path: 'posts',
-                select: {
-                    __v: 0
-                },
-                populate: {
-                path: 'authorId',
-                select: {
-                    username: 1,
-                }
-                }
-            },
-            {
-                path: 'subscribers'
-            }
-        ])
-        .then(theme => res.json(theme))
-        .catch(next);
-}
-
-/**
- * 
- * @param {Request} req 
- * @param {Response} res 
- * @param {Callback} next 
- * @returns {void}
- */
-
- export function createTheme(req, res, next) {
-    const { title } = req.body;
-    const { _id: userId } = req.user;
-
-    Theme.create({ title, authorId: userId })
-        .then(createdTheme => {
-            if (createdTheme) {
-                res.status(201).json({ message: 'Created theme successfully!', data: createdTheme });
-            } else {
-                res.status(401).json({ message: 'Not allowed!' });
-            }
-        })
-        .catch(next);
-}
-
-/**
- * 
- * @param {Request} req 
- * @param {Response} res 
- * @param {Callback} next 
- * @returns {void}
- */
-
-export function editTheme(req, res, next) {
-    const { title } = req.body;
-    const { themeId } = req.params;
-    const { _id: userId } = req.user;
-
-    // if the userId is not the same as this one of the post, the post will not be deleted
-
-    // Post.findOneAndDelete({ _id: postId, authorId: userId });
+        res
+            .status(200)
+            .json({ data: themes });
     
-    Theme.findByIdAndUpdate(themeId, { title }, { new: true })
-        .then(updatedTheme => {
-            if (updatedTheme) {
-                res.status(201).json({ message: 'Updated theme successfully!', data: updatedTheme });
-            } else {
-                res.status(401).json({ message: 'Not allowed!' });
-            }
-        })
-        .catch(next);
+    } catch (err) {
+
+        next(err);
+    }
 }
 
 /**
@@ -114,22 +41,165 @@ export function editTheme(req, res, next) {
  * @returns {void}
  */
 
-export function deleteTheme(req, res, next) {
-    const { title } = req.body;
-    const { themeId } = req.params;
-    const { _id: userId } = req.user;
+export async function getTheme(req, res, next) {
 
-    // if the userId is not the same as this one of the post, the post will not be deleted
+    try {
 
-    // Post.findOneAndDelete({ _id: postId, authorId: userId });
+        const { themeId } = req.params;
 
-    themeModel.findByIdAndDelete(themeId, { title }, { new: true })
-        .then(deletedTheme => {
-            if (deletedTheme) {
-                res.status(201).json({ message: 'Deleted theme successfully!', data: deletedTheme });
-            } else {
-                res.status(401).json({ message: 'Not allowed!' });
+        const theme = new Theme
+            .findById(themeId)
+            .populate([
+                {
+                    path: 'posts',
+                    select: {
+                        __v: 0
+                    },
+                    populate: {
+                    path: 'authorId',
+                    select: {
+                        username: 1,
+                    }
+                    }
+                },
+                {
+                    path: 'subscribers'
+                }
+            ]);
+
+        res
+            .status(200)
+            .json({ data: theme });
+
+    } catch (err) {
+
+        next(err);
+    }
+}
+
+/**
+ * 
+ * @param {Request} req 
+ * @param {Response} res 
+ * @param {Callback} next 
+ * @returns {void}
+ */
+
+ export async function createTheme(req, res, next) {
+
+    try {
+
+        const { title } = req.body;
+        const { _id: userId } = req.user;
+    
+        const createdTheme = await Theme.create(
+            { 
+                title, 
+                authorId: userId 
             }
-        })
-        .catch(next);
+        );
+
+        if (!createdTheme) {
+
+            return res
+                .status(401)
+                .json({ message: 'Not allowed!' });
+        }
+
+        res
+            .status(201)
+            .json({ 
+                message: 'Created theme successfully!', 
+                data: createdTheme 
+            });
+
+
+    } catch (err) {
+
+        next(err);
+    }
+}
+
+/**
+ * 
+ * @param {Request} req 
+ * @param {Response} res 
+ * @param {Callback} next 
+ * @returns {void}
+ */
+
+export async function editTheme(req, res, next) {
+
+    try {
+
+        const { title } = req.body;
+        const { themeId } = req.params;
+        const { _id: userId } = req.user;
+
+        const updatedTheme = await Theme.findByIdAndUpdate(
+            themeId,
+            { title },
+            { new: true }
+        );
+
+        if (!updatedTheme) {
+
+            return res
+                .status(401)
+                .json({ message: 'Not allowed!' });
+        }
+
+        res
+            .status(201)
+            .json({ 
+                message: 'Updated theme successfully!', 
+                data: updatedTheme 
+            });
+
+    } catch (err) {
+
+        next(err);
+    }
+}
+
+/**
+ * 
+ * @param {Request} req 
+ * @param {Response} res 
+ * @param {Callback} next 
+ * @returns {void}
+ */
+
+export async function deleteTheme(req, res, next) {
+
+    try {
+
+        const { title } = req.body;
+        const { themeId } = req.params;
+        const { _id: userId } = req.user;
+    
+        const deletedTheme = await Theme.findByIdAndDelete(
+            themeId, 
+            { title }, 
+            { new: true }
+        );
+
+        if (!deletedTheme) {
+
+            return res
+                .status(401)
+                .json({ message: 'Not allowed!' });
+        }
+
+        res
+            .status(200)
+            .json({ 
+                message: 'Deleted theme successfully!', 
+                data: deletedTheme 
+            });
+
+    } catch (err) {
+
+        next(err);
+    }
 }

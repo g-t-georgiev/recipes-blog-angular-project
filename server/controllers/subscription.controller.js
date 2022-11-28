@@ -1,23 +1,57 @@
-const { Subscription } = await import('../models/index.js');
+import { Subscription } from '../models/index.js';
 
-export function subscribe(req, res, next) {
-    const { themeId } = req.params;
-    const { _id: userId } = req.user;
+export async function subscribe(req, res, next) {
 
-    // console.log('subscribed to theme ' + themeId);
+    try {
 
-    Subscription.create({ themeId, authorId: userId })
-        .then(x => { res.status(200).json({ message: 'Subscribed successfully!', data: x }) })
-        .catch(next);
+        const { themeId } = req.params;
+        const { _id: userId } = req.user;
+    
+        // console.log('subscribed to theme ' + themeId);
+    
+        const createdSubscription = await Subscription.create(
+            { 
+                themeId, 
+                authorId: userId 
+            }
+        );
+
+        res
+            .status(200)
+            .json({
+                message: 'Subscribed successfully!', 
+                data: createdSubscription
+            });
+
+    } catch (err) {
+
+        next(err);
+    }
 }
 
-export function unsubscribe(req, res, next) {
-    const { themeId } = req.params;
-    const { _id: userId } = req.user;
+export async function unsubscribe(req, res, next) {
 
-    // console.log('unsubscribed to theme ' + themeId);
+    try {
 
-    Subscription.deleteOne({ themeId, authorId: userId })
-        .then(x => { res.status(200).json({ message: 'Unsubscribed successfully!', data: x }) })
-        .catch(next);
+        const { themeId } = req.params;
+        const { _id: userId } = req.user;
+
+        const deletedSubscription = await Subscription.deleteOne(
+            { 
+                themeId, 
+                authorId: userId 
+            }
+        );
+
+        res
+            .status(200)
+            .json({
+                message: 'Unsubscribed successfully!', 
+                data: deletedSubscription
+            })
+
+    } catch (err) {
+        
+        next(err);
+    }
 }

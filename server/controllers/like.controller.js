@@ -1,23 +1,57 @@
-const { Post } = await import('../models/index.js');
+import { Post } from '../models/index.js';
 
- export function like(req, res, next) {
-    const { postId } = req.params;
-    const { _id: userId } = req.user;
+export async function like(req, res, next) {
 
-    // console.log('like');
+    try {
 
-    Post.create({ postId, authorId: userId })
-        .then((x) => { res.status(200).json({ message: 'Liked successfully!', data: x }) })
-        .catch(next);
+        const { postId } = req.params;
+        const { _id: userId } = req.user;
+
+        // console.log('like');
+
+        const createdLike = await Post.create(
+            {
+                postId,
+                authorId: userId
+            }
+        );
+
+        res
+            .status(200)
+            .json({
+                message: 'Liked successfully!',
+                data: createdLike
+            });
+
+    } catch (err) {
+
+        next(err);
+    }
 }
 
-export function unlike(req, res, next) {
-    const { postId } = req.params;
-    const { _id: userId } = req.user;
+export async function unlike(req, res, next) {
 
-    // console.log('unlike');
+    try {
 
-    Post.deleteOne({ postId, authorId: userId })
-        .then((x) => res.status(200).json({ message: 'Unliked successfully!', data: x }))
-        .catch(next);
+        const { postId } = req.params;
+        const { _id: userId } = req.user;
+
+        // console.log('unlike');
+
+        const deletedLike = await Post.deleteOne({
+            postId,
+            authorId: userId
+        });
+
+        res
+            .status(200)
+            .json({
+                message: 'Unliked successfully!',
+                data: deletedLike
+            });
+
+    } catch (err) {
+
+        next(err);
+    }
 }

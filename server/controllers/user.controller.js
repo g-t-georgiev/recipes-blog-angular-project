@@ -1,74 +1,203 @@
-const {
+import {
     User,
     Subscription,
     Post,
     Theme,
     Like
-} = await import('../models/index.js');
+} from '../models/index.js';
 
-const { greet } = await import('../utils/index.js');
+import { greet } from '../utils/index.js';
 
 export function authenticate(req, res) {
     const { user } = req;
-    res.status(user ? 200 : 401).send({ user, message: greet(user && user.username) });
-}
-
-export function getProfileInfo(req, res, next) {
-    const { _id: userId } = req.user;
-
-    User.findOne({ _id: userId }, { password: 0, __v: 0 }) // finding by Id and returning without password and __v
-        .then(user => { res.status(200).json(user) })
-        .catch(next);
-}
-
-export function editProfileInfo(req, res, next) {
-    const { _id: userId } = req.user;
-    const { username, email } = req.body;
-
-    User.findOneAndUpdate({ _id: userId }, { username, email }, { runValidators: true, new: true })
-        .then(x => { res.status(200).json(x) })
-        .catch(err => {
-            if (err.name === 'MongoError' && err.code === 11000) {
-                let field = err.message.split("index: ")[1];
-                field = field.split(" dup key")[0];
-                field = field.substring(0, field.lastIndexOf("_"));
-
-                res.status(409)
-                    .send({ message: `This ${field} is already registered!` });
-                return;
-            }
-            next(err);
+    res
+        .status(
+            user 
+                ? 200 
+                : 401
+        )
+        .json({ 
+            user, 
+            message: greet(user && user.username) 
         });
 }
 
-export function getUserThemes(req, res, next) {
+export async function getProfileInfo(req, res, next) {
     const { _id: userId } = req.user;
 
-    Theme.find({ authorId: userId })
-        .then(x => { res.status(200).json(x) })
-        .catch(next);
+    try {
+
+        // finding by Id and return without password and __v
+        const user = await User.findOne(
+            { _id: userId }, 
+            { password: 0, __v: 0 }
+        );
+
+        if (!user) {
+            
+            return res
+                .status(404)
+                .json({
+                    message: 'No entry matches id'
+                });
+        }
+
+        res
+            .status(200)
+            .json({ data: user });
+
+    } catch (err) {
+
+        next(err);
+    }
 }
 
-export function getUserSubscriptions(req, res, next) {
-    const { _id: userId } = req.user;
+export async function editProfileInfo(req, res, next) {
 
-    Subscription.find({ authorId: userId })
-        .then(x => { res.status(200).json(x) })
-        .catch(next);
+    try {
+
+        const { _id: userId } = req.user;
+        const { username, email } = req.body;
+    
+        const updatedUser = await User.findOneAndUpdate(
+            { _id: userId }, 
+            { username, email }, 
+            { runValidators: true, new: true }
+        );
+
+        if (!updatedUser) {
+
+            return res
+                .status(404)
+                .json({
+                    message: 'No entry matches id'
+                });
+        }
+        
+        res
+            .status(200)
+            .json({ data: updatedUser });
+        
+    } catch (err) {
+        
+        if (err.name === 'MongoError' && err.code === 11000) {
+            let field = err.message.split("index: ")[1];
+            field = field.split(" dup key")[0];
+            field = field.substring(0, field.lastIndexOf("_"));
+
+            res.status(409)
+                .send({ message: `This ${field} is already registered!` });
+            return;
+        }
+        
+        next(err);
+    }
 }
 
-export function getUserPosts(req, res, next) {
-    const { _id: userId } = req.user;
+export async function getUserThemes(req, res, next) {
+    
+    try {
 
-    Post.find({ authorId: userId })
-        .then(x => { res.status(200).json(x) })
-        .catch(next);
+        const { _id: userId } = req.user;
+
+        const themes = await Theme.find({ authorId: userId });
+
+        if (!themes) {
+
+            return res
+                .status(404)
+                .json({
+                    message: 'No entries match id'
+                });
+        }
+
+        res
+            .status(200)
+            .json({ data: themes });
+
+    } catch (err) {
+
+        next(err);
+    }
 }
 
-export function getUserLikes(req, res, next) {
-    const { _id: userId } = req.user;
+export async function getUserSubscriptions(req, res, next) {
 
-    Like.find({ authorId: userId })
-        .then(x => { res.status(200).json(x) })
-        .catch(next);
+    try {
+
+        const { _id: userId } = req.user;
+
+        const subscriptions = await Subscription.find({ authorId: userId });
+
+        if (!subscriptions) {
+
+            return res
+                .status(404)
+                .json({
+                    message: 'No entries match id'
+                });
+        }
+
+        res
+            .status(200)
+            .json({ data: subscriptions });
+
+    } catch (err) {
+
+        next(err);
+    }
+}
+
+export async function getUserPosts(req, res, next) {
+
+        try {
+
+        const { _id: userId } = req.user;
+
+        const posts = await Post.find({ authorId: userId });
+
+        if (!posts) {
+
+            return res
+                .status(404)
+                .json({
+                    message: 'No entries match id'
+                });
+        }
+
+        res
+            .status(200)
+            .json({ data: posts });
+
+    } catch (err) {
+
+        next(err);
+    }
+}
+
+export async function getUserLikes(req, res, next) {
+
+    try {
+
+        const { _id: userId } = req.user;
+
+        const likes = await Like.find({ authorId: userId });
+
+        if (!likes) {
+
+            return res
+                .status(404)
+                .json({
+                    message: 'No entries match id'
+                });
+        }
+
+        res
+            .status(200)
+            .json({ data: likes });
+
+    } catch (err) {
+
+        next(err);
+    }
 }

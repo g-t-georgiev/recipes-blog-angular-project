@@ -1,10 +1,6 @@
-const {
-    User,
-    TokenBlacklist
-} = await import('../models/index.js');
-
-const { greet, jwt } = await import('../utils/index.js');
-const { authCookieName } = await import('../app-config.js');
+import { User, TokenBlacklist } from '../models/index.js';
+import { greet, jwt } from '../utils/index.js';
+import * as appConfig from '../app.config.js';
 
 const bsonToJson = (data) => { return JSON.parse(JSON.stringify(data)) };
 const removePassword = (data) => {
@@ -12,79 +8,115 @@ const removePassword = (data) => {
     return userData
 }
 
+export async function register(req, res, next) {
+    try {
 
-export function register(req, res, next) {
-    const { email, username, imageUrl, password, repeatPassword } = req.body;
+        const {
+            email,
+            username,
+            imageUrl,
+            password,
+            repeatPassword
+        } = req.body;
 
-    if (password !== repeatPassword) {
-        return Promise.reject({ message: 'Passwords do not match!', status: 403 });
+        if (password !== repeatPassword) {
+            return Promise.reject({ message: 'Passwords do not match!', status: 403 });
+        }
+
+        let createdUser = await User.create({ email, username, imageUrl, password });
+        createdUser = bsonToJson(createdUser);
+        createdUser = removePassword(createdUser);
+
+        res
+            .status(201)
+            .send(
+                {
+                    message: 'Account registered successfully!'
+                }
+            );
+
+    } catch (err) {
+
+        if (err.name === 'MongoError' && err.code === 11000) {
+            let field = err.message.split("index: ")[1];
+            field = field.split(" dup key")[0];
+            field = field.substring(0, field.lastIndexOf("_"));
+
+            return next({ message: `This ${field} is already registered!`, status: 409 });
+        }
+
+        next(err);
     }
-
-    return User.create({ email, username, imageUrl, password })
-        .then((createdUser) => {
-            createdUser = bsonToJson(createdUser);
-            createdUser = removePassword(createdUser);
-
-            res.status(201)
-                .send({ message: 'Account registered successfully!' });
-        })
-        .catch(err => {
-            if (err.name === 'MongoError' && err.code === 11000) {
-                let field = err.message.split("index: ")[1];
-                field = field.split(" dup key")[0];
-                field = field.substring(0, field.lastIndexOf("_"));
-
-                return next({ message: `This ${field} is already registered!`, status: 409 });
-            }
-            next(err);
-        });
 }
 
 
-export function login(req, res, next) {
-    const { email, password } = req.body;
+export async function login(req, res, next) {
 
-    User.findOne({ email })
-        .then(user => {
-            return Promise.all([user, user ? user.matchPassword(password) : false]);
-        })
-        .then(([user, match]) => {
+    try {
 
-            if (!match) {
-                return Promise.reject({ message: 'Wrong email or password', status: 401 });
-            }
+        const {
+            email,
+            password
+        } = req.body;
 
-            user = bsonToJson(user);
-            user = removePassword(user);
+        let user = await User.findOne({ email });
+        let passwordMatches = user ? user.matchPassword(password) : false;
 
-            return Promise.all([
+        if (!passwordMatches) {
+            return Promise.reject(
+                {
+                    message: 'Wrong email or password',
+                    status: 401
+                }
+            );
+        }
+
+        user = bsonToJson(user);
+        user = removePassword(user);
+
+        const authToken = await jwt.createToken({ id: user._id });
+
+        const cookieOptions = { httpOnly: true };
+
+        if (appConfig.NODE_ENV === 'production') {
+            cookieOptions.sameSite = 'none';
+            cookieOptions.secure = true;
+        }
+
+        res.cookie(
+            appConfig.AUTH_COOKIE_NAME,
+            authToken,
+            cookieOptions
+        )
+
+        res
+            .status(200)
+            .json({
                 user,
-                jwt.createToken({ id: user._id })
-            ]);
-        })
-        .then(([user, token]) => {
+                message: greet(user.username)
+            });
 
-            if (process.env.NODE_ENV === 'production') {
-                res.cookie(authCookieName, token, { httpOnly: true, sameSite: 'none', secure: true })
-            } else {
-                res.cookie(authCookieName, token, { httpOnly: true })
-            }
+    } catch (err) {
 
-            res.status(200)
-                .send({ user, message: greet(user.username) });
-        })
-        .catch(next);
+        next(err);
+    }
 }
 
 
-export function logout(req, res, next) {
-    const token = req.cookies[authCookieName];
+export async function logout(req, res, next) {
+    try {
 
-    TokenBlacklist.create({ token })
-        .then(() => {
-            res.clearCookie(authCookieName)
-                .status(200)
-                .send({ message: 'Logout successful!' });
-        })
-        .catch(next);
+        const authToken = req.cookies[appConfig.AUTH_COOKIE_NAME];
+
+        await TokenBlacklist.create({ token });
+
+        res
+            .clearCookie(appConfig.AUTH_COOKIE_NAME)
+            .status(200)
+            .json({ message: 'Logout successful!' });
+
+    } catch (err) {
+
+        next(err);
+    }
 }

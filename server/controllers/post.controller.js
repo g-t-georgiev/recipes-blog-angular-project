@@ -1,71 +1,140 @@
-const { Post } = await import('../models/index.js');
+import { Post } from '../models/index.js';
 
-export function getLatestsPosts(req, res, next) {
-    const limit = Number(req.query.limit) || 0;
+export async function getLatestsPosts(req, res, next) {
 
-    Post.find({})
-        .sort({ createdAt: -1 })
-        .limit(limit)
-        .populate([
-            {
-                path: 'authorId',
-                select: {
-                    username: 1
+    try {
+
+        const limit = Number(req.query.limit) || 0;
+        const posts = await Post
+            .find({})
+            .sort({ createdAt: -1 })
+            .limit(limit)
+            .populate([
+                {
+                    path: 'authorId',
+                    select: {
+                        username: 1
+                    }
                 }
-            }
-        ])
-        .then(posts => {
-            res.status(200).json(posts)
-        })
-        .catch(next);
+            ]);
+
+        res
+            .status(200)
+            .json({ data: posts });
+
+    } catch (err) {
+
+        next(err);
+    }
 }
 
-export function createPost(req, res, next) {
-    const { _id: userId } = req.user;
-    const { text, themeId } = req.body;
+export async function createPost(req, res, next) {
 
-    Post.create({ text, authorId: userId, themeId })
-        .then(createdPost => {
-            if (createdPost) {
-                res.status(201).json({ message: 'Post created successfully!', data: createdPost });
-            } else {
-                res.status(401).json({ message: 'Not allowed!' });
+    try {
+
+        const { _id: userId } = req.user;
+        const { text, themeId } = req.body;
+
+        const createdPost = await Post.create(
+            {
+                text,
+                authorId: userId,
+                themeId
             }
-        })
-        .catch(next);
+        );
+
+        if (!createdPost) {
+
+            return res
+                .status(401)
+                .json({ message: 'Not allowed!' });
+        }
+
+        res
+            .status(201)
+            .json({
+                message: 'Post created successfully!',
+                data: createdPost
+            });
+
+    } catch (err) {
+
+        next(err);
+    }
 }
 
 
-export function editPost(req, res, next) {
-    const { postId } = req.params;
-    const { text } = req.body;
-    const { _id: userId } = req.user;
+export async function editPost(req, res, next) {
 
-    // if the userId is not the same as this one of the post, the post will not be updated
-    Post.findOneAndUpdate({ _id: postId, authorId: userId }, { text }, { new: true })
-        .then(updatedPost => {
-            if (updatedPost) {
-                res.status(201).json({ message: 'Post updated successfully!', data: updatedPost });
-            }
-            else {
-                res.status(401).json({ message: `Not allowed!` });
-            }
-        })
-        .catch(next);
+    try {
+
+        const { postId } = req.params;
+        const { text } = req.body;
+        const { _id: userId } = req.user;
+
+        // if provided 'userId' and post 'authorId'
+        // do not match, post won't be updated
+
+        const updatedPost = await Post.findOneAndUpdate(
+            {
+                _id: postId,
+                authorId: userId
+            },
+            { text },
+            { new: true }
+        );
+
+        if (!updatedPost) {
+
+            return res
+                .status(401)
+                .json({ message: `Not allowed!` });
+        }
+
+        res
+            .status(201)
+            .json({
+                message: 'Post updated successfully!',
+                data: updatedPost
+            });
+
+    } catch (err) {
+
+        next(err);
+    }
 }
 
-export function deletePost(req, res, next) {
-    const { postId } = req.params;
-    const { _id: userId } = req.user;
+export async function deletePost(req, res, next) {
 
-    // if the userId is not the same as this one of the post, the post will not be deleted
-    Post.findOneAndDelete({ _id: postId, authorId: userId })
-        .then(deletedPost => {
-            if (deletedPost) {
-                res.status(200).json({ message: 'Post deleted successfully!', data: deletedPost });
-            } else {
-                res.status(401).json({ message: `Not allowed!` });
+    try {
+
+        const { postId } = req.params;
+        const { _id: userId } = req.user;
+
+        // if provided 'userId' and post 'authorId'
+        // do not match, post won't be deleted
+
+        const deletedPost = await Post.findOneAndDelete(
+            {
+                _if: postId,
+                authorId: userId
             }
-        })
-        .catch(next);
+        );
+
+        if (!deletedPost) {
+
+            return res
+                .status(401)
+                .json({ message: `Not allowed!` });
+        }
+
+        res.status(200).json({
+            message: 'Post deleted successfully!',
+            data: deletedPost
+        });
+
+    } catch (err) {
+
+        next(err);
+    }
 }
