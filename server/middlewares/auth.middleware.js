@@ -1,9 +1,6 @@
-const { jwt } = await import('../utils/index.js');
-const { authCookieName } = await import('../app-config.js');
-const {
-    User,
-    TokenBlacklist
-} = await import('../models/index.js');
+import { User, TokenBlacklist } from '../models/index.js';
+import { jwt } from '../utils/index.js';
+import * as appConfig from '../app.config.js';
 
 
 /**
@@ -20,7 +17,7 @@ export function authMiddleware(redirectUnauthenticated = true) {
      * @returns {void}
      */
     return function (req, res, next) {
-        const token = req.cookies[authCookieName] ?? '';
+        const token = req.cookies[appConfig.AUTH_COOKIE_NAME] ?? '';
         Promise.all([
             jwt.verifyToken(token),
             TokenBlacklist.findOne({ token })
