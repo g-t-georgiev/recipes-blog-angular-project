@@ -3,10 +3,10 @@
 	"version": "1.0.0",
 	"description": "REST API for the angular front-end application Recipes Blog",
 	"type": "module",
-	"main": "index.js",
+	"main": "/server/index.js",
 	"scripts": {
-		"start": "node .",
-		"devStart": "nodemon ."
+		"start": "node ./index.js",
+		"devStart": "nodemon ./index.js"
 	},
 	"repository": {
 		"type": "git",
