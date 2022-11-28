@@ -1,4 +1,5 @@
 (async function() {
+
 	try {
 
 		(await import('dotenv')).config();
@@ -23,6 +24,8 @@
 		app.listen(envConfig.port, console.log(`Listening on port ${envConfig.port}!`));
 
 	} catch (err) {
-		console.error(err);
+
+		console.error("index.js#annonymous", err);
 	}
+
 })();
