@@ -1,8 +1,8 @@
 const { jwt } = await import('../utils/index.js');
 const { authCookieName } = await import('../app-config.js');
 const {
-    userModel,
-    tokenBlacklistModel
+    User,
+    TokenBlacklist
 } = await import('../models/index.js');
 
 
@@ -23,14 +23,14 @@ export function authMiddleware(redirectUnauthenticated = true) {
         const token = req.cookies[authCookieName] ?? '';
         Promise.all([
             jwt.verifyToken(token),
-            tokenBlacklistModel.findOne({ token })
+            TokenBlacklist.findOne({ token })
         ])
             .then(([data, blacklistedToken]) => {
                 if (blacklistedToken) {
                     return Promise.reject(new Error('blacklisted token'));
                 }
 
-                userModel.findById(data.id)
+                User.findById(data.id)
                     .then(user => {
                         req.user = user;
                         req.isLogged = true;
