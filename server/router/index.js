@@ -1,4 +1,4 @@
-const express = await import('express');
+import express from 'express';
 
 const { default: users } = await import('./users.js');
 const { default: themes } = await import('./themes.js');

@@ -1,7 +1,7 @@
-const express = await import('express');
+import express from 'express';
 
-const { authMiddleware } = await import('../middlewares/index.js');
-const { usersController } = await import('../controllers/index.js');
+import { authMiddleware } from '../middlewares/index.js';
+import { usersController } from '../controllers/index.js';
 
 // middlewares added specific to this router
 
