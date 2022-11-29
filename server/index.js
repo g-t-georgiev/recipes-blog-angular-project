@@ -1,31 +1,21 @@
-(async function() {
+import path, { dirname } from 'path';
+import url, { fileURLToPath } from 'url';
 
-	try {
+import env from './config/env.config.js';
+import { expressAppInit } from './config/express.config.js';
+import { dbConnector } from './config/db.config.js';
 
-		(await import('dotenv')).config();
-		// console.log(process.env);
 
-		const express = (await import('express')).default;
-		const { dirname } = await import('path');
-		const { fileURLToPath } = await import('url');
+const __dirname = dirname(fileURLToPath(import.meta.url));
+globalThis.__basedir = __dirname;
 
-		const envConfig = (await import('./config/env.config.js')).default;
-		const expressConfig = (await import('./config/express.config.js')).default;
-		const dbConnector = (await import('./config/db.config.js')).default
+dbConnector()
+	.then(function () {
 
-		const __dirname = dirname(fileURLToPath(import.meta.url));
-		globalThis.__basedir = __dirname;
-
-		await dbConnector();
-
-		const app = express();
-		expressConfig(app);
-
-		app.listen(envConfig.port, console.log(`Listening on port ${envConfig.port}!`));
-
-	} catch (err) {
-
-		console.error("index.js#annonymous", err);
-	}
-
-})();
+		expressAppInit()
+			.listen(
+				env.port, 
+				console.log(`Listening on port ${env.port}!`)
+			);
+	})
+	.catch(console.error);
