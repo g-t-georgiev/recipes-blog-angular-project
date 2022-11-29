@@ -1,6 +1,20 @@
 import { User, TokenBlacklist } from '../models/index.js';
 import { greet, jwt } from '../utils/index.js';
-import * as appConfig from '../app.config.js';
+
+const { 
+    NODE_ENV,
+    AUTH_COOKIE_NAME
+} = process.env;
+
+// if (NODE_ENV === 'development') {
+
+//     console.log(
+//         'AuthController#module',
+//         'NODE_ENV: ', NODE_ENV,
+//         'AUTH_COOKIE_NAME: ', AUTH_COOKIE_NAME
+//     );
+
+// }
 
 const bsonToJson = (data) => { return JSON.parse(JSON.stringify(data)) };
 const removePassword = (data) => {
@@ -78,13 +92,13 @@ export async function login(req, res, next) {
 
         const cookieOptions = { httpOnly: true };
 
-        if (appConfig.NODE_ENV === 'production') {
+        if (NODE_ENV === 'production') {
             cookieOptions.sameSite = 'none';
             cookieOptions.secure = true;
         }
 
         res.cookie(
-            appConfig.AUTH_COOKIE_NAME,
+            AUTH_COOKIE_NAME,
             authToken,
             cookieOptions
         )
@@ -106,12 +120,12 @@ export async function login(req, res, next) {
 export async function logout(req, res, next) {
     try {
 
-        const authToken = req.cookies[appConfig.AUTH_COOKIE_NAME];
+        const authToken = req.cookies[AUTH_COOKIE_NAME];
 
         await TokenBlacklist.create({ token });
 
         res
-            .clearCookie(appConfig.AUTH_COOKIE_NAME)
+            .clearCookie(AUTH_COOKIE_NAME)
             .status(200)
             .json({ message: 'Logout successful!' });
 
