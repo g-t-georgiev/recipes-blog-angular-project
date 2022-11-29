@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import envConfig from './env.config.js';
 
 
-const connectOptions = {
+const dbConnectOptions = {
 	useNewUrlParser: true,
     useUnifiedTopology: true,
     serverSelectionTimeoutMS: 5000,
@@ -14,6 +14,8 @@ const connectOptions = {
     family: 4 // Use IPv4, skip trying IPv6
 }
 
-export default function() {
-	return mongoose.connect(envConfig.dbURL, connectOptions);
+export function dbConnector() {
+	return mongoose.connect(envConfig.dbURL, dbConnectOptions);
 };
+
+export default dbConnector;
