@@ -1,10 +1,25 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 
-import * as appConfig from '../app.config.js';
+const { 
+    NODE_ENV,
+    BCRYPT_SALTROUNDS 
+} = process.env;
+
+// if (NODE_ENV === 'development') {
+
+//     console.log(
+//         'UserModel#module',
+//         'NODE_ENV: ', NODE_ENV,
+//         'SALTROUNDS: ', BCRYPT_SALTROUNDS
+//     );
+
+// }
+
+let saltRounds = parseInt(BCRYPT_SALTROUNDS, 10);
+saltRounds = isNaN(saltRounds) ? 5 : saltRounds;
 
 const { Schema, model } = mongoose;
-const saltRounds = Number(appConfig.SALTROUNDS) || 5;
 
 const userSchema = new Schema({
     email: {
