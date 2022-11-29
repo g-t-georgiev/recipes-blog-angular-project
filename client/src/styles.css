@@ -1,16 +1,28 @@
 @import url('./assets/styles/typography.css');
 
-:root {
-    --background-color--primary: #f5f1f0;
-    --color--primary: #222;
-    --color--active: hsl(220, 90%, 35%);
-    --color--secondary: hsl(220, 90%, 56%);
-    
+:root {    
     --font-family: Poppins;
     --font-weight--primary: 400;
     --font-style--primary: normal;
     --font-size: 16px;
 }
+
+body {
+    --background-color--primary: #f5f1f0;
+    --color--primary: #222;
+    --color--active: hsl(220, 90%, 35%);
+    --color--secondary: hsl(220, 90%, 56%);
+}
+
+.theme--dark,
+body.theme--dark {
+    --background-color--primary: #1a191e;
+    --color--primary: #f5f1f0;
+    --color--active: hsl(340, 81%, 35%);
+    --color--secondary: hsl(340, 81%, 60%);
+}
+
+
 
 *,
 *::after,
@@ -28,13 +40,6 @@ body {
     font-size: var(--font-size);
     font-style: var(--font-style--primary);
     font-weight: var(--font-weight--primary);
-}
-
-.theme--dark {
-    --background-color--primary: #1a191e;
-    --color--primary: #f5f1f0;
-    --color--active: hsl(340, 81%, 35%);
-    --color--secondary: hsl(340, 81%, 60%);
 }
 
 a {
