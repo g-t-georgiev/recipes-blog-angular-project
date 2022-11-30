@@ -1,5 +1,7 @@
 .toggle-theme-btn {
     --toggle-theme-btn__size: 2rem;
+    --icon__fill: #eee;
+    --icon__fill--hover: #aaa;
 
     background-color: transparent;
     border: none;
@@ -24,4 +26,25 @@
     inline-size: 100%;
     block-size: 100%;
     stroke-linecap: round;
+}
+
+.sun-moon-icon > :is(.sun, .moon, .sun-beams) {
+    transform-origin: center center;
+}
+
+
+.sun-moon-icon > :is(.moon, .sun) {
+    fill: var(--icon__fill);
+}
+
+.sun-moon-icon > :is(.sun-beams) {
+    stroke: var(--icon__fill);
+}
+
+.toggle-theme-btn:is(:hover, :focus-visible) :is(.sun, .moon) {
+    fill: var(--icon__fill--hover);
+}
+
+.toggle-theme-btn:is(:hover, :focus-visible) :is(.sun-beams) {
+    fill: var(--icon__fill--hover);
 }
