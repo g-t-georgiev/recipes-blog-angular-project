@@ -47,9 +47,13 @@ export class DarkModeSwitchComponent implements OnInit, AfterViewInit, OnDestroy
 	}
 
 
-	toggleTheme(currentTheme: string): void {
-		const toggledTheme = !(currentTheme === 'dark');
-		this.themeService.switchDarkMode(toggledTheme);
+	toggleTheme(event: MouseEvent): void {
+		const button = event.currentTarget as HTMLButtonElement;
+		const currentTheme = button.value;
+		// console.log('Current: ', currentTheme);
+		const toggledTheme = currentTheme === 'dark' ? 'light' : 'dark';
+		// console.log('Next: ', toggledTheme);
+		this.themeService.setPreference(toggledTheme);
 	}
 
 }
