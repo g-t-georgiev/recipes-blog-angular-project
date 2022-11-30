@@ -1,8 +1,14 @@
 .toggle-theme-btn {
     --toggle-theme-btn__size: 2rem;
-    --icon__fill: #eee;
-    --icon__fill--hover: #aaa;
+    --icon__fill: hsl(0, 0%, 23%);
+    --icon__fill--hover: currentColor;
+}
 
+:host-context(body.theme--dark) .toggle-theme-btn  {
+    --icon__fill: hsl(12, 20%, 85%);
+}
+
+.toggle-theme-btn {
     background-color: transparent;
     border: none;
     padding: 0;
@@ -33,11 +39,11 @@
 }
 
 
-.sun-moon-icon > :is(.moon, .sun) {
+.sun-moon-icon :is(.moon, .sun) {
     fill: var(--icon__fill);
 }
 
-.sun-moon-icon > :is(.sun-beams) {
+.sun-moon-icon .sun-beams {
     stroke: var(--icon__fill);
 }
 
@@ -45,6 +51,111 @@
     fill: var(--icon__fill--hover);
 }
 
-.toggle-theme-btn:is(:hover, :focus-visible) :is(.sun-beams) {
+.toggle-theme-btn:is(:hover, :focus-visible) .sun-beams {
     fill: var(--icon__fill--hover);
+}
+
+@supports (scale: 1.75) {
+
+    :host-context(body.theme--dark) .sun-moon-icon .sun {
+        scale: 1.75;
+    }
+
+}
+
+@supports not (scale: 1.75) {
+
+    :host-context(body.theme--dark) .sun-moon-icon .sun {
+        transform: scale(1.75);
+    }
+
+}
+
+:host-context(body.theme--dark) .sun-moon-icon .sun-beams {
+    opacity: 0;
+}
+
+@supports (translate: -7px) {
+    
+    :host-context(body.theme--dark) .sun-moon-icon .sun-beams > circle {
+        translate: -7px;
+    }
+
+}
+
+@supports not (translate: -7px) {
+
+    :host-context(body.theme--dark) .sun-moon-icon .sun-beams > circle {
+        transform: translateX(-7px);
+    }
+
+}
+
+@supports (rotate: z -25deg) {
+
+    :host-context(body.theme--dark) .sun-moon-icon .sun-beams {
+        rotate: z -25deg;
+    }
+    
+}
+
+@supports not (rotate: z -25deg) {
+
+    :host-context(body.theme--dark) .sun-moon-icon .sun-beams {
+        transform: rotateZ(-25deg);
+    }
+    
+}
+
+@supports (translate: -7px) {
+
+    :host-context(body.theme--dark) .sun-moon-icon .moon > circle {
+        translate: -7px;
+    }
+
+}
+
+@supports not (translate: -7px) {
+
+    :host-context(body.theme--dark) .sun-moon-icon .moon > circle {
+        transform: translateX(-7px);
+    }
+
+}
+
+@media (prefers-reduced-motion: no-preference) {
+
+    .sun-moon-icon .sun {
+        transition: 
+            scale .5s cubic-bezier(.5,1.25,.75,1.25),
+            transform .5s cubic-bezier(.5,1.25,.75,1.25);
+    }
+
+    :host-context(body.theme--dark) .sun-moon-icon .sun {
+        transition-duration: .25s;
+        transition-timing-function: cubic-bezier(.25,0,.3,1);
+    }
+
+    .sun-moon-icon .sun-beams {
+        transition: 
+            rotate .5s cubic-bezier(.5,1.5,.75,1.25),
+            transform .5s cubic-bezier(.5,1.5,.75,1.25),
+            opacity .5s cubic-bezier(.25,0,.3,1);
+    }
+
+    :host-context(body.theme--dark) .sun-moon-icon :is(.sun-beams) {
+        transition-duration: .15s;
+    }
+
+    .sun-moon-icon .moon > circle {
+        transition:
+            translate .25s cubic-bezier(.9,0,.1,1),
+            transform .25s cubic-bezier(.9,0,.1,1);
+    }
+
+    :host-context(body.theme--dark) .sun-moon-icon .moon > circle {
+        transition-delay: .25s;
+        transition-duration: .5s;
+    }
+
 }
