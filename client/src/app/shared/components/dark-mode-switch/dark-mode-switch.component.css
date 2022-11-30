@@ -1,8 +1,6 @@
-:host {
-    --toggle-theme-btn__size: 2rem;
-}
-
 .toggle-theme-btn {
+    --toggle-theme-btn__size: 2rem;
+
     background-color: transparent;
     border: none;
     padding: 0;
@@ -16,6 +14,10 @@
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
     outline-offset: 5px;
+
+    @media (hover: none) {
+        --toggle-theme-btn__size: 48px;
+    }
 }
 
 .toggle-theme-btn > svg {
