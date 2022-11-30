@@ -1,0 +1,19 @@
+:host {
+    --toggle-theme-btn__size: 2rem;
+}
+
+.toggle-theme-btn {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+
+    inline-size: var(--toggle-theme-btn__size);
+    block-size: var(--toggle-theme-btn__size);
+    aspect-ratio: 1;
+    border-radius: 50%;
+
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    outline-offset: 5px;
+}
