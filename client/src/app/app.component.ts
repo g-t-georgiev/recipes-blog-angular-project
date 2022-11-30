@@ -32,7 +32,7 @@ export class AppComponent implements OnInit {
 
         this.themeService.preferColorSchemeDarkMediaQuery.addEventListener(
             'change', 
-            ({ matches }) => this.themeService.switchDarkMode(matches)
+            ({ matches: darkModeOn }) => this.themeService.switchDarkMode(darkModeOn)
         );
 
     }
