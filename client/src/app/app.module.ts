@@ -27,8 +27,8 @@ import { DarkModeSwitchService } from './core/services/dark-mode-switch.service'
             provide: APP_INITIALIZER,
             useFactory: (themeService: DarkModeSwitchService) => {
                 return function() {
-                    themeService.switchDarkMode(
-                        themeService.preferColorSchemeDarkMediaQuery.matches
+                    themeService.setPreference(
+                        themeService.getPreference()
                     );
                 }
             },

@@ -26,13 +26,12 @@ export class AppComponent implements OnInit {
                 //     `currentState: ${darkModeOn}`
                 // );
 
-                this.themeService.toggleThemeStyle(darkModeOn);
+                this.themeService.setStyles(darkModeOn);
             }
         });
 
-        this.themeService.preferColorSchemeDarkMediaQuery.addEventListener(
-            'change', 
-            ({ matches: darkModeOn }) => this.themeService.switchDarkMode(darkModeOn)
+        this.themeService.onChanges(
+            ({ matches: darkModeOn }) => this.themeService.setPreference(darkModeOn ? 'dark' : 'light')
         );
 
     }
