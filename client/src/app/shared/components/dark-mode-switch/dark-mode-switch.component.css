@@ -17,3 +17,9 @@
     -webkit-tap-highlight-color: transparent;
     outline-offset: 5px;
 }
+
+.toggle-theme-btn > svg {
+    inline-size: 100%;
+    block-size: 100%;
+    stroke-linecap: round;
+}
