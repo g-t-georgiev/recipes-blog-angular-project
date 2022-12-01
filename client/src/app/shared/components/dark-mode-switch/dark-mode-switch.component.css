@@ -1,3 +1,9 @@
+:host {
+    position: fixed;
+    top: 1rem;
+    right: 1.5rem;
+}
+
 .toggle-theme-btn {
     --toggle-theme-btn__size: 2rem;
     --icon__fill: hsl(0, 0%, 23%);
@@ -5,7 +11,7 @@
 }
 
 :host-context(body.theme--dark) .toggle-theme-btn  {
-    --icon__fill: hsl(12, 20%, 85%);
+    --icon__fill: hsl(12, 20%, 75%);
     --icon__fill--hover: hsl(12, 20%, 95%);
 }
 
@@ -159,7 +165,7 @@
     }
 
     :host-context(body.theme--dark) .sun-moon-icon .moon > circle {
-        transition-delay: .1s;
+        transition-delay: 0;
         transition-duration: .25s;
     }
 
