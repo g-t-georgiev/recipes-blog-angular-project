@@ -1,35 +1,69 @@
 :host {
-    --header-logo__font-size: 1.5rem;
+    --font-size: .92rem;
+    --font-weight: 400;
+    --color: currentColor;
 
-    --header-link__font-size: 1.15rem;
+    --color--hover: hsl(0, 0%, 65%);
+    --auth-section-delim__color: hsl(0, 0%, 80%);
+    --signup__border-color: hsl(0, 0%, 30%);
+    --signup__border-color--hover: hsl(0, 0%, 65%);
+}
+
+:host-context(body.theme--dark) {
+    --color--hover: hsl(0, 0%, 55%);
+    --auth-section-delim__color: hsl(0, 0%, 20%);
+    --signup__border-color: hsl(0, 0%, 20%);
+    --signup__border-color--hover: hsl(0, 0%, 40%);
 }
 
 header {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
 
     padding-block: 1rem;
-    padding-inline: 1.5rem;
-
-    
+    padding-inline: 1.5rem;    
 }
 
 nav {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
+    align-items: center;
+    gap: .5rem;
 
-    flex-basis: 25%;
+    flex-basis: 50%;
 }
 
 nav a {
-    font-size: var(--header-link__font-size);
+    font-weight: var(--font-weight);
+    font-size: var(--font-size);
+    color: var(--color);
+    text-decoration: none;
+    line-height: 1.5;
+    padding-block: .25rem;
+    padding-inline: .35rem;
 }
 
-.active {
-    color: var(--color--secondary);
-    text-decoration: underline;
+nav a:not(.button):hover {
+    color: var(--color--hover);
 }
 
-.logo {
-    font-size: var(--header-logo__font-size);
+nav .auth {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: .5rem;
+
+    border-left: 1px solid var(--auth-section-delim__color);
+    padding-inline-start: 1rem;
+}
+
+a.button,
+.button {
+    border: 1px solid var(--signup__border-color);
+    border-radius: 3px;
+}
+
+a.button:hover,
+.button:hover {
+    border-color: var(--signup__border-color--hover);
 }
