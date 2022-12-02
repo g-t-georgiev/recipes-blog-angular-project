@@ -1,4 +1,6 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { delay } from 'rxjs/operators';
 
 import { WINDOW } from 'src/app/shared/custom-di-tokens';
 
@@ -7,16 +9,25 @@ import { WINDOW } from 'src/app/shared/custom-di-tokens';
 	templateUrl: './header.component.html',
 	styleUrls: ['./header.component.css']
 })
-export class HeaderComponent implements OnInit, OnDestroy {
+export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
 
-	showMenuToggleBtn: boolean = false;
+	@ViewChild('menuToggleBtn') private menuToggleBtn!: ElementRef<HTMLButtonElement>;
+
+	private _showToggleBtn$: BehaviorSubject<boolean> = new BehaviorSubject(true);
+	showToggleBtn$: Observable<boolean> = this._showToggleBtn$.asObservable();
+
+	private _navToggledState$: BehaviorSubject<string> = new BehaviorSubject('closed');
+	navToggledState$: Observable<string> = this._navToggledState$.asObservable();
+
+	private navToggleSubscription!: Subscription;
 
 	private get vpSizeChangeMQ(): MediaQueryList {
 		return this.window.matchMedia('(max-width: 780px)');
 	}
 
 	private vpSizeChangeHandler: (ev: MediaQueryListEvent) => void = (vpSizeChangeEv) => {
-		this.showMenuToggleBtn = vpSizeChangeEv.matches;
+		this._showToggleBtn$.next(vpSizeChangeEv.matches);
+		this._navToggledState$.next(vpSizeChangeEv.matches ? 'closed' : 'opened');
 	};
 
 	constructor(
@@ -27,8 +38,30 @@ export class HeaderComponent implements OnInit, OnDestroy {
 		this.vpSizeChangeMQ.addEventListener('change', this.vpSizeChangeHandler);
 	}
 
+	ngAfterViewInit(): void {
+		this.navToggleSubscription = this.navToggledState$
+		.pipe(
+			delay(300)
+		)
+		.subscribe({
+			next: (nextToggleStateValue) => {
+				if (this.menuToggleBtn && this.menuToggleBtn.nativeElement) {
+					this.menuToggleBtn.nativeElement.value = nextToggleStateValue;
+				}
+			}
+		});
+	}
+
 	ngOnDestroy(): void {
 		this.vpSizeChangeMQ.removeEventListener('change', this.vpSizeChangeHandler);
+		this.navToggleSubscription?.unsubscribe();
+	}
+
+	toggleNavState(event: PointerEvent) {
+		const button = event.currentTarget as HTMLButtonElement;
+		const currentBtnValue = button.value;
+		const toggledBtnValue = currentBtnValue === 'closed' ? 'opened' : 'closed';
+		this._navToggledState$.next(toggledBtnValue);
 	}
 
 }
