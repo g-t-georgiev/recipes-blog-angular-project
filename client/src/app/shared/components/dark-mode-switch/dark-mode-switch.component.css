@@ -1,6 +1,6 @@
 :host {
     position: absolute;
-    top: 1.5rem;
+    top: 1.35rem;
     right: 2rem;
 }
 
@@ -41,7 +41,7 @@
 @media (hover: none) {
 
     .toggle-theme-btn {
-        --toggle-theme-btn__size: 38px;
+        --toggle-theme-btn__size: 35px;
     }
 
 }
