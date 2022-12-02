@@ -24,7 +24,9 @@ header {
     justify-content: center;
 
     padding-block: 1rem;
-    padding-inline: 1.5rem;    
+    padding-inline: 1.5rem;
+
+    background-color: var(--background-color);
 }
 
 nav {
