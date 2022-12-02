@@ -116,8 +116,15 @@ a.button:hover,
 
     cursor: pointer;
     touch-action: manipulation;
-    -webkit-tap-highlight-color: transparent;
     outline-offset: 5px;
+}
+
+@supports (-webkit-tap-highlight-color: transparent) {
+
+    .menu-toggle-btn {
+        -webkit-tap-highlight-color: transparent;
+    }
+
 }
 
 @media (hover: none) {
