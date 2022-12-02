@@ -47,7 +47,7 @@ export class DarkModeSwitchComponent implements OnInit, AfterViewInit, OnDestroy
 	}
 
 
-	toggleTheme(event: MouseEvent): void {
+	toggleTheme(event: PointerEvent): void {
 		const button = event.currentTarget as HTMLButtonElement;
 		const currentTheme = button.value;
 		// console.log('Current: ', currentTheme);
