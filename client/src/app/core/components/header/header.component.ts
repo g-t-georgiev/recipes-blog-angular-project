@@ -1,6 +1,5 @@
 import { Component, Inject, OnDestroy, OnInit, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { delay } from 'rxjs/operators';
 
 import { WINDOW } from 'src/app/shared/custom-di-tokens';
 
@@ -40,16 +39,13 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	ngAfterViewInit(): void {
 		this.navToggleSubscription = this.navToggledState$
-		.pipe(
-			delay(300)
-		)
-		.subscribe({
-			next: (nextToggleStateValue) => {
-				if (this.menuToggleBtn && this.menuToggleBtn.nativeElement) {
-					this.menuToggleBtn.nativeElement.value = nextToggleStateValue;
+			.subscribe({
+				next: (nextToggleStateValue) => {
+					if (this.menuToggleBtn && this.menuToggleBtn.nativeElement) {
+						this.menuToggleBtn.nativeElement.value = nextToggleStateValue;
+					}
 				}
-			}
-		});
+			});
 	}
 
 	ngOnDestroy(): void {
