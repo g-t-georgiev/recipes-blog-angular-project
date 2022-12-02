@@ -17,16 +17,30 @@
 }
 
 header {
+    --header__padding-block: 1.5rem;
+    --header__padding_inline: 1rem;
+
     position: sticky;
     top: 0;
 
     display: flex;
     justify-content: center;
+    align-items: center;
 
-    padding-block: 1rem;
-    padding-inline: 1.5rem;
+    padding-block: var(--header__padding-block);
+    padding-inline: var(--header__padding_inline);
 
     background-color: var(--background-color);
+}
+
+header:has(> .menu-toggle-btn[value="opened"]) {
+    height: 100vh;
+    width: 100vw;
+
+    position: fixed;
+
+    flex-direction: column;
+    justify-content: flex-start;
 }
 
 nav {
@@ -36,6 +50,10 @@ nav {
     gap: .5rem;
 
     flex-basis: 50%;
+}
+
+.menu-toggle-btn[value="closed"] ~ nav {
+    display: none;
 }
 
 nav a {
@@ -62,6 +80,16 @@ nav .auth {
     padding-inline-start: 1rem;
 }
 
+.menu-toggle-btn[value="opened"] ~ nav,
+.menu-toggle-btn[value="opened"] ~ nav .auth {
+    flex-direction: column;
+}
+
+.menu-toggle-btn[value="opened"] ~ nav .auth {
+    border-left: none;
+    padding-inline-start: 0;
+}
+
 a.button,
 .button {
     border: 1px solid var(--signup__border-color);
@@ -73,16 +101,105 @@ a.button:hover,
     border-color: var(--signup__border-color--hover);
 }
 
-#menu-toggle-icon {
-    --menu-toggle-icon__size: 2rem;
+.menu-toggle-btn {
+    --menu-btn__size: 2rem;
 
-    inline-size: var(--menu-toggle-icon__size);
-    block-size: var(--menu-toggle-icon__size);
+    background-color: transparent;
+    border: none;
+    padding-block: .25rem;
+    padding-inline: .25rem;
+
+    inline-size: var(--menu-btn__size);
+    block-size: var(--menu-btn__size);
+    aspect-ratio: 1;
+    border-radius: 50%;
+
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    outline-offset: 5px;
 }
 
 @media (hover: none) {
 
-    #menu-toggle-icon {
-        --menu-toggle-icon_size: 38px;
+    .menu-toggle-btn {
+        --menu-btn_size: 38px;
     }
+}
+
+.menu-toggle-icon {
+    --menu-toggle-icon__fill: hsl(0, 0%, 23%);
+    --menu-toggle-icon__fill--hover: hsl(0, 0%, 13%);
+
+    inline-size: 100%;
+    block-size: 100%;
+    stroke-linecap: round;
+}
+
+:host-context(body.theme--dark) .menu-toggle-icon {
+    --menu-toggle-icon__fill: hsl(12, 20%, 75%);
+    --menu-toggle-icon__fill--hover: hsl(12, 20%, 95%);
+}
+
+.menu-toggle-icon rect {
+    fill: var(--menu-toggle-icon__fill);
+}
+
+.menu-toggle-icon:is(:hover, :focus-visible) rect {
+    fill: var(--menu-toggle-icon__fill--hover);
+}
+
+.menu-toggle-icon rect:nth-child(1) {
+    transform-origin: top center;
+}
+
+.menu-toggle-icon rect:nth-child(2) {
+    transform-origin: center center;
+}
+
+.menu-toggle-icon rect:nth-child(3) {
+    transform-origin: center center;
+}
+
+@supports ((translate: initial) and (rotate: initial)) {
+
+    .menu-toggle-btn[value="opened"] rect:nth-child(1) {
+        translate: 0 25%;
+        rotate: z 45deg;
+    }
+
+    .menu-toggle-btn[value="opened"] rect:nth-child(2) {
+        rotate: z 45deg;
+        opacity: 0;
+    }
+
+    .menu-toggle-btn[value="opened"] rect:nth-child(3) {
+        translate: 0 -25%;
+        rotate: z -45deg;
+    }
+
+}
+
+@supports not ((translate: initial) and (rotate: initial)) {
+
+    .menu-toggle-btn[value="opened"] rect:nth-child(1) {
+        transform: translateX(25%), rotateZ(45deg);
+    }
+
+    .menu-toggle-btn[value="opened"] rect:nth-child(2) {
+        transform: rotateZ(45deg);
+    }
+
+    .menu-toggle-btn[value="opened"] rect:nth-child(3) {
+        transform: translateX(-25%), rotateZ(-45deg);
+    }
+
+}
+
+@media (prefers-reduced-motion: no-preference) {
+
+    .menu-toggle-btn:is([value="closed"], [value="opened"]) rect {
+        transition: all .25s ease-in-out;
+    }
+
 }
