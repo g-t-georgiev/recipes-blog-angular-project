@@ -72,3 +72,17 @@ a.button:hover,
 .button:hover {
     border-color: var(--signup__border-color--hover);
 }
+
+#menu-toggle-icon {
+    --menu-toggle-icon__size: 2rem;
+
+    inline-size: var(--menu-toggle-icon__size);
+    block-size: var(--menu-toggle-icon__size);
+}
+
+@media (hover: none) {
+
+    #menu-toggle-icon {
+        --menu-toggle-icon_size: 38px;
+    }
+}
