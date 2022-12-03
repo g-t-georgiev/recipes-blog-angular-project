@@ -7,12 +7,14 @@ import { SharedModule } from '../shared/shared.module';
 import { HeaderComponent } from './components/header/header.component';
 
 import { DarkModeSwitchService } from './services/dark-mode-switch.service';
+import { MenuToggleButtonComponent } from './components/menu-toggle-button/menu-toggle-button.component';
 
 
 
 @NgModule({
 	declarations: [
-		HeaderComponent
+		HeaderComponent,
+  MenuToggleButtonComponent
 	],
 	imports: [
 		CommonModule,
