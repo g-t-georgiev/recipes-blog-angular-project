@@ -34,6 +34,9 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
 	) { }
 
 	ngOnInit(): void {
+		this._showToggleBtn$.next(this.vpSizeChangeMQ.matches);
+		this._navToggledState$.next(this.vpSizeChangeMQ.matches ? 'closed' : 'opened');
+		
 		this.vpSizeChangeMQ.addEventListener('change', this.vpSizeChangeHandler);
 	}
 
