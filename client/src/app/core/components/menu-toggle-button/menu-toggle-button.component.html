@@ -1,1 +1,24 @@
-<p>menu-toggle-button works!</p>
+<button 
+    #menuToggleBtn 
+    type="button" 
+    value="closed" 
+    class="menu-toggle-btn" 
+    title="Toggle mobile menu" 
+    aria-label="closed" 
+    aria-live="polite" 
+    (pointerdown)="toggleBtn($event)"
+>
+<svg 
+    class="menu-toggle-icon"
+    viewBox="0 0 10 10" 
+    width="10" 
+    height="10" 
+    aria-hidden="true"
+>
+
+    <line class="line" x1="1" x2="9" y1="2" y2="2" stroke="currentColor" />
+    <line class="line" x1="1" x2="6" y1="5" y2="5" stroke="currentColor" />
+    <line class="line" x1="1" x2="9" y1="8" y2="8" stroke="currentColor" />
+
+</svg>
+</button>

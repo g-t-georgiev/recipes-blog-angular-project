@@ -1,0 +1,143 @@
+.menu-toggle-btn {
+    --menu-btn__size: 2rem;
+
+    background-color: transparent;
+    border: none;
+    padding-block: .25rem;
+    padding-inline: .25rem;
+
+    inline-size: var(--menu-btn__size);
+    block-size: var(--menu-btn__size);
+    aspect-ratio: 1;
+    border-radius: 50%;
+
+    cursor: pointer;
+    touch-action: manipulation;
+    outline-offset: 5px;
+}
+
+@supports (-webkit-tap-highlight-color: transparent) {
+
+    .menu-toggle-btn {
+        -webkit-tap-highlight-color: transparent;
+    }
+
+}
+
+@media (hover: none) {
+
+    .menu-toggle-btn {
+        --menu-btn_size: 38px;
+    }
+}
+
+.menu-toggle-icon {
+    --l-color: hsl(0, 0%, 23%);
+
+    inline-size: 100%;
+    block-size: 100%;
+    stroke-linecap: round;
+}
+
+:host-context(body.theme--dark) .menu-toggle-icon {
+    --l-color: hsl(12, 20%, 75%);
+}
+
+.line {
+    transform-origin: center center;
+    stroke: var(--l-color);
+}
+
+/* icon animations on closed state */
+
+@supports (
+    (scale: .95 1) and 
+    (translate: 20%)
+) {
+
+    :is(
+        .menu-toggle-btn[value="closed"]:hover, 
+        .menu-toggle-btn[value="closed"]:focus-visible
+    ) .line:nth-child(2n+1) {
+
+        scale: .95 1;
+        translate: 20%; 
+    }
+    
+}
+
+@supports not (
+    (scale: .95 1) and 
+    (translate: 20%)
+) {
+
+    :is(
+        .menu-toggle-btn[value="closed"]:hover, 
+        .menu-toggle-btn[value="closed"]:focus-visible
+    ) .line:nth-child(2n+1) {
+        
+        transform: 
+            scale(.95, 1),
+            translate(20%, 0);
+    }
+
+}
+
+/* icon animations on opened state */ 
+
+@supports (
+    (rotate: z 45deg) and 
+    (rotate: z -45deg) and 
+    (scale: 1 1) and 
+    (translate: 0)
+) {
+
+    .menu-toggle-btn[value="opened"] .line {
+        scale: 1 1;
+        translate: 0;
+    }
+
+    .menu-toggle-btn[value="opened"] .line:nth-child(1) {
+        transform-origin: 0 0;
+        rotate: z 40deg; 
+    }
+
+    .menu-toggle-btn[value="opened"] .line:nth-child(2) {
+        transform-origin: 50% 50%;
+        translate: -100%;
+        opacity: 0;
+    }
+
+
+    .menu-toggle-btn[value="opened"] .line:nth-child(3) {
+        transform-origin: 0 100%;
+        rotate: z -40deg;
+    }
+    
+}
+
+@supports not (
+    (rotate: z 45deg)
+) {
+
+    .menu-toggle-btn[value="opened"] .line:nth-child(1) {
+        transform: 
+            rotateZ(45deg);
+    }
+
+    .menu-toggle-btn[value="opened"] .line:nth-child(3) {
+        transform: 
+            rotateZ(-45deg);
+    }
+
+}
+
+/* icon animation transitions */
+
+@media (prefers-reduced-motion: no-preference) {
+
+    .line {
+        transition: all .25s ease-in-out;
+    }
+
+}
