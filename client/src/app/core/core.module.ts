@@ -14,7 +14,7 @@ import { MenuToggleButtonComponent } from './components/menu-toggle-button/menu-
 @NgModule({
 	declarations: [
 		HeaderComponent,
-  MenuToggleButtonComponent
+  		MenuToggleButtonComponent
 	],
 	imports: [
 		CommonModule,
