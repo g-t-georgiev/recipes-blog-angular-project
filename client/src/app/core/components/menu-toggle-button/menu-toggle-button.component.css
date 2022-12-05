@@ -56,8 +56,8 @@
 ) {
 
     :is(
-        .menu-toggle-btn[value="closed"]:hover, 
-        .menu-toggle-btn[value="closed"]:focus-visible
+        .menu-toggle-btn:hover, 
+        .menu-toggle-btn:focus-visible
     ) .line:nth-child(2n+1) {
 
         scale: .95 1;
@@ -72,8 +72,8 @@
 ) {
 
     :is(
-        .menu-toggle-btn[value="closed"]:hover, 
-        .menu-toggle-btn[value="closed"]:focus-visible
+        .menu-toggle-btn:hover, 
+        .menu-toggle-btn:focus-visible
     ) .line:nth-child(2n+1) {
         
         transform: 
@@ -85,51 +85,8 @@
 
 /* icon animations on opened state */ 
 
-@supports (
-    (rotate: z 45deg) and 
-    (rotate: z -45deg) and 
-    (scale: 1 1) and 
-    (translate: 0)
-) {
-
-    .menu-toggle-btn[value="opened"] .line {
-        scale: 1 1;
-        translate: 0;
-    }
-
-    .menu-toggle-btn[value="opened"] .line:nth-child(1) {
-        transform-origin: 0 0;
-        rotate: z 40deg; 
-    }
-
-    .menu-toggle-btn[value="opened"] .line:nth-child(2) {
-        transform-origin: 50% 50%;
-        translate: -100%;
-        opacity: 0;
-    }
-
-
-    .menu-toggle-btn[value="opened"] .line:nth-child(3) {
-        transform-origin: 0 100%;
-        rotate: z -40deg;
-    }
-    
-}
-
-@supports not (
-    (rotate: z 45deg)
-) {
-
-    .menu-toggle-btn[value="opened"] .line:nth-child(1) {
-        transform: 
-            rotateZ(45deg);
-    }
-
-    .menu-toggle-btn[value="opened"] .line:nth-child(3) {
-        transform: 
-            rotateZ(-45deg);
-    }
-
+.toggled .line:nth-child(2) {
+    opacity: 0;
 }
 
 /* icon animation transitions */

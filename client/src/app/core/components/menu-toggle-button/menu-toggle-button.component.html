@@ -1,12 +1,12 @@
-<button 
-    #menuToggleBtn 
+<button  
     type="button" 
-    value="closed" 
+    [attr.value]="btnTextValue" 
     class="menu-toggle-btn" 
+    [class.toggled]="toggled"
     title="Toggle mobile menu" 
-    aria-label="closed" 
+    [attr.aria-label]="btnTextValue" 
     aria-live="polite" 
-    (pointerdown)="toggleBtn($event)"
+    (pointerdown)="toggle()"
 >
 <svg 
     class="menu-toggle-icon"
