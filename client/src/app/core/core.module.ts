@@ -8,6 +8,7 @@ import { HeaderComponent } from './components/header/header.component';
 
 import { DarkModeSwitchService } from './services/dark-mode-switch.service';
 import { MenuToggleButtonComponent } from './components/menu-toggle-button/menu-toggle-button.component';
+import { ViewportResizeService } from './services/viewport-resize.service';
 
 
 
@@ -32,6 +33,7 @@ export class CoreModule {
 			ngModule: CoreModule,
 			providers: [
 				DarkModeSwitchService,
+				ViewportResizeService, 
 			]
 		}
 	}
