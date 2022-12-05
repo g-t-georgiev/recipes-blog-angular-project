@@ -8,6 +8,7 @@ import { HomeComponent } from './home/home.component';
 import { StoreModule } from '@ngrx/store';
 import { IRootState, darkModeReducer } from './+state';
 import { DarkModeSwitchService } from './core/services/dark-mode-switch.service';
+import { ViewportResizeService } from './core/services/viewport-resize.service';
 
 @NgModule({
     declarations: [
@@ -23,6 +24,16 @@ import { DarkModeSwitchService } from './core/services/dark-mode-switch.service'
         })
     ],
     providers: [
+        {
+            provide: APP_INITIALIZER,
+            useFactory: (resizeService: ViewportResizeService) => {
+                return function () {
+                    resizeService.init();
+                }
+            },
+            multi: true,
+            deps: [ViewportResizeService]
+        },
         {
             provide: APP_INITIALIZER,
             useFactory: (themeService: DarkModeSwitchService) => {
