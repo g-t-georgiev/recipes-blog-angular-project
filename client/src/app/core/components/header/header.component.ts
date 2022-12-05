@@ -1,7 +1,15 @@
-import { Component, Inject, OnDestroy, OnInit, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { 
+	Component, 
+	OnInit, 
+	OnDestroy, 
+	HostBinding,  
+} from '@angular/core';
 
-import { WINDOW } from 'src/app/shared/custom-di-tokens';
+import { Subscription } from 'rxjs';
+
+import { ViewportResizeService } from '../../services/viewport-resize.service';
+
+
 
 @Component({
 	selector: 'app-header',
@@ -10,32 +18,34 @@ import { WINDOW } from 'src/app/shared/custom-di-tokens';
 })
 export class HeaderComponent implements OnInit, OnDestroy {
 
-	private _showToggleBtn$: BehaviorSubject<boolean> = new BehaviorSubject(true);
-	showToggleBtn$: Observable<boolean> = this._showToggleBtn$.asObservable();
+	private subscription!: Subscription;
 
-	private get vpSizeChangeMQ(): MediaQueryList {
-		return this.window.matchMedia('(max-width: 780px)');
-	}
+	isNavCollapsed: boolean = false;
 
-	private vpSizeChangeHandler: (ev: MediaQueryListEvent) => void = (vpSizeChangeEv) => {
-		this._showToggleBtn$.next(vpSizeChangeEv.matches);
-	};
+	@HostBinding('class.fullscreen') expand: boolean = false;
 
 	constructor(
-		@Inject(WINDOW) private window: typeof globalThis & Window
+		private resizeService: ViewportResizeService
 	) { }
 
 	ngOnInit(): void {
-		this._showToggleBtn$.next(this.vpSizeChangeMQ.matches);
-		
-		this.vpSizeChangeMQ.addEventListener('change', this.vpSizeChangeHandler);
+		this.isNavCollapsed = !this.resizeService.hasMatch();
+		this.expand = this.resizeService.hasMatch() && this.isNavCollapsed;
+
+		this.subscription = this.resizeService.onMaxWidth780$.subscribe({
+			next: ({ matches }) => {
+				this.isNavCollapsed = !matches;
+				this.expand = matches && this.isNavCollapsed;
+			}
+		});
 	}
 
 	ngOnDestroy(): void {
-		this.vpSizeChangeMQ.removeEventListener('change', this.vpSizeChangeHandler);
+		this.subscription?.unsubscribe();
 	}
 
-	onMenuButtonToggle(value: boolean) {
-		console.log(value);
+	onMenuButtonToggle(menuBtnToggled: boolean) {
+		this.isNavCollapsed = menuBtnToggled;
+		this.expand = this.isNavCollapsed;
 	}
 }

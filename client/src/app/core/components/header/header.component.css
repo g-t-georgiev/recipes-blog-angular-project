@@ -24,6 +24,7 @@ header {
     top: 0;
 
     display: flex;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
 
@@ -33,18 +34,9 @@ header {
     background-color: var(--background-color);
 }
 
-header:has(> .menu-toggle-btn[value="opened"]) {
-    height: 100vh;
-    width: 100vw;
-
-    position: fixed;
-
-    flex-direction: column;
-    justify-content: flex-start;
-}
-
-nav {
+.nav--primary {
     display: flex;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
     gap: .5rem;
@@ -52,11 +44,7 @@ nav {
     flex-basis: 50%;
 }
 
-.menu-toggle-btn[value="closed"] ~ nav {
-    display: none;
-}
-
-nav a {
+.nav-link {
     font-weight: var(--font-weight);
     font-size: var(--font-size);
     color: var(--color);
@@ -66,12 +54,13 @@ nav a {
     padding-inline: .35rem;
 }
 
-nav a:not(.button):hover {
+.nav-link:not(.button):hover {
     color: var(--color--hover);
 }
 
-nav .auth {
+.nav-auth-section {
     display: flex;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
     gap: .5rem;
@@ -80,23 +69,32 @@ nav .auth {
     padding-inline-start: 1rem;
 }
 
-.menu-toggle-btn[value="opened"] ~ nav,
-.menu-toggle-btn[value="opened"] ~ nav .auth {
-    flex-direction: column;
-}
-
-.menu-toggle-btn[value="opened"] ~ nav .auth {
-    border-left: none;
-    padding-inline-start: 0;
-}
-
-a.button,
 .button {
     border: 1px solid var(--signup__border-color);
     border-radius: 3px;
 }
 
-a.button:hover,
 .button:hover {
     border-color: var(--signup__border-color--hover);
+}
+
+:host-context(body.maxwidth--780) 
+.fullscreen {
+    position: fixed;
+    top: 0;
+
+    width: 100vw;
+    height: 100vh;
+
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.fullscreen :is(.nav--primary, .nav-auth-section) {
+    flex-direction: column;
+}
+
+.fullscreen .nav-auth-section {
+    border-left: none;
+    padding-inline-start: 0;   
 }

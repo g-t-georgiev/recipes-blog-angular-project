@@ -1,17 +1,22 @@
-<header>
+<header [class.fullscreen]="expand">
     
-    <app-menu-toggle-button *ngIf="showToggleBtn$ | async" (on-toggle)="onMenuButtonToggle($event)"></app-menu-toggle-button>
+    <app-menu-toggle-button 
+        (on-toggle)="onMenuButtonToggle($event)"
+    ></app-menu-toggle-button>
 
-    <nav>
+    <nav 
+        class="nav--primary" 
+        *ngIf="isNavCollapsed" 
+    >
 
-        <a routerLink="/home">Home</a>
-        <a routerLink="/recipes">Recipes</a>
+        <a class="nav-link" routerLink="/home">Home</a>
+        <a class="nav-link" routerLink="/recipes">Recipes</a>
         
-        <section class="auth">
+        <section class="nav-auth-section">
 
             <ng-container>
-                <a routerLink="/users/login">Log In</a>
-                <a routerLink="/users/register" class="button">Sign up</a>
+                <a class="nav-link" routerLink="/users/login">Log In</a>
+                <a class="nav-link button" routerLink="/users/register">Sign up</a>
             </ng-container>
     
         </section>
