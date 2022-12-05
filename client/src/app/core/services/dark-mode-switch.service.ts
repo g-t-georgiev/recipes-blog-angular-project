@@ -1,28 +1,30 @@
 import { Injectable, Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { WINDOW } from 'src/app/shared/custom-di-tokens';
+import { Observable, fromEvent } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
+
+import { WINDOW } from 'src/app/shared/custom-di-tokens';
 import { IRootState, toggleDarkMode } from 'src/app/+state';
 
 @Injectable()
 export class DarkModeSwitchService {
 
-	private get colorSchemeDark(): MediaQueryList {
-		return this.window.matchMedia('(prefers-color-scheme: dark)');
-	}
+	private colorSchemeDark!: MediaQueryList;
+
+	onColorSchemeDark$!: Observable<MediaQueryListEvent>;
 
 	constructor(
 		@Inject(DOCUMENT) private document: Document,
 		@Inject(WINDOW) private window: Window & typeof globalThis,
 		private state: Store<IRootState>
-	) { }
-
-	onChanges(cb: (ev: MediaQueryListEvent) => void) {
-		this.colorSchemeDark.addEventListener('change', cb);
-
-		return () => {
-			this.colorSchemeDark.removeEventListener('change', cb);
-		}
+	) { 
+		this.colorSchemeDark = this.window.matchMedia('(prefers-color-scheme: dark)');
+		this.onColorSchemeDark$ = fromEvent<MediaQueryListEvent>(this.colorSchemeDark, 'change').pipe(
+			tap(({ matches }) => {
+				this.setPreference(matches ? 'dark': 'light');
+			})
+		);
 	}
 
 	
