@@ -1,24 +1,28 @@
-<button  
-    type="button" 
-    [attr.value]="btnTextValue" 
-    class="menu-toggle-btn" 
-    [class.toggled]="toggled"
-    title="Toggle mobile menu" 
-    [attr.aria-label]="btnTextValue" 
-    aria-live="polite" 
-    (pointerdown)="toggle()"
->
-<svg 
-    class="menu-toggle-icon"
-    viewBox="0 0 10 10" 
-    width="10" 
-    height="10" 
-    aria-hidden="true"
->
+<ng-container *ngIf="(localState$ | async) as toggleBtnState">
 
-    <line class="line" x1="1" x2="9" y1="2" y2="2" stroke="currentColor" />
-    <line class="line" x1="1" x2="6" y1="5" y2="5" stroke="currentColor" />
-    <line class="line" x1="1" x2="9" y1="8" y2="8" stroke="currentColor" />
+    <button  
+        type="button" 
+        [attr.value]="toggleBtnState.value" 
+        class="menu-toggle-btn" 
+        [class.toggled]="toggleBtnState.toggled"
+        title="Toggle mobile menu" 
+        [attr.aria-label]="toggleBtnState.value" 
+        aria-live="polite" 
+        (pointerdown)="toggle(!toggleBtnState.toggled)"
+    >
+        <svg 
+            class="menu-toggle-icon"
+            viewBox="0 0 10 10" 
+            width="10" 
+            height="10" 
+            aria-hidden="true"
+        >
 
-</svg>
-</button>
+            <line class="line" x1="1" x2="8" y1="2" [attr.y2]="toggleBtnState.toggled ? 8 : 2" stroke="currentColor" />
+            <line class="line" x1="2" x2="6" y1="5" [attr.y2]="toggleBtnState.toggled ? 8 : 5" stroke="currentColor" />
+            <line class="line" x1="1" x2="8" y1="8" [attr.y2]="toggleBtnState.toggled ? 2 : 8" stroke="currentColor" />
+
+        </svg>
+    </button>
+
+</ng-container>
