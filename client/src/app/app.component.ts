@@ -14,23 +14,28 @@ import { ViewportResizeService } from './core/services/viewport-resize.service';
 export class AppComponent implements OnInit {
 
     constructor(
+        private vpResizeService: ViewportResizeService, 
         private themeService: DarkModeSwitchService, 
-        private resizeService: ViewportResizeService, 
         private state: Store<IRootState>
     ) { }
 
     ngOnInit(): void {
-        this.state.select(globalState => globalState.darkModeOn)
-            .pipe(
-                tap((darkModeOn) => {
-                    this.themeService.setStyles(darkModeOn);
-                })
-            )
-            .subscribe();
+		this.vpResizeService.onMaxWidth780$
+			.pipe(
+				tap(({ matches }) => {
+					this.vpResizeService.setStyles(matches)
+				}),
+			).subscribe();
 
-        this.resizeService.onMaxWidth780$.subscribe();
+        this.state.select(
+            (globalState) => globalState.darkModeOn
+        ).pipe(
+            tap((darkModeOn) => {
+                this.themeService.setStyles(darkModeOn);
+            })
+        ).subscribe();
+
         this.themeService.onColorSchemeDark$.subscribe();
-
-    }
+	}
 
 }
