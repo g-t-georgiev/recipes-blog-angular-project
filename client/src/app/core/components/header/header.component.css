@@ -79,7 +79,7 @@ header {
 }
 
 :host-context(body.maxwidth--780) 
-.fullscreen {
+header.fullscreen {
     position: fixed;
     top: 0;
 
@@ -90,11 +90,11 @@ header {
     justify-content: flex-start;
 }
 
-.fullscreen :is(.nav--primary, .nav-auth-section) {
+header.fullscreen :is(.nav--primary, .nav-auth-section) {
     flex-direction: column;
 }
 
-.fullscreen .nav-auth-section {
+header.fullscreen .nav-auth-section {
     border-left: none;
     padding-inline-start: 0;   
 }
