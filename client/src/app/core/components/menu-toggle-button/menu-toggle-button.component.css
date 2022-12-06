@@ -51,34 +51,30 @@
 /* icon animations on closed state */
 
 @supports (
-    (scale: .95 1) and 
-    (translate: 20%)
+    (scale: 1.15 1) 
 ) {
 
     :is(
-        .menu-toggle-btn:hover, 
-        .menu-toggle-btn:focus-visible
-    ) .line:nth-child(2n+1) {
+        .menu-toggle-btn:not(.toggled):hover, 
+        .menu-toggle-btn:not(.toggled):focus-visible
+    ) .line {
 
-        scale: .95 1;
-        translate: 20%; 
+        scale: 1.15 1;
     }
     
 }
 
 @supports not (
-    (scale: .95 1) and 
-    (translate: 20%)
+    (scale: 1.15 1) 
 ) {
 
     :is(
-        .menu-toggle-btn:hover, 
-        .menu-toggle-btn:focus-visible
-    ) .line:nth-child(2n+1) {
+        .menu-toggle-btn:not(.toggled):hover, 
+        .menu-toggle-btn:not(.toggled):focus-visible
+    ) .line {
         
         transform: 
-            scale(.95, 1),
-            translate(20%, 0);
+            scale(1.15, 1)
     }
 
 }
@@ -95,6 +91,10 @@
 
     .line {
         transition: all .25s ease-in-out;
+    }
+
+    .line:nth-child(2) {
+        transition: opacity .05s linear;
     }
 
 }
