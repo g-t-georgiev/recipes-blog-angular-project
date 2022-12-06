@@ -96,9 +96,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
 		if (
 			[ 
 				'APP-MENU-TOGGLE-BUTTON', 
+				'APP-DARK-MODE-SWITCH', 
 				'BUTTON', 
 				'svg', 
-				'line'
+				'line',
+				'circle', 
+				'rect', 
+				'mask', 
+				'g'
 			].includes(tagName)
 		) { return; }
 
