@@ -5,22 +5,23 @@ import { RouterModule } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
 
 import { HeaderComponent } from './components/header/header.component';
+import { DarkModeSwitchComponent } from './components/dark-mode-switch/dark-mode-switch.component';
+import { MenuToggleButtonComponent } from './components/menu-toggle-button/menu-toggle-button.component';
 
 import { DarkModeSwitchService } from './services/dark-mode-switch.service';
-import { MenuToggleButtonComponent } from './components/menu-toggle-button/menu-toggle-button.component';
 import { ViewportResizeService } from './services/viewport-resize.service';
 
 
 
 @NgModule({
 	declarations: [
-		HeaderComponent,
+		HeaderComponent, 
+		DarkModeSwitchComponent,
   		MenuToggleButtonComponent
 	],
 	imports: [
 		CommonModule,
 		RouterModule,
-		SharedModule
 	],
 	exports: [
 		HeaderComponent
