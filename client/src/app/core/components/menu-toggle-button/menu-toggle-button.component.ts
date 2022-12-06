@@ -1,12 +1,15 @@
 import { 
 	Component, 
+	Input, 
 	Output, 
 	EventEmitter,
-	Input,
-	OnInit,
-	OnChanges,
-	SimpleChanges, 
+	OnChanges, 
 } from '@angular/core';
+
+import { 
+	BehaviorSubject, 
+	Observable, 
+} from 'rxjs';
 
 
 
@@ -15,34 +18,51 @@ enum ToggleNavButtonOptions {
 	CLOSED = 'closed'
 }
 
+interface ILocalState {
+	value: ToggleNavButtonOptions,
+	toggled: boolean
+};
+
 @Component({
 	selector: 'app-menu-toggle-button',
 	templateUrl: './menu-toggle-button.component.html',
 	styleUrls: ['./menu-toggle-button.component.css']
 })
-export class MenuToggleButtonComponent implements OnInit, OnChanges {
+export class MenuToggleButtonComponent implements OnChanges {
 
-	toggled: boolean = false;
-	btnTextValue: ToggleNavButtonOptions = ToggleNavButtonOptions.CLOSED;
+	private _localState$: BehaviorSubject<ILocalState> = new BehaviorSubject<ILocalState>({
+		toggled: false,
+		value: ToggleNavButtonOptions.CLOSED
+	});
 
-	@Input('autoExpand') autoExpand: boolean = false;
+	localState$: Observable<ILocalState> = this._localState$.asObservable();
+
+	@Input('force-close') closeExplicitly: boolean = false; 
 	@Output('on-toggle') private onToggle: EventEmitter<boolean> = new EventEmitter();
 
-	constructor() { }
+	ngOnChanges(): void {
 
-	ngOnInit(): void {
-		this.btnTextValue = this.toggled ? ToggleNavButtonOptions.OPENED : ToggleNavButtonOptions.CLOSED;
+		// console.log(
+		// 	'MenuToggleButtonComponent#ngOnChanges', 
+		// 	this.closeExplicitly
+		// );
+
+		if (this.closeExplicitly) {
+			this.setState(!this.closeExplicitly);
+		}
+
 	}
 
-	ngOnChanges(changes: SimpleChanges): void {
-		console.log(changes);
-		console.log(this.autoExpand);
+	private setState(isToggled: boolean) {
+		this._localState$.next({
+			toggled: isToggled,
+			value: isToggled ? ToggleNavButtonOptions.OPENED : ToggleNavButtonOptions.CLOSED
+		});
 	}
 
-	toggle() {
-		this.toggled = !this.toggled;
-		this.btnTextValue = this.toggled ? ToggleNavButtonOptions.OPENED : ToggleNavButtonOptions.CLOSED; 
-		this.onToggle.emit(this.toggled);
+	toggle(isToggled: boolean) {
+		this.setState(isToggled);
+		this.onToggle.emit(isToggled);
 	}
 
 }
