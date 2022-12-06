@@ -26,9 +26,11 @@ import { ViewportResizeService } from './core/services/viewport-resize.service';
     providers: [
         {
             provide: APP_INITIALIZER,
-            useFactory: (resizeService: ViewportResizeService) => {
+            useFactory: (vpResizeService: ViewportResizeService) => {
                 return function () {
-                    resizeService.init();
+                    vpResizeService.setStyles(
+                        vpResizeService.hasMatch()
+                    );
                 }
             },
             multi: true,
