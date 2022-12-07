@@ -1,16 +1,17 @@
-<ng-container *ngIf="(localState$ | async) as headerInitState">
+<ng-container *ngIf="(localState$ | async) as localState">
 
-    <header [class.fullscreen]="headerInitState.expandHeader" (pointerdown)="onHeaderAreaClick($event, headerInitState.expandHeader)">
+    <header 
+        [class.fullscreen]="localState.showNavigation" 
+        (pointerdown)="onHeaderAreaClick($event, localState.showNavigation)"
+    >
     
         <app-menu-toggle-button 
-            [force-close]="headerInitState.forceClose"
-            *ngIf="headerInitState.showToggleBtn"
-            (on-toggle)="onMenuButtonToggle($event)"
+            *ngIf="localState.showMenuButton"
         ></app-menu-toggle-button>
     
         <nav 
             class="nav--primary" 
-            *ngIf="headerInitState.toggleNavigation" 
+            *ngIf="localState.showNavigation" 
         >
     
             <a class="nav-link" routerLink="/home">Home</a>
