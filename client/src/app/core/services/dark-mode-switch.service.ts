@@ -5,7 +5,8 @@ import { tap } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 
 import { WINDOW } from 'src/app/shared/custom-di-tokens';
-import { IRootState, toggleDarkMode } from 'src/app/+state';
+import { IRootState, theme as colorThemeState } from 'src/app/+state';
+
 
 @Injectable()
 export class DarkModeSwitchService {
@@ -35,7 +36,7 @@ export class DarkModeSwitchService {
 
 	setPreference(theme: string): void {
 
-		this.state.dispatch(toggleDarkMode({ darkModeOn: theme === 'dark' }));
+		this.state.dispatch(colorThemeState.actions.toggleDarkMode({ darkModeOn: theme === 'dark' }));
 	}
 
 	setStyles(darkModeOn: boolean): void {

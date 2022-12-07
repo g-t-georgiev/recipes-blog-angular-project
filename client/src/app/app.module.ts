@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
 import { HomeComponent } from './home/home.component';
 import { StoreModule } from '@ngrx/store';
-import { IRootState, darkModeReducer } from './+state';
+import { IRootState, theme } from './+state';
 import { DarkModeSwitchService } from './core/services/dark-mode-switch.service';
 import { ViewportResizeService } from './core/services/viewport-resize.service';
 
@@ -20,7 +20,7 @@ import { ViewportResizeService } from './core/services/viewport-resize.service';
         AppRoutingModule,
         CoreModule.forRoot(),
         StoreModule.forRoot<IRootState>({
-            darkModeOn: darkModeReducer
+            darkModeOn: theme.reducers.darkModeReducer
         })
     ],
     providers: [
