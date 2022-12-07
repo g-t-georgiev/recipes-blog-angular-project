@@ -2,4 +2,4 @@ export interface IRootState {
     darkModeOn: boolean;
 };
 
-export * from './dark-mode';
+export * as theme from './dark-mode';
