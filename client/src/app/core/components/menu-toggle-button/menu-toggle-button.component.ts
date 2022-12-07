@@ -6,7 +6,7 @@ import {
 	Observable, 
 } from 'rxjs';
 
-import { HeaderState, ILocalState } from '../header/header.state';
+import { HeaderState } from '../header/header.state';
 
 
 
@@ -22,7 +22,7 @@ enum ToggleNavButtonOptions {
 })
 export class MenuToggleButtonComponent {
 
-	readonly localState$: Observable<ILocalState> = this.state.localState$;
+	readonly showNavigation$: Observable<boolean> = this.state.showNavigation$;
 
 	constructor(
 		private readonly state: HeaderState
@@ -33,7 +33,8 @@ export class MenuToggleButtonComponent {
 	}
 
 	toggleNavigation(showNavigation: boolean) {
-		this.state.toggleNavigationView(showNavigation);
+		// console.log('Current navigation state: ', showNavigation ? 'opened' : 'closed');
+		this.state.toggleNavigation(!showNavigation);
 	}
 
 }
