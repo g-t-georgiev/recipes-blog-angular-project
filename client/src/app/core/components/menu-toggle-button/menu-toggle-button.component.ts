@@ -1,15 +1,12 @@
 import { 
 	Component, 
-	Input, 
-	Output, 
-	EventEmitter,
-	OnChanges, 
 } from '@angular/core';
 
 import { 
-	BehaviorSubject, 
 	Observable, 
 } from 'rxjs';
+
+import { HeaderState, ILocalState } from '../header/header.state';
 
 
 
@@ -18,51 +15,25 @@ enum ToggleNavButtonOptions {
 	CLOSED = 'closed'
 }
 
-interface ILocalState {
-	value: ToggleNavButtonOptions,
-	toggled: boolean
-};
-
 @Component({
 	selector: 'app-menu-toggle-button',
 	templateUrl: './menu-toggle-button.component.html',
 	styleUrls: ['./menu-toggle-button.component.css']
 })
-export class MenuToggleButtonComponent implements OnChanges {
+export class MenuToggleButtonComponent {
 
-	private _localState$: BehaviorSubject<ILocalState> = new BehaviorSubject<ILocalState>({
-		toggled: false,
-		value: ToggleNavButtonOptions.CLOSED
-	});
+	readonly localState$: Observable<ILocalState> = this.state.localState$;
 
-	localState$: Observable<ILocalState> = this._localState$.asObservable();
+	constructor(
+		private readonly state: HeaderState
+	) { }
 
-	@Input('force-close') closeExplicitly: boolean = false; 
-	@Output('on-toggle') private onToggle: EventEmitter<boolean> = new EventEmitter();
-
-	ngOnChanges(): void {
-
-		// console.log(
-		// 	'MenuToggleButtonComponent#ngOnChanges', 
-		// 	this.closeExplicitly
-		// );
-
-		if (this.closeExplicitly) {
-			this.setState(!this.closeExplicitly);
-		}
-
+	getbtnTextValue(showNavigation: boolean): ToggleNavButtonOptions {
+		return showNavigation ? ToggleNavButtonOptions.OPENED : ToggleNavButtonOptions.CLOSED;
 	}
 
-	private setState(isToggled: boolean) {
-		this._localState$.next({
-			toggled: isToggled,
-			value: isToggled ? ToggleNavButtonOptions.OPENED : ToggleNavButtonOptions.CLOSED
-		});
-	}
-
-	toggle(isToggled: boolean) {
-		this.setState(isToggled);
-		this.onToggle.emit(isToggled);
+	toggleNavigation(showNavigation: boolean) {
+		this.state.toggleNavigationView(showNavigation);
 	}
 
 }
