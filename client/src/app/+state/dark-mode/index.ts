@@ -1,2 +1,2 @@
-export * from './dark-mode.actions';
-export * from './dark-mode.reducers';
+export * as actions from './dark-mode.actions';
+export * as reducers from './dark-mode.reducers';
