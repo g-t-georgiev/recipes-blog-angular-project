@@ -13,7 +13,7 @@
         title="Toggle mobile menu" 
         [attr.aria-label]="getbtnTextValue(showNavigation)" 
         aria-live="polite" 
-        (pointerdown)="toggleNavigation(showNavigation)"
+        (pointerup)="toggleNavigation(showNavigation)"
     >
         <svg 
             class="menu-toggle-icon"

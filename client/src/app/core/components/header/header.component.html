@@ -7,7 +7,7 @@
     <!-- {{localState | json }} -->
     <header 
         [class.fullscreen]="localState.showNavigation" 
-        (pointerdown)="onHeaderAreaClick($event, localState.showNavigation)"
+        (pointerup)="onHeaderAreaClick($event, localState.showNavigation)"
     >
         
         <app-menu-toggle-button 
