@@ -1,14 +1,14 @@
-<ng-container *ngIf="(localState$ | async) as toggleBtnState">
+<ng-container *ngIf="(localState$ | async) as localState">
 
     <button  
         type="button" 
-        [attr.value]="toggleBtnState.value" 
+        [attr.value]="getbtnTextValue(localState.showNavigation)" 
         class="menu-toggle-btn" 
-        [class.toggled]="toggleBtnState.toggled"
+        [class.toggled]="localState.showNavigation"
         title="Toggle mobile menu" 
-        [attr.aria-label]="toggleBtnState.value" 
+        [attr.aria-label]="getbtnTextValue(localState.showNavigation)" 
         aria-live="polite" 
-        (pointerdown)="toggle(!toggleBtnState.toggled)"
+        (pointerdown)="toggleNavigation(!localState.showNavigation)"
     >
         <svg 
             class="menu-toggle-icon"
@@ -18,9 +18,9 @@
             aria-hidden="true"
         >
 
-            <line class="line" x1="1" x2="8" y1="2" [attr.y2]="toggleBtnState.toggled ? 8 : 2" stroke="currentColor" />
-            <line class="line" x1="2" x2="6" y1="5" [attr.y2]="toggleBtnState.toggled ? 8 : 5" stroke="currentColor" />
-            <line class="line" x1="1" x2="8" y1="8" [attr.y2]="toggleBtnState.toggled ? 2 : 8" stroke="currentColor" />
+            <line class="line" x1="1" x2="8" y1="2" [attr.y2]="localState.showNavigation ? 8 : 2" stroke="currentColor" />
+            <line class="line" x1="2" x2="6" y1="5" [attr.y2]="localState.showNavigation ? 8 : 5" stroke="currentColor" />
+            <line class="line" x1="1" x2="8" y1="8" [attr.y2]="localState.showNavigation ? 2 : 8" stroke="currentColor" />
 
         </svg>
     </button>
