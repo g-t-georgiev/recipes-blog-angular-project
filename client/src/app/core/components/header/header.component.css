@@ -113,11 +113,3 @@ header {
     }
 
 }
-
-/* @media (prefers-reduced-motion: no-preference) {
-
-    header {
-        transition: all .15s ease-in-out;
-    }
-
-} */
