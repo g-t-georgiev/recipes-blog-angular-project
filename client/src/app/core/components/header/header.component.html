@@ -1,10 +1,15 @@
-<ng-container *ngIf="(localState$ | async) as localState">
+<ng-container 
+    [ngTemplateOutlet]="header" 
+    [ngTemplateOutletContext]="{ $implicit: localState$ | async }"
+></ng-container>
 
+<ng-template #header let-localState>
+    <!-- {{localState | json }} -->
     <header 
         [class.fullscreen]="localState.showNavigation" 
         (pointerdown)="onHeaderAreaClick($event, localState.showNavigation)"
     >
-    
+        
         <app-menu-toggle-button 
             *ngIf="localState.showMenuButton"
         ></app-menu-toggle-button>
@@ -31,4 +36,4 @@
     
     </header>
 
-</ng-container>
+</ng-template>
