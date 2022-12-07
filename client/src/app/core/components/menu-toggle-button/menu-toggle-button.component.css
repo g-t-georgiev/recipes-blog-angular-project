@@ -94,7 +94,7 @@
     }
 
     .line:nth-child(2) {
-        transition: opacity .05s linear;
+        transition: opacity .1s linear;
     }
 
 }
