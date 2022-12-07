@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
+import { withLatestFrom, mergeMap, tap } from 'rxjs/operators';
 import { ComponentStore } from '@ngrx/component-store';
 
 
@@ -25,10 +26,25 @@ export class HeaderState extends ComponentStore<ILocalState> {
 
     readonly localState$: Observable<ILocalState> = this.select((state) => state);
 
+    readonly showNavigation$: Observable<boolean> = this.select(({ showNavigation }) => showNavigation);
+
     // updaters 
 
-    readonly toggleNavigationView = this.updater((state: ILocalState, showNavigation: boolean) => ({ ...state, showNavigation }));
+    readonly updateNavigationState = this.updater((state: ILocalState, showNavigation: boolean) => ({ ...state, showNavigation }));
 
-    readonly toggleMenuBtnView = this.updater((state: ILocalState, showMenuButton: boolean) => ({ ...state, showMenuButton }));
+    readonly updateMenuBtnToggleState = this.updater((state: ILocalState, showMenuButton: boolean) => ({ ...state, showMenuButton }));
+
+    // effects 
+
+    readonly toggleNavigation = this.effect(
+        (showNavigation$: Observable<boolean>) => {
+            return showNavigation$.pipe(
+                tap((value: boolean) => {
+                    // console.log('New navigation state: ', value ? 'opened' : 'closed');
+                    this.updateNavigationState(value);
+                })
+            );
+        }
+    );
     
 }
