@@ -32,13 +32,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
 	) { }
 
 	ngOnInit(): void {
-		this.state.toggleMenuBtnView(this.vpResizeService.hasMatch());
-		this.state.toggleNavigationView(!this.vpResizeService.hasMatch());
+		this.state.updateMenuBtnToggleState(this.vpResizeService.hasMatch());
+		this.state.toggleNavigation(!this.vpResizeService.hasMatch());
 
 		this.subscription = this.vpResizeService.onMaxWidth780$.subscribe({
 			next: ({ matches }) => {
-				this.state.toggleMenuBtnView(matches); // show toggle nav button on match
-				this.state.toggleNavigationView(!matches); // hide navigation on match
+				this.state.updateMenuBtnToggleState(matches); // show toggle nav button on match
+				this.state.toggleNavigation(!matches); // hide navigation on match
 			}
 		});
 	}
@@ -73,7 +73,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 			return; 
 		}
 
-		this.state.toggleNavigationView(false);
+		this.state.toggleNavigation(false);
 
 	}
 }
