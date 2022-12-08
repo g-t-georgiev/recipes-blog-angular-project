@@ -1,3 +1,27 @@
+@keyframes toggle-dark-mode {
+    0% {
+        scale: .85;
+    }
+    50% {
+        scale: 1.3;
+    }
+    100% {
+        scale: 1.10;
+    }
+}
+
+@keyframes toggle-light-mode {
+    0% {
+        scale: 1.15;
+    }
+    50% {
+        scale: .65;
+    }
+    100% {
+        scale: .85;
+    }
+}
+
 :host {
     position: absolute;
     top: 1.35rem;
@@ -46,27 +70,26 @@
 
 }
 
-.toggle-theme-btn > svg {
+.sun-moon-icon {
     inline-size: 100%;
     block-size: 100%;
     stroke-linecap: round;
 }
 
-.sun-moon-icon > :is(.sun, .moon, .sun-beams) {
+:is(.sun, .moon, .sun-beams) {
     transform-origin: center center;
 }
 
-
-.sun-moon-icon :is(.moon, .sun) {
+:is(.moon-mask, .sun) {
     fill: var(--icon__fill);
 }
 
-.sun-moon-icon .sun-beams {
-    stroke: var(--icon__fill);
+.toggle-theme-btn:is(:hover, :focus-visible) :is(.sun, .moon-mask) {
+    fill: var(--icon__fill--hover);
 }
 
-.toggle-theme-btn:is(:hover, :focus-visible) :is(.sun, .moon) {
-    fill: var(--icon__fill--hover);
+.sun-beams {
+    stroke: var(--icon__fill);
 }
 
 .toggle-theme-btn:is(:hover, :focus-visible) .sun-beams {
@@ -75,27 +98,59 @@
 
 @supports (scale: 1.15) {
 
-    :host-context(body.theme--dark) .sun-moon-icon .sun {
-        scale: 1.15;
+    .sun {
+        /* scale: .85; */
+        animation-name: toggle-light-mode;
+        animation-fill-mode: both;
+    }
+
+    :host-context(body.theme--dark) .sun {
+        /* scale: 1.15; */
+        animation-name: toggle-dark-mode;
+        animation-fill-mode: both;
     }
 
 }
 
 @supports not (scale: 1.15) {
 
-    :host-context(body.theme--dark) .sun-moon-icon .sun {
-        transform: scale(1.15);
+    .sun {
+        /* transform: scale(.85); */
+        animation-name: toggle-light-mode;
+        animation-fill-mode: both;
+    }
+
+    :host-context(body.theme--dark) .sun {
+        /* transform: scale(1.15); */
+        animation-name: toggle-dark-mode;
+        animation-fill-mode: both;
     }
 
 }
 
-:host-context(body.theme--dark) .sun-moon-icon .sun-beams {
+:host-context(body.theme--dark) .sun-beams {
     opacity: 0;
 }
 
-@supports (translate: -7px) {
+@supports (rotate: z -35deg) {
+
+    :host-context(body.theme--dark) .sun-beams {
+        rotate: z -35deg;
+    }
     
-    :host-context(body.theme--dark) .sun-moon-icon .sun-beams > circle {
+}
+
+@supports not (rotate: z -35deg) {
+
+    :host-context(body.theme--dark) .sun-beams {
+        transform: rotateZ(-35deg);
+    }
+    
+}
+
+@supports (translate: -7px) {
+
+    :host-context(body.theme--dark) .moon {
         translate: -7px;
     }
 
@@ -103,39 +158,7 @@
 
 @supports not (translate: -7px) {
 
-    :host-context(body.theme--dark) .sun-moon-icon .sun-beams > circle {
-        transform: translateX(-7px);
-    }
-
-}
-
-@supports (rotate: z -25deg) {
-
-    :host-context(body.theme--dark) .sun-moon-icon .sun-beams {
-        rotate: z -25deg;
-    }
-    
-}
-
-@supports not (rotate: z -25deg) {
-
-    :host-context(body.theme--dark) .sun-moon-icon .sun-beams {
-        transform: rotateZ(-25deg);
-    }
-    
-}
-
-@supports (translate: -7px) {
-
-    :host-context(body.theme--dark) .sun-moon-icon .moon > circle {
-        translate: -7px;
-    }
-
-}
-
-@supports not (translate: -7px) {
-
-    :host-context(body.theme--dark) .sun-moon-icon .moon > circle {
+    :host-context(body.theme--dark) .moon {
         transform: translateX(-7px);
     }
 
@@ -143,37 +166,42 @@
 
 @media (prefers-reduced-motion: no-preference) {
 
-    .sun-moon-icon .sun {
+    .sun {
+        animation-duration: .5s;
+        animation-timing-function: cubic-bezier(.5,1.25,.75,1.25);
         transition: 
-            scale .5s cubic-bezier(.5,1.25,.75,1.25),
-            transform .5s cubic-bezier(.5,1.25,.75,1.25);
+            /* scale .5s cubic-bezier(.5,1.25,.75,1.25),
+            transform .5s cubic-bezier(.5,1.25,.75,1.25) */
+            fill .15s ease-in-out;
     }
 
-    :host-context(body.theme--dark) .sun-moon-icon .sun {
+    :host-context(body.theme--dark) .sun {
+        animation-duration: .5s;
+        animation-timing-function: cubic-bezier(.25,0,.3,1);
         transition-duration: .25s;
         transition-timing-function: cubic-bezier(.25,0,.3,1);
     }
 
-    .sun-moon-icon .sun-beams {
+    .sun-beams {
         transition: 
-            rotate .5s cubic-bezier(.5,1.5,.75,1.25),
-            transform .5s cubic-bezier(.5,1.5,.75,1.25),
+            rotate .95s cubic-bezier(.5,1.5,.75,1.25),
+            transform .95s cubic-bezier(.5,1.5,.75,1.25),
             opacity .5s cubic-bezier(.25,0,.3,1);
     }
 
-    :host-context(body.theme--dark) .sun-moon-icon :is(.sun-beams) {
-        transition-duration: .15s;
+    :host-context(body.theme--dark) .sun-beams {
+        transition-duration: .1s;
     }
 
-    .sun-moon-icon .moon > circle {
+    .moon {
         transition:
-            translate .25s cubic-bezier(.9,0,.1,1),
-            transform .25s cubic-bezier(.9,0,.1,1);
+            translate .35s cubic-bezier(.9,0,.1,1),
+            transform .35s cubic-bezier(.9,0,.1,1);
     }
 
-    :host-context(body.theme--dark) .sun-moon-icon .moon > circle {
+    :host-context(body.theme--dark) .moon {
         transition-delay: 0;
-        transition-duration: .25s;
+        transition-duration: .55s;
     }
 
 }
