@@ -1,0 +1,35 @@
+body {
+    --background-color: #ebebeb;
+    --color: #222;
+    --color--active: hsl(220, 90%, 55%);
+    --color--focused: hsl(220, 90%, 55%);
+    --color--visited: hsl(220, 70%, 35%);
+    --color--hover: hsl(220, 70%, 56%);
+}
+
+.theme--dark,
+body.theme--dark {
+    --background-color: #121212;
+    --color: #d6d6d6;
+    --color--active: hsl(220, 70%, 55%);
+    --color--focused: hsl(220, 70%, 55%);
+    --color--visited: hsl(220, 50%, 35%);
+    --color--hover: hsl(220, 40%, 65%);
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--color);
+}
+
+a {
+    color: var(--color);
+}
+
+a:active { 
+    color: var(--color--active);
+}
+
+a:hover {
+    color: var(--color--hover);
+}
