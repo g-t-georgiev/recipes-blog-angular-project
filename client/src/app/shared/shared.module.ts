@@ -1,13 +1,18 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { LogoPlaceholderComponent } from './components/logo-placeholder/logo-placeholder.component';
 
 
 
 @NgModule({
-	declarations: [],
+	declarations: [
+    	LogoPlaceholderComponent
+  ],
 	imports: [
 		CommonModule,
 	],
-	exports: []
+	exports: [
+		LogoPlaceholderComponent
+	]
 })
 export class SharedModule { }
