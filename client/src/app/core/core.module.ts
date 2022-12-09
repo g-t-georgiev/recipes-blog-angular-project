@@ -22,6 +22,7 @@ import { ViewportResizeService } from './services/viewport-resize.service';
 	imports: [
 		CommonModule,
 		RouterModule,
+		SharedModule
 	],
 	exports: [
 		HeaderComponent
