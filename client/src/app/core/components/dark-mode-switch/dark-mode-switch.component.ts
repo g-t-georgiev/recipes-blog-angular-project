@@ -17,7 +17,6 @@ export class DarkModeSwitchComponent implements OnInit, AfterViewInit, OnDestroy
 	isDarkModeOn$!: Observable<boolean>;
 
 	private darkModeToggleSubscription!: Subscription;
-	private colorSchemeChangeSubscription!: Subscription;
 
 	constructor(
 		private themeService: DarkModeSwitchService,
@@ -25,26 +24,28 @@ export class DarkModeSwitchComponent implements OnInit, AfterViewInit, OnDestroy
 	) {
 		
 		this.isDarkModeOn$ = this.state.select(globalState => globalState.darkModeOn);
+		this.darkModeToggleSubscription = new Subscription();
 	}
 
 	ngOnInit(): void { }
 
 	ngAfterViewInit(): void {
 
-		this.darkModeToggleSubscription = this.isDarkModeOn$.subscribe({
-			next: (value) => {
-				const { nativeElement: toggleBtn } = this.toggleThemeBtn; 
-				const selectedTheme = value ? 'dark' : 'light';
-				toggleBtn.setAttribute('aria-label', selectedTheme);
-				toggleBtn.value = selectedTheme;
-			}
-		});
+		this.darkModeToggleSubscription.add(
+			this.isDarkModeOn$.subscribe({
+				next: (value) => {
+					const { nativeElement: toggleBtn } = this.toggleThemeBtn; 
+					const selectedTheme = value ? 'dark' : 'light';
+					toggleBtn.setAttribute('aria-label', selectedTheme);
+					toggleBtn.value = selectedTheme;
+				}
+			})
+		);
 
 	}
 
 	ngOnDestroy(): void {
 		this.darkModeToggleSubscription.unsubscribe?.();
-		this.colorSchemeChangeSubscription.unsubscribe?.();
 	}
 
 
