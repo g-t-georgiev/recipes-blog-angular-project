@@ -11,6 +11,7 @@
     >
         
         <app-menu-toggle-button 
+            class="menu-toggle-btn"
             *ngIf="localState.showMenuButton"
         ></app-menu-toggle-button>
     
@@ -21,18 +22,24 @@
     
             <a class="nav-link" routerLink="/home">Home</a>
             <a class="nav-link" routerLink="/recipes">Recipes</a>
+            <a class="nav-link" routerLink="/recipes/add">Add Recipe</a>
+
+            <app-logo-placeholder class="logo"></app-logo-placeholder>
             
             <section class="nav-auth-section">
     
                 <ng-container>
                     <a class="nav-link" routerLink="/users/login">Log In</a>
-                    <a class="nav-link button" routerLink="/users/register">Sign up</a>
+                    <a class="nav-link" routerLink="/users/register">Sign up</a>
                 </ng-container>
         
             </section>
         </nav>
     
-        <app-dark-mode-switch></app-dark-mode-switch>
+        <app-dark-mode-switch 
+            *ngIf="(!localState.showMenuButton) || (localState.showMenuButton && !localState.showNavigation)"
+            class="theme-switch"
+        ></app-dark-mode-switch>
     
     </header>
 
