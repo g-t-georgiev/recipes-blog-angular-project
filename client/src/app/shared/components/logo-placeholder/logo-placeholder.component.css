@@ -1,0 +1,56 @@
+@font-face {
+    font-family: 'Sacramento', cursive;
+    font-weight: 400;
+    src: 
+        local('Sacramento Regular')
+        url('../../../../assets/fonts/Sacramento/Sacramento-Regular.ttf')
+        format('ttf');
+}
+
+:host {
+    --logo-placeholder__size: 7rem;
+    --logo-placeholder-circle__fill: hsl(325, 57%, 46%);
+    --logo-placeholder-circle__size: 6rem;
+}
+
+:host-context(.theme--dark) {
+    --logo-placeholder-circle__fill: hsl(167, 27%, 46%);
+}
+
+.logo-placeholder {
+    position: relative;
+    inline-size: var(--logo-placeholder__size);
+}
+
+.logo-text {
+    position: absolute;
+    display: block;
+
+    font-family: 'Sacramento', cursive;
+    font-size: 4rem;
+    text-align: center;
+}
+
+@supports ((translate: 12% -95%) and (rotate: z -12deg)) {
+
+    .logo-text {
+        translate: 13% -120%;
+        rotate: z -5deg;
+    }
+
+}
+
+@supports not ((translate: 12% -125%) and (rotate: z -12deg)) {
+
+    .logo-text {
+        transform: 
+            translate(12%, -125%),
+            rotateZ(12deg);
+    }
+
+}
+
+.logo-placeholder-circle {
+    fill: var(--logo-placeholder-circle__fill);
+    inline-size: var(--logo-placeholder-circle__size);
+}
