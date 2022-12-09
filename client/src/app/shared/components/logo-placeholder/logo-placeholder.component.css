@@ -1,12 +1,3 @@
-@font-face {
-    font-family: 'Sacramento', cursive;
-    font-weight: 400;
-    src: 
-        local('Sacramento Regular')
-        url('../../../../assets/fonts/Sacramento/Sacramento-Regular.ttf')
-        format('ttf');
-}
-
 :host {
     --logo-placeholder__size: 7rem;
     --logo-placeholder-circle__fill: hsl(325, 57%, 46%);
