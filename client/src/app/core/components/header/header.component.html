@@ -10,6 +10,10 @@
         (pointerup)="onHeaderAreaClick($event, localState.showNavigation)"
     >
         
+        <app-logo-placeholder 
+            class="logo"
+        ></app-logo-placeholder>
+
         <app-menu-toggle-button 
             class="menu-toggle-btn"
             *ngIf="localState.showMenuButton"
@@ -23,8 +27,6 @@
             <a class="nav-link" routerLink="/home">Home</a>
             <a class="nav-link" routerLink="/recipes">Recipes</a>
             <a class="nav-link" routerLink="/recipes/add">Add Recipe</a>
-
-            <app-logo-placeholder class="logo"></app-logo-placeholder>
             
             <section class="nav-auth-section">
     
@@ -35,9 +37,13 @@
         
             </section>
         </nav>
+
+        <!-- 
+            Add to <app-dark-mode-switch> to hide it on mobile view opened navigation
+            *ngIf="(!localState.showMenuButton) || (localState.showMenuButton && !localState.showNavigation)" 
+        -->
     
         <app-dark-mode-switch 
-            *ngIf="(!localState.showMenuButton) || (localState.showMenuButton && !localState.showNavigation)"
             class="theme-switch"
         ></app-dark-mode-switch>
     
