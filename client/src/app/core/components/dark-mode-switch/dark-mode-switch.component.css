@@ -54,12 +54,6 @@
 
 }
 
-:host {
-    position: absolute;
-    top: 1.35rem;
-    right: 2rem;
-}
-
 .toggle-theme-btn {
     --toggle-theme-btn__size: 2rem;
     --icon__fill: hsl(0, 0%, 23%);
