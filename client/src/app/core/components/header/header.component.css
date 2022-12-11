@@ -1,8 +1,9 @@
 :host {
+    --header__bg-color: var(--bg-color1);
     --header__margin-inline: auto;
     --header__padding-block: 1.5rem;
     --header__padding_inline: 1rem;
-    --header__inline-size: 75%;
+    --header__inline-size: 50vw;
     --header__block-size: auto;
     --header__position: sticky;
     --header__top-offset: 0;
@@ -11,19 +12,16 @@
     --header__justify-content: space-between;
     --header__align-tems: center;
 
-    --nav__font-weight: 400;
-    --nav__font-size: .95rem;
-    --nav__color--hover: hsl(0, 0%, 65%);
+    --nav-link__font-weight: 400;
+    --nav-link__font-size: 1.2rem;
+    --nav-link__color: var(--txt__color);
+    --nav-link__color--hover: var(--link__color--active);
 }
 
 :host-context(.maxwidth--780) {
     --header__inline-size: 100vw;
     --header__justify-content: space-between;
-    --nav__font-size: 1.35rem;
-}
-
-:host-context(.theme--dark) {
-    --nav__color--hover: hsl(0, 0%, 55%);
+    --nav-link__font-size: 1.55rem;
 }
 
 header {
@@ -42,7 +40,7 @@ header {
     padding-block: var(--header__padding-block);
     padding-inline: var(--header__padding_inline);
 
-    background-color: var(--background-color);
+    background-color: var(--header__bg-color);
 }
 
 .nav--primary {
@@ -56,17 +54,17 @@ header {
 }
 
 .nav-link {
-    font-weight: var(--nav__font-weight);
-    font-size: var(--nav__font-size);
-    color: var(--color);
+    font-weight: var(--nav-link__font-weight);
+    font-size: var(--nav-link__font-size);
+    color: var(--nav-link__color);
     text-decoration: none;
     line-height: 1.5;
     padding-block: .25rem;
     padding-inline: .35rem;
 }
 
-.nav-link:not(.button):hover {
-    color: var(--nav__color--hover);
+.nav-link:not(.button):is(:hover, :active, :focus-visible, .active) {
+    color: var(--nav-link__color--hover);
 }
 
 .nav-auth-section {
@@ -77,14 +75,30 @@ header {
     gap: .5rem;
 }
 
+.theme-switch {
+    position: fixed;
+    top: var(--header__padding-block);
+    right: var(--header__padding_inline);
+}
+
 @media screen and (max-width: 780px) {
+
+    .nav--primary {
+        display: none;
+    }
+
+    .toggle {
+        display: flex;
+        align-items: flex-start;
+    }
+
 
     header.fullscreen { 
         --header__block-size: 100vh;
         --header__position: fixed;
         --header__flex-direction: column;
         --header__justify-content: flex-start;
-        --header__align-items: center;
+        --header__align-items: flex-start;
         
         block-size: var(--header__block-size);
 
@@ -96,34 +110,12 @@ header {
         gap: 3rem;
     }
 
-    header.fullscreen .logo {
-        position: absolute;
-        top: var(--header__padding-block);
-        left: var(--header__padding_inline);
-    }
-
-    header.fullscreen .menu-toggle-btn {
-        margin-block-start: calc( var(--header__padding-block) * .65 );
-        margin-inline-start: calc( var(--header__padding_inline) * 2 );
-    }
-
     header.fullscreen :is(.nav--primary, .nav-auth-section) {
         flex-direction: column;
     }
 
-    header.fullscreen .nav--primary {
-        align-items: center;
-        margin-inline-start: calc( var(--header__padding_inline) * 2 );
-    }
-
     header.fullscreen .nav-auth-section {
-        align-items: center; 
-    }
-
-    header.fullscreen .theme-switch {
-        position: absolute;
-        top: calc( var(--header__padding-block) * 1.6 );
-        right: var(--header__padding_inline);
+        align-items: flex-start; 
     }
 
 }
