@@ -1,35 +1,41 @@
 body {
-    --background-color: #ebebeb;
-    --color: #222;
-    --color--active: hsl(220, 90%, 55%);
-    --color--focused: hsl(220, 90%, 55%);
-    --color--visited: hsl(220, 70%, 35%);
-    --color--hover: hsl(220, 70%, 56%);
+    --bg-color1: hsl(210, 29%, 97%);
+
+    --txt__color: hsl(0, 0%, 7%);
+
+    --link__color: hsl(326, 100%, 39%);
+    --link__color--active: hsl(325, 95%, 47%);
+    --link__color--visited: hsl(326, 100%, 31%);
 }
 
 .theme--dark,
 body.theme--dark {
-    --background-color: #121212;
-    --color: #d6d6d6;
-    --color--active: hsl(220, 70%, 55%);
-    --color--focused: hsl(220, 70%, 55%);
-    --color--visited: hsl(220, 50%, 35%);
-    --color--hover: hsl(220, 40%, 65%);
+    --bg-color1: hsl(218, 80%, 2%);
+
+    --txt__color: hsl(210, 17%, 82%);
+
+    --link__color: hsl(181, 100%, 50%);
+    --link__color--active: hsl(181, 100%, 50%);
+    --link__color--visited: hsl(181, 92%, 37%);
 }
 
 body {
-    background-color: var(--background-color);
-    color: var(--color);
+    background-color: var(--bg-color1);
+    color: var(--txt__color);
 }
 
 a {
-    color: var(--color);
+    color: var(--link__color);
 }
 
-a:active { 
-    color: var(--color--active);
+a:is(:active) { 
+    color: var(--link__color--active);
 }
 
-a:hover {
-    color: var(--color--hover);
+a:is(:visited) {
+    color: var(--link__color--visited);
+}
+
+a:is(:focus-visible) {
+    outline-color: var(--link__color--active);
 }
