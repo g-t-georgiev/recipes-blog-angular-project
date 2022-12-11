@@ -13,5 +13,13 @@ body {
 }
 
 a {
+    text-decoration: none;
+}
+
+a:is(:hover) {
     text-decoration: underline;
+}
+
+a:is(:focus-visible) {
+    outline-style: solid;
 }
