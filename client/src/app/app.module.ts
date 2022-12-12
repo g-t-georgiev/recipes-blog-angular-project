@@ -1,5 +1,6 @@
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -16,7 +17,8 @@ import { ViewportResizeService } from './core/services/viewport-resize.service';
         HomeComponent
     ],
     imports: [
-        BrowserModule,
+        BrowserModule, 
+        HttpClientModule,
         AppRoutingModule,
         CoreModule.forRoot(),
         StoreModule.forRoot<IRootState>({
