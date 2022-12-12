@@ -1,15 +1,18 @@
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
+import { StoreModule } from '@ngrx/store';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
 import { HomeComponent } from './home/home.component';
-import { StoreModule } from '@ngrx/store';
+
 import { currentUser, IRootState, theme } from './+state';
+
 import { DarkModeSwitchService } from './core/services/dark-mode-switch.service';
 import { ViewportResizeService } from './core/services/viewport-resize.service';
+import { AuthService } from './core/services/auth.service';
 
 @NgModule({
     declarations: [
@@ -50,6 +53,16 @@ import { ViewportResizeService } from './core/services/viewport-resize.service';
             },
             multi: true,
             deps: [DarkModeSwitchService]
+        },
+        {
+            provide: APP_INITIALIZER,
+            useFactory: (authService: AuthService) => {
+                return function () {
+                    authService.authenticate$();
+                }
+            },
+            multi: true,
+            deps: [AuthService]
         }
     ],
     bootstrap: [AppComponent]
