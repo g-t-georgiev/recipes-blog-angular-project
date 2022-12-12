@@ -1,6 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
 import { toggleDarkMode } from './dark-mode.actions';
-// import { IDarkModeFeature } from './dark-mode.selectors';
 
 const initialDarkModeState = false;
 
