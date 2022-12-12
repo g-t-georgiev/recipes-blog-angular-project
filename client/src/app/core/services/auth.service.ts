@@ -53,15 +53,15 @@ export class AuthService {
 	) { }
 
 	login$(userData: IUserSignInDto): Observable<IUserSignInResponse> {
-		return this.http.post<IUserSignInResponse>(signInUrl, userData, { withCredentials: true });
+		return this.http.post<IUserSignInResponse>(signInUrl, userData);
 	}
 
 	register$(userData: IUserSignUpDto): Observable<IUserSignUpResponse> {
-		return this.http.post<IUserSignUpResponse>(signUpUrl, userData, { withCredentials: true });
+		return this.http.post<IUserSignUpResponse>(signUpUrl, userData);
 	}
 
 	logout$(): Observable<IUserSignOutResponse> {
-		return this.http.delete<IUserSignOutResponse>(signOutUrl, { withCredentials: true });
+		return this.http.delete<IUserSignOutResponse>(signOutUrl);
 	}
 
 	authenticate$(): Observable<IUserSignInResponse> {
