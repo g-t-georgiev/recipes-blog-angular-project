@@ -15,12 +15,12 @@ const signUpUrl = `${apiUrl}/register`;
 const signOutUrl = `${apiUrl}/logout`;
 const authUrl = `${apiUrl}/users/auth`;
 
-interface IUserSignInDto {
+export interface IUserSignInDto {
 	username: string;
 	password: string;
 }
 
-interface IUserSignUpDto {
+export interface IUserSignUpDto {
 	email: string;
 	username: string;
 	imageUrl: string;
@@ -28,16 +28,16 @@ interface IUserSignUpDto {
 	repeatPassword: string;
 }
 
-interface IUserSignInResponse {
+export interface IUserSignInResponse {
 	user?: IUser;
 	message: string;
 }
 
-interface IUserSignUpResponse {
+export interface IUserSignUpResponse {
 	message: string;
 }
 
-interface IUserSignOutResponse {
+export interface IUserSignOutResponse {
 	message: string;
 }
 
