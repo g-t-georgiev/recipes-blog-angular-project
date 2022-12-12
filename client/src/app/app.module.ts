@@ -3,6 +3,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { StoreModule } from '@ngrx/store';
 
+import { AuthService, DarkModeSwitchService as ThemeSwitchService, ViewportResizeService } from './core/services';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
@@ -10,9 +12,6 @@ import { HomeComponent } from './home/home.component';
 
 import { currentUser, IRootState, theme } from './+state';
 
-import { DarkModeSwitchService } from './core/services/dark-mode-switch.service';
-import { ViewportResizeService } from './core/services/viewport-resize.service';
-import { AuthService } from './core/services/auth.service';
 
 @NgModule({
     declarations: [
@@ -44,7 +43,7 @@ import { AuthService } from './core/services/auth.service';
         },
         {
             provide: APP_INITIALIZER,
-            useFactory: (themeService: DarkModeSwitchService) => {
+            useFactory: (themeService: ThemeSwitchService) => {
                 return function() {
                     themeService.setPreference(
                         themeService.getPreference()
@@ -52,7 +51,7 @@ import { AuthService } from './core/services/auth.service';
                 }
             },
             multi: true,
-            deps: [DarkModeSwitchService]
+            deps: [ThemeSwitchService]
         },
         {
             provide: APP_INITIALIZER,
