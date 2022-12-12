@@ -10,6 +10,7 @@ import { MenuToggleButtonComponent } from './components/menu-toggle-button/menu-
 
 import { DarkModeSwitchService } from './services/dark-mode-switch.service';
 import { ViewportResizeService } from './services/viewport-resize.service';
+import { AuthService } from './services/auth.service';
 
 
 
@@ -36,6 +37,7 @@ export class CoreModule {
 			providers: [
 				DarkModeSwitchService,
 				ViewportResizeService, 
+				AuthService
 			]
 		}
 	}
