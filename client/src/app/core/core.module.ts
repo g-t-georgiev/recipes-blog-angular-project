@@ -11,6 +11,8 @@ import { MenuToggleButtonComponent } from './components/menu-toggle-button/menu-
 import { DarkModeSwitchService } from './services/dark-mode-switch.service';
 import { ViewportResizeService } from './services/viewport-resize.service';
 import { AuthService } from './services/auth.service';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AttachCookieInterceptor, AuthInterceptor } from './interceptors';
 
 
 
@@ -35,6 +37,16 @@ export class CoreModule {
 		return {
 			ngModule: CoreModule,
 			providers: [
+				{
+					provide: HTTP_INTERCEPTORS,
+					useClass: AuthInterceptor,
+					multi: true
+				},
+				{
+					provide: HTTP_INTERCEPTORS,
+					useClass: AttachCookieInterceptor,
+					multi: true
+				},
 				DarkModeSwitchService,
 				ViewportResizeService, 
 				AuthService
