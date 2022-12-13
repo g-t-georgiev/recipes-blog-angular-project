@@ -14,7 +14,7 @@ export class DarkModeSwitchComponent implements OnInit, AfterViewInit, OnDestroy
 
 	@ViewChild('toggleThemeBtn') private toggleThemeBtn!: ElementRef<HTMLButtonElement>;
 
-	isDarkModeOn$!: Observable<boolean>;
+	readonly isDarkModeOn$!: Observable<boolean>;
 
 	private darkModeToggleSubscription!: Subscription;
 
