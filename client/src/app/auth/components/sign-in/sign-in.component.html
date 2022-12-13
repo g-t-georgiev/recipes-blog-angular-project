@@ -1,21 +1,29 @@
-<form>
+<section class="login-section">
 
-    <h2>Sign in to your profile</h2>
+    <header class="login-section-header">
+        <h2>Sign in to your profile</h2>
+    </header>
 
-    <section class="form-field">
-        <label for="username">Username</label>
-        <input type="text" name="username" id="username" placeholder="Username" />
-    </section>
+    <form class="login-form">
+    
+        <section class="login-form-field">
+            <label class="login-form-label" for="username">Username</label>
+            <input class="login-form-input" type="text" name="username" id="username" placeholder="Username" />
+        </section>
+    
+        <section class="login-form-field">
+            <label class="login-form-label" for="password">Password</label>
+            <input class="login-form-input" type="password" name="password" id="password" placeholder="Password" />
+        </section>
+    
+        <button class="login-form-submit-btn" type="submit">Login</button>
 
-    <section class="form-field">
-        <label for="password">Password</label>
-        <input type="password" name="password" id="password" />
-    </section>
+    </form>
 
-    <button type="submit">Sign In</button>
+    <footer class="login-section-footer">
+        <p class="login-section-footer-content">
+            Don't have an account? <a [routerLink]="[ '/users', 'register' ]">Sign up.</a>
+        </p>
+    </footer>
 
-    <p>
-        Don't have an account? <a [routerLink]="[ '/users', 'register' ]">Sign up.</a>
-    </p>
-
-</form>
+</section>
