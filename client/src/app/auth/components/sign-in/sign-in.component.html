@@ -1,1 +1,21 @@
-<p>sign-in works!</p>
+<form>
+
+    <h2>Sign in to your profile</h2>
+
+    <section class="form-field">
+        <label for="username">Username</label>
+        <input type="text" name="username" id="username" placeholder="Username" />
+    </section>
+
+    <section class="form-field">
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" />
+    </section>
+
+    <button type="submit">Sign In</button>
+
+    <p>
+        Don't have an account? <a [routerLink]="[ '/users', 'register' ]">Sign up.</a>
+    </p>
+
+</form>
