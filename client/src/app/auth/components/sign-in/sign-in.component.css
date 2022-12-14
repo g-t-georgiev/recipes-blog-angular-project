@@ -18,7 +18,9 @@
     --login-form-label__offset-block: -100%;
 
     --login-form-input__bg-color: hsl(210, 29%, 97%);
-    --login-form-input__border-color: hsl(0, 0%, 7%);;
+    --login-form-input__border-color: hsl(0, 0%, 7%);
+    --login-form-input__border-color--invalid: hsl(0, 74%, 37%);
+    --login-form-input__border-color--valid: hsl(133, 64%, 27%);
     --login-form-input__border-style: solid;
     --login-form-input__border-width: .1rem;
     --login-form-input__padding-inline: .85rem;
@@ -32,14 +34,29 @@
     --login-form-submit-btn__border-style: solid;
     --login-form-submit-btn__border-width: .1rem;
     --login-form-submit-btn__cursor: pointer;
+
+    --login-form-input-error__padding-block: .25rem;
+    --login-form-input-error__padding-inline: .5rem;
+    --login-form-input-error__font-size: .8em;
+    --login-form-input-error__color: hsl(0, 74%, 37%);
+
+    --login-form-error__font-size: .9em;
+    --login-form-error__color: hsl(0, 74%, 37%);
 }
 
 :host-context(.theme--dark) {
     --login-form-input__bg-color: hsl(218, 80%, 2%);
     --login-form-input__border-color: hsl(210, 17%, 82%);
+    --login-form-input__border-color--invalid: hsl(0, 54%, 37%);
+    --login-form-input__border-color--valid: hsl(133, 54%, 27%);
 
     --login-form-submit-btn__bg-color: hsl(218, 80%, 2%);
     --login-form-submit-btn__border-color: hsl(210, 29%, 97%);
+
+    --login-form-input-error__color: hsl(0, 54%, 37%);
+
+    --login-form-error__color: hsl(0, 54%, 37%);
+
 }
 
 :host-context(.maxwidth--780) {
@@ -67,7 +84,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 1.35rem;
+    gap: 2rem;
 
     inline-size: clamp(var(--login-form__inline-size--min), var(--login-form__inline-size--prefered), var(--login-form__inline-size--max));
 }
@@ -161,4 +178,31 @@
     outline: none;
 
     cursor: var(--login-form-submit-btn__cursor);
+}
+
+.login-form-error-msg {
+    font-size: var(--login-form-error__font-size);
+    color: var(--login-form-error__color);
+}
+
+.form-input-error-msg {
+    position: absolute;
+    left: 0;
+    bottom: -60%;
+
+    inline-size: auto;
+
+    padding-block: var(--login-form-input-error__padding-block);
+    padding-inline: var(--login-form-input-error__padding-inline);
+
+    font-size: var(--login-form-input-error__font-size);
+    color: var(--login-form-input-error__color);
+}
+
+.ng-touched.ng-invalid {
+    border-color: var(--login-form-input__border-color--invalid);
+}
+
+.ng-touched.ng-valid {
+    border-color: var(--login-form-input__border-color--valid);
 }
