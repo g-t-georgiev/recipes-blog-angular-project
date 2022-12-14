@@ -4,19 +4,89 @@
         <h2>Sign in to your profile</h2>
     </header>
 
-    <form class="login-form">
+    <section 
+        class="login-form-error-msg"
+    >
+
+        Please fill in all the fields below!
+
+    </section>
+
+    <form 
+        #loginForm="ngForm" 
+        (ngSubmit)="onLogin(loginForm)"
+        class="login-form"
+    >
     
         <section class="login-form-field">
-            <label class="login-form-label" for="username">Username</label>
-            <input class="login-form-input" type="text" name="username" id="username" placeholder="Username" />
+
+            <label 
+                class="login-form-label" 
+                for="username"
+            >
+
+                Username
+
+            </label>
+
+            <input 
+                ngModel 
+                required 
+                #usernameControl="ngModel" 
+                class="login-form-input" 
+                type="text" 
+                name="username" 
+                id="username" 
+                placeholder="Username" 
+                aria-required="true" 
+            />
+
+            <ng-container 
+                [ngTemplateOutlet]="formInputErrorMsg" 
+                [ngTemplateOutletContext]="{ $implicit: 'Username is required' }"
+                *ngIf="usernameControl.touched && usernameControl.errors?.['required']"
+            ></ng-container>
+
         </section>
     
         <section class="login-form-field">
-            <label class="login-form-label" for="password">Password</label>
-            <input class="login-form-input" type="password" name="password" id="password" placeholder="Password" />
+
+            <label 
+                class="login-form-label" 
+                for="password"
+            >
+
+                Password
+
+            </label>
+
+            <input 
+                ngModel 
+                required 
+                #passwordControl="ngModel" 
+                class="login-form-input" 
+                type="password" 
+                name="password" 
+                id="password" 
+                placeholder="Password" 
+                aria-required="true" 
+            />
+
+            <ng-container 
+                [ngTemplateOutlet]="formInputErrorMsg" 
+                [ngTemplateOutletContext]="{ $implicit: 'Password is required' }"
+                *ngIf="passwordControl.touched && passwordControl.errors?.['required']"
+            ></ng-container>
+
         </section>
     
-        <button class="login-form-submit-btn" type="submit">Login</button>
+        <button 
+            [attr.disabled]="loginForm.invalid"
+            class="login-form-submit-btn" 
+            type="submit"
+        >
+            Login
+        </button>
 
     </form>
 
@@ -27,3 +97,9 @@
     </footer>
 
 </section>
+
+<ng-template #formInputErrorMsg let-errorTxt>
+    <section class="form-input-error-msg">
+        {{errorTxt}}
+    </section>
+</ng-template>
