@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { NgForm } from '@angular/forms';
 
 @Component({
 	selector: 'app-sign-in',
@@ -6,5 +7,14 @@ import { Component } from '@angular/core';
 	styleUrls: ['./sign-in.component.css']
 })
 export class SignInComponent {
+
+	onLogin(formModel: NgForm) {
+
+		if (formModel.invalid) {
+			return;
+		}
+
+		console.log(formModel);
+	}
 
 }
