@@ -8,9 +8,7 @@ import { SharedModule } from '../shared/shared.module';
 import { AttachCookieInterceptor, AuthInterceptor } from './interceptors';
 import { AuthService, DarkModeSwitchService as ThemeSwitchService, ViewportResizeService } from './services';
 
-import { HeaderComponent } from './components/header/header.component';
-import { DarkModeSwitchComponent } from './components/dark-mode-switch/dark-mode-switch.component';
-import { MenuToggleButtonComponent } from './components/menu-toggle-button/menu-toggle-button.component';
+import { HeaderComponent, DarkModeSwitchComponent, MenuToggleButtonComponent } from './components';
 
 
 
