@@ -1,8 +1,4 @@
 body {
-    --form-container__inline-size: 50vw;
-    --form-container__margin-block: 5rem 0;
-    --form-container__margin-inline: auto;
-
     --form-container-header__font-size--min: 1.65rem;
     --form-container-header__font-size--max: 1.9rem;
     --form-container-header__font-size--prefered: 3.3vw;
@@ -59,10 +55,6 @@ body.theme--dark {
 }
 
 .form-container {
-    inline-size: var(--form-container__inline-size);
-    margin-block: var(--form-container__margin-block);
-    margin-inline: var(--form-container__margin-inline);
-
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -200,13 +192,26 @@ body.theme--dark {
     color: var(--form-input-error__color);
 }
 
-.ng-touched.ng-invalid {
+.ng-touched.ng-invalid:not(:focus) {
     border-color: var(--form-input__border-color--invalid);
 }
 
-.ng-touched.ng-valid {
+.ng-touched.ng-valid:not(:focus) {
     border-color: var(--form-input__border-color--valid);
 }
+
+.form-row:has(
+    .ng-touched.ng-invalid:not(:focus)
+) .form-input-label {
+    color: var(--form-input__border-color--invalid);
+}
+
+.form-row:has(
+    .ng-touched.ng-valid:not(:focus)
+) .form-input-label {
+    color: var(--form-input__border-color--valid);
+}
+
 
 @media (prefers-reduced-motion: no-preference) {
 
