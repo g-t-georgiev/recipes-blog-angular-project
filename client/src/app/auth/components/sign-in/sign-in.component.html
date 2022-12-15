@@ -1,11 +1,11 @@
-<section class="login-section">
+<section class="form-container">
 
-    <header class="login-section-header">
+    <header class="form-container-header">
         <h2>Sign in to your profile</h2>
     </header>
 
     <section 
-        class="login-form-error-msg"
+        class="form-error"
     >
 
         Please fill in all the fields below!
@@ -14,14 +14,14 @@
 
     <form 
         #loginForm="ngForm" 
-        (ngSubmit)="onLogin(loginForm)"
-        class="login-form"
+        (ngSubmit)="handleLogin(loginForm)"
+        class="form"
     >
     
-        <section class="login-form-field">
+        <section class="form-row">
 
             <label 
-                class="login-form-label" 
+                class="form-input-label" 
                 for="username"
             >
 
@@ -33,7 +33,7 @@
                 ngModel 
                 required 
                 #usernameControl="ngModel" 
-                class="login-form-input" 
+                class="form-input" 
                 type="text" 
                 name="username" 
                 id="username" 
@@ -49,10 +49,10 @@
 
         </section>
     
-        <section class="login-form-field">
+        <section class="form-row">
 
             <label 
-                class="login-form-label" 
+                class="form-input-label" 
                 for="password"
             >
 
@@ -64,7 +64,7 @@
                 ngModel 
                 required 
                 #passwordControl="ngModel" 
-                class="login-form-input" 
+                class="form-input" 
                 type="password" 
                 name="password" 
                 id="password" 
@@ -82,7 +82,7 @@
     
         <button 
             [attr.disabled]="loginForm.invalid"
-            class="login-form-submit-btn" 
+            class="form-submit-btn" 
             type="submit"
         >
             Login
@@ -90,8 +90,8 @@
 
     </form>
 
-    <footer class="login-section-footer">
-        <p class="login-section-footer-content">
+    <footer class="form-container-footer">
+        <p class="form-container-footer-content">
             Don't have an account? <a [routerLink]="[ '/users', 'register' ]">Sign up.</a>
         </p>
     </footer>
@@ -99,7 +99,7 @@
 </section>
 
 <ng-template #formInputErrorMsg let-errorTxt>
-    <section class="form-input-error-msg">
+    <section class="form-input-error">
         {{errorTxt}}
     </section>
 </ng-template>
