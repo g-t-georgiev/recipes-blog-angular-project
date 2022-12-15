@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { NgForm } from '@angular/forms';
 
 @Component({
 	selector: 'app-sign-up',
@@ -6,5 +7,14 @@ import { Component } from '@angular/core';
 	styleUrls: ['./sign-up.component.css']
 })
 export class SignUpComponent {
+
+	handleRegister(formModel: NgForm) {
+
+		if (formModel.invalid) {
+			return;
+		}
+
+		console.log(formModel);
+	}
 
 }
