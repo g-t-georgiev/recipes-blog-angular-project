@@ -8,7 +8,7 @@ import { NgForm } from '@angular/forms';
 })
 export class SignInComponent {
 
-	onLogin(formModel: NgForm) {
+	handleLogin(formModel: NgForm) {
 
 		if (formModel.invalid) {
 			return;
