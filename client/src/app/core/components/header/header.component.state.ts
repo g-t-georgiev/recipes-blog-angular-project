@@ -16,7 +16,7 @@ const initialState: ILocalState = {
 };
 
 @Injectable()
-export class HeaderState extends ComponentStore<ILocalState> {
+export class HeaderComponentState extends ComponentStore<ILocalState> {
 
     constructor() {
         super(initialState);
