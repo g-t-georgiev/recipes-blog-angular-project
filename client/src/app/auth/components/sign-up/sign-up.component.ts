@@ -8,7 +8,7 @@ import { NgForm } from '@angular/forms';
 })
 export class SignUpComponent {
 
-	handleRegister(formModel: NgForm) {
+	submitHandler(formModel: NgForm) {
 
 		if (formModel.invalid) {
 			return;
