@@ -1,1 +1,105 @@
-<p>sign-up works!</p>
+<section class="form-container">
+
+    <header class="form-container-header">
+        <h2>Create an account</h2>
+    </header>
+
+    <section 
+        class="form-error"
+    >
+
+        Please fill in all the fields below!
+
+    </section>
+
+    <form 
+        #registerForm="ngForm" 
+        (ngSubmit)="handleRegister(registerForm)"
+        class="form"
+    >
+    
+        <section class="form-row">
+
+            <label 
+                class="form-input-label" 
+                for="username"
+            >
+
+                Username
+
+            </label>
+
+            <input 
+                ngModel 
+                required 
+                #usernameControl="ngModel" 
+                class="form-input" 
+                type="text" 
+                name="username" 
+                id="username" 
+                placeholder="Username" 
+                aria-required="true" 
+            />
+
+            <ng-container 
+                [ngTemplateOutlet]="formInputErrorMsg" 
+                [ngTemplateOutletContext]="{ $implicit: 'Username is required' }"
+                *ngIf="usernameControl.touched && usernameControl.errors?.['required']"
+            ></ng-container>
+
+        </section>
+    
+        <section class="form-row">
+
+            <label 
+                class="form-input-label" 
+                for="password"
+            >
+
+                Password
+
+            </label>
+
+            <input 
+                ngModel 
+                required 
+                #passwordControl="ngModel" 
+                class="form-input" 
+                type="password" 
+                name="password" 
+                id="password" 
+                placeholder="Password" 
+                aria-required="true" 
+            />
+
+            <ng-container 
+                [ngTemplateOutlet]="formInputErrorMsg" 
+                [ngTemplateOutletContext]="{ $implicit: 'Password is required' }"
+                *ngIf="passwordControl.touched && passwordControl.errors?.['required']"
+            ></ng-container>
+
+        </section>
+    
+        <button 
+            [attr.disabled]="registerForm.invalid"
+            class="form-submit-btn" 
+            type="submit"
+        >
+            Login
+        </button>
+
+    </form>
+
+    <footer class="form-container-footer">
+        <p class="form-container-footer-content">
+            Already have an account? <a [routerLink]="[ '/users', 'login' ]">Sign in.</a>
+        </p>
+    </footer>
+
+</section>
+
+<ng-template #formInputErrorMsg let-errorTxt>
+    <section class="form-input-error">
+        {{errorTxt}}
+    </section>
+</ng-template>
