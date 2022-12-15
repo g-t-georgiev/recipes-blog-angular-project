@@ -10,7 +10,7 @@ import {
 } from 'rxjs';
 
 import { ViewportResizeService } from '../../services/viewport-resize.service';
-import { HeaderState, ILocalState } from './header.state';
+import { HeaderComponentState, ILocalState } from './header.component.state';
 
 
 
@@ -18,7 +18,7 @@ import { HeaderState, ILocalState } from './header.state';
 	selector: 'app-header',
 	templateUrl: './header.component.html',
 	styleUrls: ['./header.component.css'],
-	providers: [HeaderState]
+	providers: [HeaderComponentState]
 })
 export class HeaderComponent implements OnInit, OnDestroy {
 
@@ -28,7 +28,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
 	constructor(
 		private readonly vpResizeService: ViewportResizeService,
-		private readonly state: HeaderState
+		private readonly state: HeaderComponentState
 	) { }
 
 	ngOnInit(): void {

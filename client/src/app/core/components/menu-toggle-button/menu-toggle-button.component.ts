@@ -6,7 +6,7 @@ import {
 	Observable, 
 } from 'rxjs';
 
-import { HeaderState } from '../header/header.state';
+import { HeaderComponentState } from '../header/header.component.state';
 
 
 
@@ -25,7 +25,7 @@ export class MenuToggleButtonComponent {
 	readonly showNavigation$: Observable<boolean> = this.state.showNavigation$;
 
 	constructor(
-		private readonly state: HeaderState
+		private readonly state: HeaderComponentState
 	) { }
 
 	getbtnTextValue(showNavigation: boolean): ToggleNavButtonOptions {
