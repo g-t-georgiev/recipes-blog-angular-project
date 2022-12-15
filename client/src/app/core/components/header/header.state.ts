@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { withLatestFrom, mergeMap, tap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 import { ComponentStore } from '@ngrx/component-store';
 
 
@@ -40,7 +40,7 @@ export class HeaderState extends ComponentStore<ILocalState> {
         (showNavigation$: Observable<boolean>) => {
             return showNavigation$.pipe(
                 tap((value: boolean) => {
-                    // console.log('New navigation state: ', value ? 'opened' : 'closed');
+
                     this.updateNavigationState(value);
                 })
             );
