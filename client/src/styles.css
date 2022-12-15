@@ -1,3 +1,4 @@
 @import './assets/styles/reset.css' layer(reset);
 @import './assets/styles/theme.css' layer(theme);
 @import './assets/styles/typography.css' layer(typography);
+@import './assets/styles/forms.css' layer(forms);
