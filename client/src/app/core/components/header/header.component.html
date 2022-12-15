@@ -1,10 +1,11 @@
 <ng-container 
     [ngTemplateOutlet]="header" 
-    [ngTemplateOutletContext]="{ $implicit: localState$ | async }"
+    [ngTemplateOutletContext]="{ $implicit: localState$ | async, currentUser: currentUser$ | async, signingOut: signingOut$ | async }"
 ></ng-container>
 
-<ng-template #header let-localState>
-    <!-- {{localState | json }} -->
+<ng-template #header let-localState let-currentUser="currentUser" let-signingOut="signingOut">
+    {{localState | json}}
+    {{currentUser | json}}
     <header 
         [class.fullscreen]="localState.showNavigation" 
         (pointerup)="onHeaderAreaClick($event, localState.showNavigation)"
@@ -26,9 +27,13 @@
             
             <section class="nav-auth-section">
     
-                <ng-container>
-                    <a class="nav-link" routerLinkActive="active" ariaCurrentWhenActive="page" routerLink="/users/login">Log In</a>
-                    <a class="nav-link" routerLinkActive="active" ariaCurrentWhenActive="page" routerLink="/users/register">Sign up</a>
+                <ng-container *ngIf="!currentUser">
+                    <a class="nav-link" routerLinkActive="active" ariaCurrentWhenActive="page" routerLink="/users/login">Login</a>
+                    <a class="nav-link" routerLinkActive="active" ariaCurrentWhenActive="page" routerLink="/users/register">Signup</a>
+                </ng-container>
+
+                <ng-container *ngIf="currentUser">
+                    <a href="javascript:void(0);logoutHandler();" [attr.disabled]="signingOut" class="nav-link">{{signingOut ? 'Processing...' : 'Signout'}}</a>
                 </ng-container>
         
             </section>
