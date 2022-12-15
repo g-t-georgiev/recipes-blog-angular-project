@@ -1,4 +1,13 @@
-<section>
-    <h1>Hello, guest!</h1>
-    <p>This is the home page.</p>
-</section>
+<ng-container
+    [ngTemplateOutlet]="home" 
+    [ngTemplateOutletContext]="{ $implicit: (currentUser$ | async) ?? 'guest' }"
+></ng-container>
+
+<ng-template #home let-currentUser>
+
+    <section>
+        <h1>Hello, {{currentUser}}!</h1>
+        <p>This is the home page.</p>
+    </section>
+
+</ng-template>
