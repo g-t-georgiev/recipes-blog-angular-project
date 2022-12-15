@@ -34,7 +34,7 @@ export async function register(req, res, next) {
         } = req.body;
 
         if (password !== repeatPassword) {
-            return Promise.reject({ message: 'Passwords do not match!', status: 403 });
+            throw { message: 'Passwords do not match!', status: 403 };
         }
 
         let createdUser = await User.create({ email, username, imageUrl, password });
@@ -43,11 +43,9 @@ export async function register(req, res, next) {
 
         res
             .status(201)
-            .send(
-                {
+            .send({
                     message: 'Account registered successfully!'
-                }
-            );
+            });
 
     } catch (err) {
 
@@ -77,12 +75,7 @@ export async function login(req, res, next) {
         let passwordMatches = user ? user.matchPassword(password) : false;
 
         if (!passwordMatches) {
-            return Promise.reject(
-                {
-                    message: 'Wrong email or password',
-                    status: 401
-                }
-            );
+            throw { message: 'Wrong email or password', status: 401 };
         }
 
         user = bsonToJson(user);
@@ -111,7 +104,6 @@ export async function login(req, res, next) {
             });
 
     } catch (err) {
-
         next(err);
     }
 }
