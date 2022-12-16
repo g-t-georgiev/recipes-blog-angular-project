@@ -5,11 +5,10 @@
     </header>
 
     <section 
+        *ngIf="registerForm.form.invalid"
         class="form-error"
     >
-
-        Please fill in all the fields below!
-
+        Please fill in all the fields correctly!
     </section>
 
     <form 
@@ -17,6 +16,33 @@
         (ngSubmit)="submitHandler(registerForm)"
         class="form"
     >
+
+        <section class="form-row">
+
+            <label 
+                class="form-input-label" 
+                for="email"
+            >
+                Email
+            </label>
+
+            <input 
+                ngModel 
+                required 
+                #emailControl="ngModel"
+                type="email" 
+                name="email" 
+                id="email" 
+                placeholder="Email" 
+                aria-required="true"
+            />
+
+            <ng-container 
+                [ngTemplateOutlet]="formInputErrorMsg"
+                [ngTemplateOutletContext]="{ $implicit: 'Email is required' }"
+            ></ng-container>
+
+        </section>
     
         <section class="form-row">
 
@@ -24,9 +50,7 @@
                 class="form-input-label" 
                 for="username"
             >
-
                 Username
-
             </label>
 
             <input 
@@ -76,6 +100,35 @@
                 [ngTemplateOutlet]="formInputErrorMsg" 
                 [ngTemplateOutletContext]="{ $implicit: 'Password is required' }"
                 *ngIf="passwordControl.touched && passwordControl.errors?.['required']"
+            ></ng-container>
+
+        </section>
+
+        <section class="form-row">
+
+            <label 
+                class="form-input-label" 
+                for="repeat-password"
+            >
+                Confirm password
+            </label>
+
+            <input 
+                ngModel 
+                required 
+                #confirmPasswordControl="ngModel" 
+                class="form-input" 
+                type="password" 
+                name="repeatpassword" 
+                id="repeatPassword" 
+                placeholder="Confirm password" 
+                aria-required="true" 
+            />
+
+            <ng-container 
+                [ngTemplateOutlet]="formInputErrorMsg" 
+                [ngTemplateOutletContext]="{ $implicit: 'Password is required' }"
+                *ngIf="confirmPasswordControl.touched && confirmPasswordControl.errors?.['required']"
             ></ng-container>
 
         </section>
