@@ -29,7 +29,8 @@
             <input 
                 ngModel 
                 required 
-                #emailControl="ngModel"
+                #emailControl="ngModel" 
+                class="form-input"
                 type="email" 
                 name="email" 
                 id="email" 
@@ -40,6 +41,7 @@
             <ng-container 
                 [ngTemplateOutlet]="formInputErrorMsg"
                 [ngTemplateOutletContext]="{ $implicit: 'Email is required' }"
+                *ngIf="emailControl.touched && emailControl.errors?.['required']"
             ></ng-container>
 
         </section>
@@ -127,7 +129,7 @@
 
             <ng-container 
                 [ngTemplateOutlet]="formInputErrorMsg" 
-                [ngTemplateOutletContext]="{ $implicit: 'Password is required' }"
+                [ngTemplateOutletContext]="{ $implicit: 'Confirm password is required' }"
                 *ngIf="confirmPasswordControl.touched && confirmPasswordControl.errors?.['required']"
             ></ng-container>
 
