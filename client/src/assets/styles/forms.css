@@ -178,6 +178,11 @@ body.theme--dark {
     cursor: var(--form-submit-btn__cursor);
 }
 
+.form-submit-btn:disabled {
+    --form-submit-btn__cursor: not-allowed;
+    cursor: var(--form-submit-btn__cursor);
+}
+
 .form-input-error {
     position: absolute;
     left: 0;
