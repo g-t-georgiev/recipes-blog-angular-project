@@ -1,5 +1,5 @@
 import { User, TokenBlacklist } from '../models/index.js';
-import { greet, jwt } from '../utils/index.js';
+import { jwt } from '../utils/index.js';
 
 const { 
     NODE_ENV,
@@ -100,7 +100,7 @@ export async function login(req, res, next) {
             .status(200)
             .json({
                 user,
-                message: greet(user.username)
+                message: `Welcome back, ${user.username}!`
             });
 
     } catch (err) {
