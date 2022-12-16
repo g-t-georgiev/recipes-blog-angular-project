@@ -1,20 +1,11 @@
 import { User, TokenBlacklist } from '../models/index.js';
-import { jwt } from '../utils/index.js';
+import { jwt, ResponseError } from '../utils/index.js';
+
 
 const { 
     NODE_ENV,
     AUTH_COOKIE_NAME
 } = process.env;
-
-// if (NODE_ENV === 'development') {
-
-//     console.log(
-//         'AuthController#module',
-//         'NODE_ENV: ', NODE_ENV,
-//         'AUTH_COOKIE_NAME: ', AUTH_COOKIE_NAME
-//     );
-
-// }
 
 const bsonToJson = (data) => { return JSON.parse(JSON.stringify(data)) };
 const removePassword = (data) => {
@@ -34,7 +25,7 @@ export async function register(req, res, next) {
         } = req.body;
 
         if (password !== repeatPassword) {
-            throw { message: 'Passwords do not match!', status: 403 };
+            throw new ResponseError({ message: 'Passwords do not match!', status: 403 });
         }
 
         let createdUser = await User.create({ email, username, imageUrl, password });
@@ -75,7 +66,7 @@ export async function login(req, res, next) {
         let passwordMatches = user ? user.matchPassword(password) : false;
 
         if (!passwordMatches) {
-            throw { message: 'Wrong email or password', status: 401 };
+            throw new ResponseError({ message: 'Wrong email or password', status: 401 });
         }
 
         user = bsonToJson(user);

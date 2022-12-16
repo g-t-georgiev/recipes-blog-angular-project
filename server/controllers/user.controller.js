@@ -6,20 +6,27 @@ import {
     Like
 } from '../models/index.js';
 
-import { greet } from '../utils/index.js';
+import { ResponseError } from '../utils/index.js';
 
-export function authenticate(req, res) {
+
+export async function authenticate(req, res, next) {
     const { user } = req;
-    res
-        .status(
-            user 
-                ? 200 
-                : 401
-        )
-        .json({ 
-            user, 
-            message: greet(user && user.username) 
-        });
+
+    try {
+
+        const message = `Welcome back, ${user?.username ?? 'guest'}!`;
+    
+        if (!user) {
+            throw new ResponseError({ message, status: 401 });
+        }
+        
+        res.status(200).json({ user, message });
+
+    } catch (err) {
+
+        next(err);
+    }
+
 }
 
 export async function getProfileInfo(req, res, next) {
@@ -34,17 +41,10 @@ export async function getProfileInfo(req, res, next) {
         );
 
         if (!user) {
-            
-            return res
-                .status(404)
-                .json({
-                    message: 'No entry matches id'
-                });
+            throw new ResponseError({ message: 'No entry matches id', status: 404 });
         }
 
-        res
-            .status(200)
-            .json({ data: user });
+        res.status(200).json({ user, message: 'Profile retrieved successfully' });
 
     } catch (err) {
 
@@ -66,17 +66,10 @@ export async function editProfileInfo(req, res, next) {
         );
 
         if (!updatedUser) {
-
-            return res
-                .status(404)
-                .json({
-                    message: 'No entry matches id'
-                });
+            throw new ResponseError({ message: 'No entry matches id', status: 404 });
         }
         
-        res
-            .status(200)
-            .json({ data: updatedUser });
+        res.status(200).json({ user: updatedUser, message: 'Profile editted successfully' });
         
     } catch (err) {
         
@@ -85,9 +78,7 @@ export async function editProfileInfo(req, res, next) {
             field = field.split(" dup key")[0];
             field = field.substring(0, field.lastIndexOf("_"));
 
-            res.status(409)
-                .send({ message: `This ${field} is already registered!` });
-            return;
+            return next({ message: `This ${field} is already registered!`, status: 409 });
         }
         
         next(err);
@@ -103,17 +94,10 @@ export async function getUserThemes(req, res, next) {
         const themes = await Theme.find({ authorId: userId });
 
         if (!themes) {
-
-            return res
-                .status(404)
-                .json({
-                    message: 'No entries match id'
-                });
+            throw new ResponseError({ message: 'No entries match id', status: 404 });
         }
 
-        res
-            .status(200)
-            .json({ data: themes });
+        res.status(200).json({ data: themes });
 
     } catch (err) {
 
@@ -130,17 +114,10 @@ export async function getUserSubscriptions(req, res, next) {
         const subscriptions = await Subscription.find({ authorId: userId });
 
         if (!subscriptions) {
-
-            return res
-                .status(404)
-                .json({
-                    message: 'No entries match id'
-                });
+            throw new ResponseError({ message: 'No entries match id', status: 404 });
         }
 
-        res
-            .status(200)
-            .json({ data: subscriptions });
+        res.status(200).json({ data: subscriptions });
 
     } catch (err) {
 
@@ -157,17 +134,10 @@ export async function getUserPosts(req, res, next) {
         const posts = await Post.find({ authorId: userId });
 
         if (!posts) {
-
-            return res
-                .status(404)
-                .json({
-                    message: 'No entries match id'
-                });
+            throw new ResponseError({ message: 'No entries match id', status: 404 });
         }
 
-        res
-            .status(200)
-            .json({ data: posts });
+        res.status(200).json({ data: posts });
 
     } catch (err) {
 
@@ -184,17 +154,10 @@ export async function getUserLikes(req, res, next) {
         const likes = await Like.find({ authorId: userId });
 
         if (!likes) {
-
-            return res
-                .status(404)
-                .json({
-                    message: 'No entries match id'
-                });
+            throw new ResponseError({ message: 'No entries match id', status: 404 });
         }
 
-        res
-            .status(200)
-            .json({ data: likes });
+        res.status(200).json({ data: likes });
 
     } catch (err) {
 
