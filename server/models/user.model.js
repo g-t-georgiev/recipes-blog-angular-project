@@ -53,7 +53,7 @@ const userSchema = new Schema({
     password: {
         type: String,
         required: true,
-        minlength: [5, 'Password should be at least 6 characters'],
+        minlength: [6, 'Password should be at least 6 characters'],
         validate: {
             validator: function (v) {
                 return /[a-zA-Z0-9]+/g.test(v);
