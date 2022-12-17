@@ -1,1 +1,35 @@
-<p>file-upload works!</p>
+<input 
+    type="file" 
+    [accept]="allowedFilesList | spread"
+    name="upload" 
+    id="file-upload-input" 
+    aria-required="false" 
+    #fileUploadInput 
+    (change)="handleFileSelectChange($event)"
+/>
+
+<section class="file-upload-ui-container">
+
+    <label 
+        for="file-upload-input"
+        class="file-upload-label"
+    >
+        {{title}}
+        <span class="file-upload-hint">*Allowed file formats: {{allowedFilesList | spread | removeDots | uppercase}}</span>
+    </label>
+
+    <section class="file-upload-select">
+
+        <button 
+            class="file-upload-button"
+            type="button" 
+            (click)="handleFileUploadBtnClick()"
+        >
+            Select file
+        </button>
+
+        <span class="selected-file">{{fileName}}</span>
+
+    </section>
+
+</section>
