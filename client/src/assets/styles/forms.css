@@ -5,7 +5,7 @@ body {
     --form-container-header__font-weight: 500;
 
     --form-error__font-size: .9em;
-    --form-error__color: hsl(0, 74%, 37%);
+    --form-error__color: hsl(0, 74%, 47%);
 
     --form__inline-size--min: 265px;
     --form__inline-size--max: 300px;
@@ -18,8 +18,8 @@ body {
 
     --form-input__bg-color: hsl(210, 29%, 97%);
     --form-input__border-color: hsl(0, 0%, 7%);
-    --form-input__border-color--invalid: hsl(0, 74%, 37%);
-    --form-input__border-color--valid: hsl(133, 64%, 27%);
+    --form-input__border-color--invalid: hsl(0, 74%, 47%);
+    --form-input__border-color--valid: hsl(133, 64%, 37%);
     --form-input__border-style: solid;
     --form-input__border-width: .1rem;
     --form-input__padding-inline: .85rem;
@@ -37,21 +37,21 @@ body {
     --form-input-error__padding-block: .5em;
     --form-input-error__padding-inline: .25em;
     --form-input-error__font-size: .9em;
-    --form-input-error__color: hsl(0, 74%, 37%);
+    --form-input-error__color: hsl(0, 74%, 47%);
 }
 
 body.theme--dark {
-    --form-error__color: hsl(0, 54%, 37%);
+    --form-error__color: hsl(0, 44%, 37%);
 
     --form-input__bg-color: hsl(218, 80%, 2%);
     --form-input__border-color: hsl(210, 17%, 82%);
-    --form-input__border-color--invalid: hsl(0, 54%, 37%);
-    --form-input__border-color--valid: hsl(133, 54%, 27%);
+    --form-input__border-color--invalid: hsl(0, 44%, 37%);
+    --form-input__border-color--valid: hsl(133, 44%, 27%);
 
     --form-submit-btn__bg-color: hsl(218, 80%, 2%);
     --form-submit-btn__border-color: hsl(210, 29%, 97%);
 
-    --form-input-error__color: hsl(0, 54%, 37%);
+    --form-input-error__color: hsl(0, 44%, 37%);
 }
 
 .form-container {
