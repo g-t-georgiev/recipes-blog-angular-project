@@ -1,21 +1,23 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from "@angular/forms";
 
+function mismatchErrorFactory(targetControlValue: any, currentControlValue: any): ValidationErrors | null {
+    return targetControlValue !== currentControlValue
+    ? { mismatch: { target: targetControlValue, current: currentControlValue } }
+    : null;
+}
+
 export function fieldsMismatchValidator(targetControl: AbstractControl): ValidatorFn {
     
-    return function (dispatchControl: AbstractControl): ValidationErrors | null {
+    return function (currentControl: AbstractControl): ValidationErrors | null {
 
         if (targetControl && targetControl?.value == null) {
             return null;
         }
 
-        if (dispatchControl && dispatchControl?.value == null) {
+        if (currentControl && currentControl?.value == null) {
             return null;
         }
 
-        return (
-            targetControl.value !== dispatchControl.value 
-            ? { fieldValuesMismatch: { targetControlValue: targetControl.value, dispatchControlValue: dispatchControl.value } } 
-            : null
-        );
+        return mismatchErrorFactory(targetControl.value, currentControl.value);
     }
 }
