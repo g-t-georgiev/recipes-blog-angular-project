@@ -20,8 +20,8 @@ export class PasswordsMatchValidatorDirective implements Validator {
 
 	constructor() { }
 
-	validate(dispatchControl: AbstractControl<any, any>): ValidationErrors | null {
-		return fieldsMismatchValidator(this.targetControl)(dispatchControl);
+	validate(currentControl: AbstractControl<any, any>): ValidationErrors | null {
+		return fieldsMismatchValidator(this.targetControl)(currentControl);
 	}
 
 }
