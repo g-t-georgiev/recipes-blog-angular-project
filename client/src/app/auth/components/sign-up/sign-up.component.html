@@ -65,6 +65,9 @@
             <input 
                 ngModel 
                 required 
+                minlength="4" 
+                maxlength="30" 
+                pattern="(?=[A-Za-z]+)^[A-Za-z0-9]+$" 
                 #usernameControl="ngModel" 
                 class="form-input" 
                 type="text" 
@@ -78,6 +81,24 @@
                 [ngTemplateOutlet]="formInputErrorMsg" 
                 [ngTemplateOutletContext]="{ $implicit: 'Username is required' }"
                 *ngIf="usernameControl.touched && usernameControl.errors?.['required']"
+            ></ng-container>
+
+            <ng-container 
+                [ngTemplateOutlet]="formInputErrorMsg" 
+                [ngTemplateOutletContext]="{ $implicit: 'Username should be at least 4 characters long' }"
+                *ngIf="usernameControl.touched && usernameControl.errors?.['minlength']"
+            ></ng-container>
+
+            <ng-container 
+                [ngTemplateOutlet]="formInputErrorMsg" 
+                [ngTemplateOutletContext]="{ $implicit: 'Username should be no more than 30 characters long' }"
+                *ngIf="usernameControl.touched && usernameControl.errors?.['maxlength']"
+            ></ng-container>
+
+            <ng-container 
+                [ngTemplateOutlet]="formInputErrorMsg" 
+                [ngTemplateOutletContext]="{ $implicit: 'Username should contain latin letters and digits only' }"
+                *ngIf="usernameControl.touched && usernameControl.errors?.['pattern']"
             ></ng-container>
 
         </section>
