@@ -3,13 +3,15 @@ import { CommonModule } from '@angular/common';
 
 import { FileUploadComponent } from './components/file-upload/file-upload.component';
 import { SpreadPipe, RemoveDotsPipe } from './pipes';
+import { MaxlengthValidatorDirective } from './directives/maxlength-validator.directive';
 
 
 @NgModule({
 	declarations: [
     	FileUploadComponent,
      	SpreadPipe,
-      	RemoveDotsPipe
+      	RemoveDotsPipe,
+       	MaxlengthValidatorDirective
   ],
 	imports: [
 		CommonModule,
@@ -17,7 +19,8 @@ import { SpreadPipe, RemoveDotsPipe } from './pipes';
 	exports: [
 		FileUploadComponent, 
 		SpreadPipe, 
-		RemoveDotsPipe
+		RemoveDotsPipe,
+		MaxlengthValidatorDirective
 	]
 })
 export class SharedModule { }
