@@ -3,10 +3,10 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { AuthRoutingModule } from './auth-routing.module';
+import { SharedModule } from '../shared/shared.module';
 
 import { SignInComponent } from './components/sign-in/sign-in.component';
 import { SignUpComponent } from './components/sign-up/sign-up.component';
-
 
 
 @NgModule({
@@ -18,6 +18,7 @@ import { SignUpComponent } from './components/sign-up/sign-up.component';
 		CommonModule,
 		AuthRoutingModule, 
 		FormsModule, 
+		SharedModule
 	],
 	exports: [
 		SignInComponent, 
