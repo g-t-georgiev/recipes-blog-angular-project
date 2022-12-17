@@ -34,9 +34,9 @@ body {
     --form-submit-btn__border-width: .1rem;
     --form-submit-btn__cursor: pointer;
 
-    --form-input-error__padding-block: .25rem;
-    --form-input-error__padding-inline: .5rem;
-    --form-input-error__font-size: .8em;
+    --form-input-error__padding-block: .5em;
+    --form-input-error__padding-inline: .25em;
+    --form-input-error__font-size: .9em;
     --form-input-error__color: hsl(0, 74%, 37%);
 }
 
@@ -76,7 +76,7 @@ body.theme--dark {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 2rem;
+    gap: 1.25rem;
 
     inline-size: clamp(var(--form__inline-size--min), var(--form__inline-size--prefered), var(--form__inline-size--max));
 }
@@ -184,9 +184,9 @@ body.theme--dark {
 }
 
 .form-input-error {
-    position: absolute;
+    /* position: absolute;
     left: 0;
-    bottom: -60%;
+    bottom: -60%; */
 
     inline-size: auto;
 
