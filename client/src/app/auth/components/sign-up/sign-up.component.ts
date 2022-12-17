@@ -14,7 +14,7 @@ export class SignUpComponent {
 			return;
 		}
 
-		console.log(formModel);
+		console.log(formModel.form.value);
 	}
 
 }
