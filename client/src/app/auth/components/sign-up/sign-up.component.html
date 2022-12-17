@@ -124,6 +124,8 @@
             <input 
                 ngModel 
                 required 
+                minlength="6" 
+                pattern="[a-zA-Z0-9]+"
                 #passwordControl="ngModel" 
                 class="form-input" 
                 type="password" 
@@ -137,6 +139,18 @@
                 [ngTemplateOutlet]="formInputErrorMsg" 
                 [ngTemplateOutletContext]="{ $implicit: 'Password is required' }"
                 *ngIf="passwordControl.touched && passwordControl.errors?.['required']"
+            ></ng-container>
+
+            <ng-container 
+                [ngTemplateOutlet]="formInputErrorMsg" 
+                [ngTemplateOutletContext]="{ $implicit: 'Password should be at least 6 characters long' }"
+                *ngIf="passwordControl.touched && passwordControl.errors?.['minlength']"
+            ></ng-container>
+
+            <ng-container 
+                [ngTemplateOutlet]="formInputErrorMsg" 
+                [ngTemplateOutletContext]="{ $implicit: 'Password should contain latin letters and digits only' }"
+                *ngIf="passwordControl.touched && passwordControl.errors?.['pattern']"
             ></ng-container>
 
         </section>
