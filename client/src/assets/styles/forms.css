@@ -36,7 +36,7 @@ body {
 
     --form-input-error__padding-block: .5em;
     --form-input-error__padding-inline: .25em;
-    --form-input-error__font-size: .9em;
+    --form-input-error__font-size: .95em;
     --form-input-error__color: hsl(0, 74%, 47%);
 }
 
