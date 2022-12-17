@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FileUploadComponent } from './components/file-upload/file-upload.component';
 import { SpreadPipe, RemoveDotsPipe } from './pipes';
 import { MaxlengthValidatorDirective } from './directives/maxlength-validator.directive';
+import { PasswordsMatchValidatorDirective } from './directives/passwords-match-validator.directive';
 
 
 @NgModule({
@@ -11,7 +12,8 @@ import { MaxlengthValidatorDirective } from './directives/maxlength-validator.di
     	FileUploadComponent,
      	SpreadPipe,
       	RemoveDotsPipe,
-       	MaxlengthValidatorDirective
+       	MaxlengthValidatorDirective,
+        PasswordsMatchValidatorDirective
   ],
 	imports: [
 		CommonModule,
@@ -20,7 +22,8 @@ import { MaxlengthValidatorDirective } from './directives/maxlength-validator.di
 		FileUploadComponent, 
 		SpreadPipe, 
 		RemoveDotsPipe,
-		MaxlengthValidatorDirective
+		MaxlengthValidatorDirective,
+		PasswordsMatchValidatorDirective
 	]
 })
 export class SharedModule { }
