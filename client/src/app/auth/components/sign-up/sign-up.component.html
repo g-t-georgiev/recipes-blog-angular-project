@@ -97,7 +97,7 @@
 
             <ng-container 
                 [ngTemplateOutlet]="formInputErrorMsg" 
-                [ngTemplateOutletContext]="{ $implicit: 'Username should contain latin letters and digits only' }"
+                [ngTemplateOutletContext]="{ $implicit: 'Username should start with a letter and contain letters and digits only' }"
                 *ngIf="usernameControl.touched && usernameControl.errors?.['pattern']"
             ></ng-container>
 
