@@ -157,7 +157,7 @@
 
             <label 
                 class="form-input-label" 
-                for="repeat-password"
+                for="confirm-password"
             >
                 Confirm password
             </label>
@@ -165,11 +165,12 @@
             <input 
                 ngModel 
                 required 
+                [passwordsMatch]="passwordControl.control"
                 #confirmPasswordControl="ngModel" 
                 class="form-input" 
                 type="password" 
-                name="repeatpassword" 
-                id="repeatPassword" 
+                name="repeatPassword" 
+                id="confirm-password" 
                 placeholder="Confirm password" 
                 aria-required="true" 
             />
@@ -178,6 +179,12 @@
                 [ngTemplateOutlet]="formInputErrorMsg" 
                 [ngTemplateOutletContext]="{ $implicit: 'Confirm password is required' }"
                 *ngIf="confirmPasswordControl.touched && confirmPasswordControl.errors?.['required']"
+            ></ng-container>
+
+            <ng-container 
+                [ngTemplateOutlet]="formInputErrorMsg" 
+                [ngTemplateOutletContext]="{ $implicit: 'Passwords do not match' }"
+                *ngIf="confirmPasswordControl.touched && confirmPasswordControl.errors?.['mismatch']"
             ></ng-container>
 
         </section>
