@@ -45,6 +45,12 @@
                 *ngIf="emailControl.touched && emailControl.errors?.['required']"
             ></ng-container>
 
+            <ng-container 
+                [ngTemplateOutlet]="formInputErrorMsg"
+                [ngTemplateOutletContext]="{ $implicit: 'Invalid email' }"
+                *ngIf="emailControl.touched && emailControl.errors?.['email']"
+            ></ng-container>
+
         </section>
     
         <section class="form-row">
