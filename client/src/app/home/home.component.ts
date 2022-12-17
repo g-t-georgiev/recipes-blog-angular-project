@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
-import { IRootState } from '../+state';
+import { IRootState } from '../state';
 import { IUser } from '../shared/interfaces';
 
 

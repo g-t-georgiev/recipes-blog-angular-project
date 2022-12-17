@@ -5,7 +5,7 @@ import { tap } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 
 import { WINDOW } from 'src/app/shared/custom-di-tokens';
-import { IRootState, theme as colorThemeState } from 'src/app/+state';
+import { IRootState, theme as colorThemeState } from 'src/app/state';
 
 
 @Injectable()

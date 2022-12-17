@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 
 import { Subscription, Observable } from 'rxjs';
 
-import { IRootState } from 'src/app/+state';
+import { IRootState } from 'src/app/state';
 import { IUser } from 'src/app/shared/interfaces';
 import { AuthService } from '../../services';
 import { ViewportResizeService } from '../../services/viewport-resize.service';
