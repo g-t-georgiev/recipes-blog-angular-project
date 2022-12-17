@@ -1,9 +1,7 @@
 <input 
     type="file" 
     [accept]="allowedFilesList | spread"
-    name="upload" 
     id="file-upload-input" 
-    aria-required="false" 
     #fileUploadInput 
     (change)="handleFileSelectChange($event)"
 />
