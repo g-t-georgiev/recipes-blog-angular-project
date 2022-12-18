@@ -185,6 +185,8 @@
                     required 
                     #confirmPasswordControl="ngModel" 
                     class="form-input" 
+                    [class.ng-valid]="confirmPasswordControl.valid && passwordsGroup.valid" 
+                    [class.ng-invalid]="confirmPasswordControl.touched && passwordsGroup.invalid"
                     type="password" 
                     name="repeatPassword" 
                     id="confirm-password" 
