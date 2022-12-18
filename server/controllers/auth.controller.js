@@ -1,5 +1,5 @@
 import { User, TokenBlacklist } from '../models/index.js';
-import { jwt, ResponseError } from '../utils/index.js';
+import { jwt, ResponseError, disk, helpers } from '../utils/index.js';
 
 
 const { 
@@ -7,11 +7,8 @@ const {
     AUTH_COOKIE_NAME
 } = process.env;
 
-const bsonToJson = (data) => { return JSON.parse(JSON.stringify(data)) };
-const removePassword = (data) => {
-    const { password, __v, ...userData } = data;
-    return userData
-}
+
+const { bsonToJson, removePassword } = helpers;
 
 export async function register(req, res, next) {
     try {
@@ -34,34 +31,35 @@ export async function register(req, res, next) {
         let imageUrl;
 
         if (profilePicture) {
-            // Upload to GoogleDisk
-            // Save user with the provided image URL from GoogleDisk API
+
+            // console.log(profilePicture);
+            const uploadId = await disk.uploadFile(profilePicture);
+            imageUrl = `https://drive.google.com/uc?id=${uploadId}`;
+            
         } else {
-            imageUrl = 'https://drive.google.com/drive/folders/1rVZmy68i5otVg9PgUVdDQaPFRXiFBzdx';
-            let createdUser = await User.create({ email, username, imageUrl, password });
-            createdUser = bsonToJson(createdUser);
-            createdUser = removePassword(createdUser);
+            imageUrl = 'https://drive.google.com/uc?id=1iUrhiwfp4XxCp0xLXDUB1rL8DXVltF2n';
         }
 
+        let existingUser = await User.findOne({ email });
 
-
-        res
-            .status(201)
-            .send({
-                    message: 'Account registered successfully!'
-            });
-
-    } catch (err) {
-
-        if (err.name === 'MongoError' && err.code === 11000) {
-            let field = err.message.split("index: ")[1];
-            field = field.split(" dup key")[0];
-            field = field.substring(0, field.lastIndexOf("_"));
-
-            return next({ message: `This ${field} is already registered!`, status: 409 });
+        if (existingUser) {
+            throw new ResponseError({ message: 'Email is already taken', status: 409 });
         }
 
-        next(err);
+        existingUser = await User.findOne({ username });
+
+        if (existingUser) {
+            throw new ResponseError({ message: 'Username is already taken', status: 409 });
+        }
+
+        const createdUser = new User({ email, username, imageUrl, password });
+        await createdUser.save();
+
+        res.status(201)
+            .json({ message: 'Account registered successfully!' });
+
+    } catch (error) {
+        next(error);
     }
 }
 
@@ -71,11 +69,11 @@ export async function login(req, res, next) {
     try {
 
         const {
-            email,
+            username,
             password
         } = req.body;
 
-        let user = await User.findOne({ email });
+        let user = await User.findOne({ username });
         let passwordMatches = user ? user.matchPassword(password) : false;
 
         if (!passwordMatches) {
@@ -100,25 +98,22 @@ export async function login(req, res, next) {
             cookieOptions
         )
 
-        res
-            .status(200)
-            .json({
-                user,
-                message: `Welcome back, ${user.username}!`
-            });
+        res.status(200)
+            .json({ user, message: `Login successful!` });
 
-    } catch (err) {
-        next(err);
+    } catch (error) {
+        next(error);
     }
 }
 
 
 export async function logout(req, res, next) {
+
     try {
 
         const authToken = req.cookies[AUTH_COOKIE_NAME];
 
-        await TokenBlacklist.create({ token });
+        await TokenBlacklist.create({ token: authToken });
 
         res
             .clearCookie(AUTH_COOKIE_NAME)
