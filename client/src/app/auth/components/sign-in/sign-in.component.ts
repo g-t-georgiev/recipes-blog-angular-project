@@ -22,7 +22,7 @@ export class SignInComponent implements OnDestroy {
 	) { }
 
 	ngOnDestroy(): void {
-		this.subscription.unsubscribe?.();
+		this.subscription?.unsubscribe?.();
 	}
 
 	submitHandler(formModel: NgForm) {
