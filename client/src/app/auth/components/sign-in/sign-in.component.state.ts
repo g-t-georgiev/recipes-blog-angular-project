@@ -16,8 +16,6 @@ const initialState: ILocalState = {
     processing: false
 };
 
-let timerId: any = null;
-
 @Injectable()
 export class SignInComponentState extends ComponentStore<ILocalState> {
 
@@ -47,15 +45,9 @@ export class SignInComponentState extends ComponentStore<ILocalState> {
                             const redirectUrl = this.activeRoute.snapshot.queryParamMap.get('redirectTo');
                             
                             if (redirectUrl) {
-                                timerId = setTimeout(() => {
-                                    this.router.navigateByUrl(redirectUrl);
-                                    clearTimeout(timerId);
-                                }, 2e3);
+                                this.router.navigateByUrl(redirectUrl);
                             } else {
-                                timerId = setTimeout(() => {
-                                    this.router.navigate([ '/' ]);
-                                    clearTimeout(timerId);
-                                }, 4e3);
+                                this.router.navigate([ '/' ]);
                             }
                             
                         }),
