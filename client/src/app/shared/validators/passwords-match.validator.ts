@@ -5,7 +5,7 @@ function errorFactory(...controls: Readonly<AbstractControl[]>): ValidationError
     let previousValue: any = null;
 
     for (const { value: currentValue } of controls) {
-        console.log(firstChange)
+        // console.log(firstChange);
         if (firstChange) {
             previousValue = currentValue;
             firstChange = false;
