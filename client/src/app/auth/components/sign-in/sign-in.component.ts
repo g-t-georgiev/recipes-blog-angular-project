@@ -26,9 +26,8 @@ export class SignInComponent {
 			return;
 		}
 
-		console.log(formModel);
+		// console.log(formModel);
 		const userData: IUserSignInDto = formModel.form.value;
-
 		this.componentState.onLoginEventEffect(userData);
 	}
 
