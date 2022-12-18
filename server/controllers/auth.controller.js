@@ -19,18 +19,21 @@ export async function register(req, res, next) {
         const {
             email,
             username,
-            imageUrl,
             password,
             repeatPassword
-        } = req.body;
+        } = req.fields;
+
+        const { profilePicture } = req.files;
 
         if (password !== repeatPassword) {
             throw new ResponseError({ message: 'Passwords do not match!', status: 403 });
         }
 
-        let createdUser = await User.create({ email, username, imageUrl, password });
-        createdUser = bsonToJson(createdUser);
-        createdUser = removePassword(createdUser);
+        console.log(req.fields, req.files);
+
+        // let createdUser = await User.create({ email, username, imageUrl, password });
+        // createdUser = bsonToJson(createdUser);
+        // createdUser = removePassword(createdUser);
 
         res
             .status(201)
