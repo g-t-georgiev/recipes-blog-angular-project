@@ -24,13 +24,11 @@ const { Schema, model } = mongoose;
 const userSchema = new Schema({
     email: {
         type: String,
-        required: true,
-        unique: true
+        required: [true, 'Email is required.'],
     },
     username: {
         type: String,
         required: [true, 'Username is required.'],
-        unique: true,
         minlength: [4, 'Username should be at least 4 characters'],
         maxlength: [30, 'Username should not be more than 30 characters long.'],
         validate: {
