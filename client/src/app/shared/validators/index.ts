@@ -1,2 +1,2 @@
 export * from './maxlength.validator';
-export * from './fields-mismatch.validator';
+export * from './passwords-match.validator';
