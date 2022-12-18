@@ -4,7 +4,7 @@ import { Observable, EMPTY } from 'rxjs';
 import { tap, mergeMap, catchError } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { AuthService, IUserSignInDto } from 'src/app/core/services';
+import { AuthService, IUserSignInDto, IUserSignInResponse } from 'src/app/core/services';
 
 export interface ILocalState {
     message: string | null;
@@ -16,6 +16,7 @@ const initialState: ILocalState = {
     processing: false
 };
 
+let timerId: any = null;
 
 @Injectable()
 export class SignInComponentState extends ComponentStore<ILocalState> {
@@ -30,7 +31,7 @@ export class SignInComponentState extends ComponentStore<ILocalState> {
 
     readonly localState$: Observable<ILocalState> = this.select((state) => state);
 
-    readonly updateMessageState = this.updater((state: ILocalState, message: string) => ({ ...state, message }));
+    readonly updateMessageState = this.updater((state: ILocalState, message: string | null) => ({ ...state, message }));
     readonly updateProcessingState = this.updater((state: ILocalState, processing: boolean ) => ({ ...state, processing })); 
     
     readonly onLoginEventEffect = this.effect(
@@ -39,22 +40,39 @@ export class SignInComponentState extends ComponentStore<ILocalState> {
                 tap(() => this.updateProcessingState(true)),
                 mergeMap((userData) => {
                     return this.authService.login$(userData).pipe(
-                        tap(({ message }) => {
+                        tap(({ message }: IUserSignInResponse) => {
                             this.updateProcessingState(false);
-                            this.updateMessageState(message);
+                            this.updateMessageState(message + '\nYou will be redirected after a few seconds...');
 
                             const redirectUrl = this.activeRoute.snapshot.queryParamMap.get('redirectTo');
                             
                             if (redirectUrl) {
-                                setTimeout(() => this.router.navigateByUrl(redirectUrl), 2e3);
+                                timerId = setTimeout(() => {
+                                    this.router.navigateByUrl(redirectUrl);
+                                    clearTimeout(timerId);
+                                }, 2e3);
                             } else {
-                                setTimeout(() => this.router.navigate(['/']), 2e3);
+                                timerId = setTimeout(() => {
+                                    this.router.navigate([ '/' ]);
+                                    clearTimeout(timerId);
+                                }, 2e3);
                             }
                             
                         }),
                         catchError(({ error }) => {
+                            
+                            // console.log(error);
+                            let errorMsg;
+        
                             this.updateProcessingState(false);
-                            this.updateMessageState(error?.message ?? '#SignInComponent: Something went wrong');
+        
+                            if (error.status === 0) {
+                                errorMsg = 'Connection error';
+                            } else {
+                                errorMsg = error.error?.message ?? error?.message ?? error.statusText ?? 'Something went wrong';
+                            }
+
+                            this.updateMessageState(errorMsg);
 
                             // throwing error completes the stream
                             // instead return an empty observable

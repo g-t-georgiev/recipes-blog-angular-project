@@ -4,7 +4,7 @@
 ></ng-container>
 
 <ng-template #signInSection let-localState>
-    {{localState | json}}
+    <!-- {{localState | json}} -->
     <section class="form-container">
 
         <header class="form-container-header">
@@ -12,8 +12,8 @@
         </header>
     
         <section 
-            *ngIf="loginForm.invalid"
-            class="form-error"
+            *ngIf="loginForm.form.invalid"
+            class="form-status-message"
         >
     
             Please fill in all the fields below!
@@ -22,7 +22,7 @@
 
         <section 
             *ngIf="localState.message"
-            class="form-error"
+            class="form-status-message"
         >
 
             {{localState.message}}
