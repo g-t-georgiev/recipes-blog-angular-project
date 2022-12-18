@@ -125,8 +125,10 @@
                 label="Choose profile picture" 
                 accept=".jpeg, .jpg, .png, .svg"
             ></app-file-upload>
+
+            <ng-container #passwordsGroup="ngModelGroup" ngModelGroup passwordsMatch>
         
-            <section class="form-row">
+                <section class="form-row">
     
                 <label 
                     class="form-input-label" 
@@ -167,9 +169,9 @@
                     *ngIf="passwordControl.touched && passwordControl.errors?.['pattern']"
                 ></ng-container>
     
-            </section>
-    
-            <section class="form-row">
+                </section>
+            
+                <section class="form-row">
     
                 <label 
                     class="form-input-label" 
@@ -181,7 +183,6 @@
                 <input 
                     ngModel 
                     required 
-                    [passwordsMatch]="passwordControl.control"
                     #confirmPasswordControl="ngModel" 
                     class="form-input" 
                     type="password" 
@@ -200,10 +201,12 @@
                 <ng-container 
                     [ngTemplateOutlet]="formInputErrorMsg" 
                     [ngTemplateOutletContext]="{ $implicit: 'Passwords do not match' }"
-                    *ngIf="confirmPasswordControl.touched && confirmPasswordControl.errors?.['mismatch']"
+                    *ngIf="confirmPasswordControl.touched && passwordsGroup.errors?.['mismatch']"
                 ></ng-container>
     
-            </section>
+                </section>
+
+            </ng-container>
         
             <button 
                 [disabled]="registerForm.invalid || localState.processing"
