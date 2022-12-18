@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { EMPTY, Observable } from 'rxjs';
+import { EMPTY, Observable, throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
 import { IRootState } from 'src/app/state';
@@ -23,7 +23,7 @@ export interface IUserSignInDto {
 export interface IUserSignUpDto {
 	email: string;
 	username: string;
-	imageUrl: string;
+	profilePicture?: string;
 	password: string;
 	repeatPassword: string;
 }
@@ -57,7 +57,17 @@ export class AuthService {
 	}
 
 	register$(userData: IUserSignUpDto): Observable<IUserSignUpResponse> {
-		return this.http.post<IUserSignUpResponse>(signUpUrl, userData);
+		const formData = new FormData();
+		formData.set('email', userData.email);
+		formData.set('username', userData.username);
+		formData.set('password', userData.password);
+		formData.set('repeatPassword', userData.repeatPassword);
+
+		if (userData.profilePicture) {
+			formData.append('profilePicture', userData.profilePicture);
+		}
+
+		return this.http.post<IUserSignUpResponse>(signUpUrl, formData);
 	}
 
 	logout$(): Observable<IUserSignOutResponse> {
@@ -65,15 +75,26 @@ export class AuthService {
 	}
 
 	authenticate$(): Observable<IUserSignInResponse> {
+		// console.log('AuthService#authenticate$');
 		return this.http.get<IUserSignInResponse>(authUrl)
 			.pipe(
-				tap(({ user }) => {
-					if (user) {
-						this.loginHandler(user);
+				tap(({ user: currentUser }) => {
+					if (currentUser) {
+						this.loginHandler(currentUser);
 					}
 				}),
 				catchError((error) => {
-					// console.error(error);
+
+					// console.log(error);
+					let errorMsg;
+
+					if (error.status === 0) {
+						errorMsg = 'Connection error';
+					} else {
+						errorMsg = error.error?.message ?? error?.message ?? error?.statusText ?? 'Something went wrong';
+					}
+					
+					console.log(errorMsg);
 					return EMPTY;
 				})
 			);
