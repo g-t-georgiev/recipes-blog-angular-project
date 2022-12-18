@@ -21,7 +21,7 @@ export class SignUpComponent implements OnDestroy {
 	) { }
 
 	ngOnDestroy(): void {
-		this.subscription.unsubscribe?.();
+		this.subscription?.unsubscribe?.();
 	}
 
 	submitHandler(formModel: NgForm) {
