@@ -2,8 +2,9 @@ import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { StoreModule } from '@ngrx/store';
+import { Observable } from 'rxjs';
 
-import { AuthService, DarkModeSwitchService as ThemeSwitchService, ViewportResizeService } from './core/services';
+import { AuthService, DarkModeSwitchService as ThemeSwitchService, IUserSignInResponse, ViewportResizeService } from './core/services';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -11,7 +12,6 @@ import { CoreModule } from './core/core.module';
 import { HomeComponent } from './home/home.component';
 
 import { currentUser, IRootState, theme } from './state';
-
 
 @NgModule({
     declarations: [
@@ -32,7 +32,7 @@ import { currentUser, IRootState, theme } from './state';
         {
             provide: APP_INITIALIZER,
             useFactory: (vpResizeService: ViewportResizeService) => {
-                return function () {
+                return function (): void {
                     vpResizeService.setStyles(
                         vpResizeService.hasMatch()
                     );
@@ -44,7 +44,7 @@ import { currentUser, IRootState, theme } from './state';
         {
             provide: APP_INITIALIZER,
             useFactory: (themeService: ThemeSwitchService) => {
-                return function() {
+                return function(): void {
                     themeService.setPreference(
                         themeService.getPreference()
                     );
@@ -56,8 +56,8 @@ import { currentUser, IRootState, theme } from './state';
         {
             provide: APP_INITIALIZER,
             useFactory: (authService: AuthService) => {
-                return function () {
-                    authService.authenticate$();
+                return function (): Observable<IUserSignInResponse> {
+                    return authService.authenticate$();
                 }
             },
             multi: true,
