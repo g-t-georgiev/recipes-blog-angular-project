@@ -6,11 +6,13 @@ import {
     Like
 } from '../models/index.js';
 
-import { ResponseError } from '../utils/index.js';
+import { ResponseError, helpers } from '../utils/index.js';
 
+
+const { bsonToJson, removePassword } = helpers;
 
 export async function authenticate(req, res, next) {
-    const { user } = req;
+    let { user } = req;
 
     try {
 
@@ -19,6 +21,9 @@ export async function authenticate(req, res, next) {
         if (!user) {
             throw new ResponseError({ message, status: 401 });
         }
+
+        user = bsonToJson(user);
+        user = removePassword(user);
         
         res.status(200).json({ user, message });
 
@@ -35,7 +40,7 @@ export async function getProfileInfo(req, res, next) {
     try {
 
         // finding by Id and return without password and __v
-        const user = await User.findOne(
+        let user = await User.findOne(
             { _id: userId }, 
             { password: 0, __v: 0 }
         );
@@ -43,6 +48,9 @@ export async function getProfileInfo(req, res, next) {
         if (!user) {
             throw new ResponseError({ message: 'No entry matches id', status: 404 });
         }
+
+        user = bsonToJson(user);
+        user = removePassword(user);
 
         res.status(200).json({ user, message: 'Profile retrieved successfully' });
 
@@ -59,7 +67,7 @@ export async function editProfileInfo(req, res, next) {
         const { _id: userId } = req.user;
         const { username, email } = req.body;
     
-        const updatedUser = await User.findOneAndUpdate(
+        let updatedUser = await User.findOneAndUpdate(
             { _id: userId }, 
             { username, email }, 
             { runValidators: true, new: true }
@@ -68,6 +76,9 @@ export async function editProfileInfo(req, res, next) {
         if (!updatedUser) {
             throw new ResponseError({ message: 'No entry matches id', status: 404 });
         }
+
+        updatedUser = bsonToJson(updatedUser);
+        updatedUser = removePassword(updatedUser);
         
         res.status(200).json({ user: updatedUser, message: 'Profile editted successfully' });
         
