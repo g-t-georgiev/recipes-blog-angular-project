@@ -26,8 +26,9 @@ export class SignUpComponent {
 		}
 
 		// console.log(formModel);
-		const { email, username, profilePicture, password, repeatPassword } = formModel.form.value;
+		const { email, username, profilePicture, passwords: { password, repeatPassword } } = formModel.form.value;
 		const userData: IUserSignUpDto = { email, username, profilePicture, password, repeatPassword };
+		// console.log(userData);
 		this.componentState.onRegisterEventEffect(userData);
 	}
 
