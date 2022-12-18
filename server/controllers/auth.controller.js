@@ -29,11 +29,21 @@ export async function register(req, res, next) {
             throw new ResponseError({ message: 'Passwords do not match!', status: 403 });
         }
 
-        console.log(req.fields, req.files);
+        // console.log(req.fields, req.files);
 
-        // let createdUser = await User.create({ email, username, imageUrl, password });
-        // createdUser = bsonToJson(createdUser);
-        // createdUser = removePassword(createdUser);
+        let imageUrl;
+
+        if (profilePicture) {
+            // Upload to GoogleDisk
+            // Save user with the provided image URL from GoogleDisk API
+        } else {
+            imageUrl = 'https://drive.google.com/drive/folders/1rVZmy68i5otVg9PgUVdDQaPFRXiFBzdx';
+            let createdUser = await User.create({ email, username, imageUrl, password });
+            createdUser = bsonToJson(createdUser);
+            createdUser = removePassword(createdUser);
+        }
+
+
 
         res
             .status(201)
