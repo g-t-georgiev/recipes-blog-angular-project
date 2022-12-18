@@ -33,7 +33,7 @@
                 </ng-container>
 
                 <ng-container *ngIf="currentUser">
-                    <a href="javascript:void(0);logoutHandler();" [attr.disabled]="signingOut" class="nav-link">{{signingOut ? 'Processing...' : 'Signout'}}</a>
+                    <a href="javascript:void(0);" (pointerup)="logoutHandler()" [attr.disabled]="signingOut" class="nav-link">{{signingOut ? 'Processing...' : 'Signout'}}</a>
                 </ng-container>
         
             </section>
