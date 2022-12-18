@@ -1,7 +1,7 @@
-import { Directive, forwardRef, Input } from '@angular/core';
+import { Directive, forwardRef } from '@angular/core';
 import { AbstractControl, NG_VALIDATORS, ValidationErrors, Validator } from '@angular/forms';
 
-import { fieldsMismatchValidator } from '../validators';
+import { passwordsMatchValidator } from '../validators';
 
 
 @Directive({
@@ -16,12 +16,8 @@ import { fieldsMismatchValidator } from '../validators';
 })
 export class PasswordsMatchValidatorDirective implements Validator {
 
-	@Input('passwordsMatch') targetControl!: AbstractControl;
-
-	constructor() { }
-
-	validate(currentControl: AbstractControl<any, any>): ValidationErrors | null {
-		return fieldsMismatchValidator(this.targetControl)(currentControl);
+	validate(formGroup: AbstractControl<any, any>): ValidationErrors | null {
+		return passwordsMatchValidator(formGroup);
 	}
 
 }
