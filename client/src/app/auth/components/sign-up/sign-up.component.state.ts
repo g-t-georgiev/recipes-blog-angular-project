@@ -42,12 +42,12 @@ export class SignUpComponentState extends ComponentStore<ILocalState> {
                     return this.authService.register$(userData).pipe(
                         tap(({ message }: IUserSignUpResponse) => {
                             this.updateProcessingState(false);
-                            this.updateMessageState(message + '\nYou will be redirected after a few seconds...');
+                            this.updateMessageState(message);
 
                             timerId = setTimeout(() => {
                                 this.router.navigate([ '/users', 'login' ]);
                                 clearTimeout(timerId);
-                            }, 2e3);
+                            }, 4e3);
                         }),
                     );
                 }), 

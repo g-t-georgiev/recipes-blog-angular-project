@@ -42,7 +42,7 @@ export class SignInComponentState extends ComponentStore<ILocalState> {
                     return this.authService.login$(userData).pipe(
                         tap(({ message }: IUserSignInResponse) => {
                             this.updateProcessingState(false);
-                            this.updateMessageState(message + '\nYou will be redirected after a few seconds...');
+                            this.updateMessageState(message);
 
                             const redirectUrl = this.activeRoute.snapshot.queryParamMap.get('redirectTo');
                             
@@ -55,7 +55,7 @@ export class SignInComponentState extends ComponentStore<ILocalState> {
                                 timerId = setTimeout(() => {
                                     this.router.navigate([ '/' ]);
                                     clearTimeout(timerId);
-                                }, 2e3);
+                                }, 4e3);
                             }
                             
                         }),
