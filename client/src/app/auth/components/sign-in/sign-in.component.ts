@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 import { ILocalState, SignInComponentState } from './sign-in.component.state';
 import { IUserSignInDto } from '../../../core/services/auth.service';
@@ -12,13 +12,18 @@ import { IUserSignInDto } from '../../../core/services/auth.service';
 	styleUrls: ['./sign-in.component.css'],
 	providers: [SignInComponentState]
 })
-export class SignInComponent {
+export class SignInComponent implements OnDestroy {
 
+	private subscription!: Subscription;
 	readonly localState$: Observable<ILocalState> = this.componentState.localState$;
 
 	constructor(
 		private readonly componentState: SignInComponentState
 	) { }
+
+	ngOnDestroy(): void {
+		this.subscription.unsubscribe?.();
+	}
 
 	submitHandler(formModel: NgForm) {
 

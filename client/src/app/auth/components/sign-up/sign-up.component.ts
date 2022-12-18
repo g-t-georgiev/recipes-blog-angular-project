@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 import { IUserSignUpDto } from 'src/app/core/services';
 import { SignUpComponentState, ILocalState } from './sign-up.component.state';
@@ -11,13 +11,18 @@ import { SignUpComponentState, ILocalState } from './sign-up.component.state';
 	styleUrls: ['./sign-up.component.css'],
 	providers: [SignUpComponentState]
 })
-export class SignUpComponent {
+export class SignUpComponent implements OnDestroy {
 
+	private subscription!: Subscription;
 	readonly localState$: Observable<ILocalState> = this.componentState.localState$;
 
 	constructor(
 		private readonly componentState: SignUpComponentState
 	) { }
+
+	ngOnDestroy(): void {
+		this.subscription.unsubscribe?.();
+	}
 
 	submitHandler(formModel: NgForm) {
 
