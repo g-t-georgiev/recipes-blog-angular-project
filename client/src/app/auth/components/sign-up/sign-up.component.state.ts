@@ -17,8 +17,6 @@ const initialState: ILocalState = {
     processing: false
 };
 
-let timerId: any = null;
-
 @Injectable()
 export class SignUpComponentState extends ComponentStore<ILocalState> {
 
@@ -42,33 +40,29 @@ export class SignUpComponentState extends ComponentStore<ILocalState> {
                     return this.authService.register$(userData).pipe(
                         tap(({ message }: IUserSignUpResponse) => {
                             this.updateProcessingState(false);
-                            this.updateMessageState(message);
-
-                            timerId = setTimeout(() => {
-                                this.router.navigate([ '/users', 'login' ]);
-                                clearTimeout(timerId);
-                            }, 4e3);
+                            // this.updateMessageState(message);
+                            this.router.navigate([ '/users', 'login' ]);
                         }),
+                        catchError((error) => {
+
+                            // console.log(error);
+                            let errorMsg;
+        
+                            this.updateProcessingState(false);
+        
+                            if (error.status === 0) {
+                                errorMsg = 'Connection error';
+                            } else {
+                                errorMsg = error.error?.message ?? error?.message ?? error.statusText ?? 'Something went wrong';
+                            }
+        
+                            this.updateMessageState(errorMsg);
+        
+                            // throwing error completes the stream
+                            // instead return an empty observable
+                            return EMPTY;
+                        })
                     );
-                }), 
-                catchError((error) => {
-
-                    // console.log(error);
-                    let errorMsg;
-
-                    this.updateProcessingState(false);
-
-                    if (error.status === 0) {
-                        errorMsg = 'Connection error';
-                    } else {
-                        errorMsg = error.error?.message ?? error?.message ?? error.statusText ?? 'Something went wrong';
-                    }
-
-                    this.updateMessageState(errorMsg);
-
-                    // throwing error completes the stream
-                    // instead return an empty observable
-                    return EMPTY;
                 })
             );
         }
