@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { tap, mergeMap } from 'rxjs/operators';
+import { EMPTY, Observable } from 'rxjs';
+import { tap, mergeMap, catchError } from 'rxjs/operators';
 import { ComponentStore } from '@ngrx/component-store';
+import { Router } from '@angular/router';
 
-import { ViewportResizeService } from '../../services';
+import { AuthService, ViewportResizeService } from '../../services';
 
 
 export interface ILocalState {
@@ -22,7 +23,9 @@ const initialState: ILocalState = {
 export class HeaderComponentState extends ComponentStore<ILocalState> {
 
     constructor(
-        private readonly vpResizeService: ViewportResizeService
+        private readonly vpResizeService: ViewportResizeService,
+        private readonly authService: AuthService,
+        private readonly router: Router
     ) {
         super(initialState);
     }
@@ -63,6 +66,40 @@ export class HeaderComponentState extends ComponentStore<ILocalState> {
                     )
                 })
             )
+        }
+    );
+
+    readonly logoutEffect = this.effect(
+        (empty$: Observable<undefined>) => {
+            return empty$.pipe(
+                tap(() => {
+                    this.updateSignoutStatus(true);
+                }),
+                mergeMap(() => {
+                    return this.authService.logout$().pipe(
+                        tap(({ message }) => {
+                            console.log(message);
+                            this.updateSignoutStatus(false);
+                            this.router.navigate(['/users', 'login']);
+                        }),
+                        catchError((error) => {
+
+                            // console.error(error);
+
+                            this.updateSignoutStatus(false);
+                            let errorMsg;
+
+                            if (error.status === 0) {
+                                errorMsg = 'Connection error';
+                            } else {
+                                errorMsg = error.error?.message ?? error?.message ?? error.statusText ?? 'Something went wrong';
+                            }
+
+                            return EMPTY;
+                        })
+                    );
+                })
+            );
         }
     );
     
