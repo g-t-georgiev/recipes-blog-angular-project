@@ -6,7 +6,7 @@
 <ng-template #home let-currentUser>
 
     <section>
-        <h1>Hello, {{currentUser.username}}!</h1>
+        <h1>Hello, {{currentUser.username ?? 'guest'}}!</h1>
         <p>This is the home page.</p>
     </section>
 
