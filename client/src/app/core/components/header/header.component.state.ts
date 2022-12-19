@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { tap, mergeMap } from 'rxjs/operators';
 import { ComponentStore } from '@ngrx/component-store';
+
+import { ViewportResizeService } from '../../services';
 
 
 export interface ILocalState {
@@ -19,7 +21,9 @@ const initialState: ILocalState = {
 @Injectable()
 export class HeaderComponentState extends ComponentStore<ILocalState> {
 
-    constructor() {
+    constructor(
+        private readonly vpResizeService: ViewportResizeService
+    ) {
         super(initialState);
     }
 
@@ -41,6 +45,24 @@ export class HeaderComponentState extends ComponentStore<ILocalState> {
                     this.updateNavigationState(value);
                 })
             );
+        }
+    );
+
+    readonly maxwidthMatchEffect = this.effect(
+        (maxwidthMatch$: Observable<boolean>) => {
+            return maxwidthMatch$.pipe(
+                mergeMap((matches) => {
+                    this.updateMenuBtnToggleState(matches);
+                    this.toggleNavigation(!matches);
+
+                    return this.vpResizeService.onMaxWidth780$.pipe(
+                        tap(({ matches }) => {
+                            this.updateMenuBtnToggleState(matches);
+                            this.toggleNavigation(!matches);
+                        })
+                    )
+                })
+            )
         }
     );
     
