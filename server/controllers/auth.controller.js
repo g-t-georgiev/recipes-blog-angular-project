@@ -40,15 +40,14 @@ export async function register(req, res, next) {
             imageUrl = 'https://drive.google.com/uc?id=1iUrhiwfp4XxCp0xLXDUB1rL8DXVltF2n';
         }
 
-        let existingUser = await User.findOne({ email });
+        let matchedUserByEmail;
+        let matchedUserByUsername;
 
-        if (existingUser) {
+        if (matchedUserByEmail = await User.findOne({ email })) {
             throw new ResponseError({ message: 'Email is already taken', status: 409 });
         }
 
-        existingUser = await User.findOne({ username });
-
-        if (existingUser) {
+        if (matchedUserByUsername = await User.findOne({ username })) {
             throw new ResponseError({ message: 'Username is already taken', status: 409 });
         }
 
