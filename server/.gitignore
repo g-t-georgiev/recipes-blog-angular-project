@@ -1,8 +1,6 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
-angular-recipes-app-fc3798ae4c49.json
-
-# Temp files storage directory
+# Files and uploads
 /public
 
 # Node
