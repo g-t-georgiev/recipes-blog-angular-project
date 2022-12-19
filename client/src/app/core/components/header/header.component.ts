@@ -1,12 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 
 import { Subscription, Observable } from 'rxjs';
 
 import { IRootState } from 'src/app/state';
 import { IUser } from 'src/app/shared/interfaces';
-import { AuthService } from '../../services';
 import { ViewportResizeService } from '../../services/viewport-resize.service';
 import { HeaderComponentState, ILocalState } from './header.component.state';
 
@@ -20,7 +18,7 @@ import { HeaderComponentState, ILocalState } from './header.component.state';
 })
 export class HeaderComponent implements OnInit, OnDestroy {
 
-	private subscription!: Subscription;
+	private subscription: Subscription = new Subscription();
 
 	readonly currentUser$: Observable<IUser | null> = this.globalState.select((state) => state.currentUser);
 	readonly localState$: Observable<ILocalState> = this.componentState.localState$;
@@ -29,15 +27,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
 	constructor(
 		private readonly vpResizeService: ViewportResizeService,
 		private readonly componentState: HeaderComponentState,
-		private readonly globalState: Store<IRootState>,
-		private readonly authService: AuthService,
-		private readonly router: Router
+		private readonly globalState: Store<IRootState>
 	) { }
 
 	ngOnInit(): void {
 
-		this.subscription = this.componentState.maxwidthMatchEffect(
-			this.vpResizeService.hasMatch()
+		this.subscription.add(
+			this.componentState.maxwidthMatchEffect(
+				this.vpResizeService.hasMatch()
+			)
 		);
 
 	}
@@ -77,20 +75,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
 	}
 
 	logoutHandler() {
-		this.componentState.updateSignoutStatus(true);
-
-		this.authService.logout$().subscribe({
-			next: ({ message }) => {
-				console.log(message);
-			},
-			complete: () => {
-				this.componentState.updateSignoutStatus(false);
-				this.router.navigate(['/users', 'login']);
-			},
-			error: ({ error }) => {
-				console.error(error?.message ?? 'Something went wrong');
-				this.componentState.updateSignoutStatus(false);
-			}
-		});
+		this.subscription.add(
+			this.componentState.logoutEffect()
+		);
 	}
 }
