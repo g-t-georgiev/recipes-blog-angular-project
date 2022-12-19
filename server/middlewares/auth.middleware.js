@@ -2,20 +2,11 @@ import { User, TokenBlacklist } from '../models/index.js';
 import { jwt } from '../utils/index.js';
 
 
+
 const { 
     NODE_ENV,
     AUTH_COOKIE_NAME
 } = process.env;
-
-// if (NODE_ENV === 'development') {
-
-//     console.log(
-//         'AuthMiddleware#module',
-//         'NODE_ENV: ', NODE_ENV,
-//         'AUTH_COOKIE_NAME: ', AUTH_COOKIE_NAME
-//     );
-
-// }
 
 /**
  * Authentication middleware for filtering request with invalid tokens
@@ -31,7 +22,7 @@ export function authMiddleware(redirectUnauthenticated = true) {
      * @returns {void}
      */
     return function (req, res, next) {
-        const token = req.cookies[AUTH_COOKIE_NAME] ?? '';
+        const token = req.cookies[AUTH_COOKIE_NAME ?? 'auth-cookie'] ?? '';
         Promise.all([
             jwt.verifyToken(token),
             TokenBlacklist.findOne({ token })

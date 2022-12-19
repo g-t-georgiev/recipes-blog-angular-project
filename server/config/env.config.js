@@ -6,8 +6,8 @@ const {
 
 const config = {
     development: {
-        port: API_PORT,
-        dbURL: DB_URL_CREDENTIALS,
+        port: API_PORT ?? 3000,
+        dbURL: DB_URL_CREDENTIALS ?? 'mongodb://localhost:27017/test',
         origin: [
             'http://localhost:5555', 
             'http://localhost:4200'
@@ -22,4 +22,4 @@ const config = {
 
 // console.log(config);
 
-export default config[NODE_ENV];
+export default config[NODE_ENV ?? 'development'];

@@ -1,24 +1,14 @@
 import jwt from 'jsonwebtoken';
 
+
 const { 
     NODE_ENV,
     JWT_EXPIRES_IN, 
     JWT_SECRET 
 } = process.env;
 
-// if (NODE_ENV === 'development') {
-
-//     console.log(
-//         'jwt#module',
-//         'NODE_ENV: ', NODE_ENV,
-//         'JWT_EXPIRES_IN: ', JWT_EXPIRES_IN,
-//         'JWT_SECRET: ', JWT_SECRET
-//     );
-
-// }
-
 const defaultOptions = {
-    expiresIn: JWT_EXPIRES_IN,
+    expiresIn: JWT_EXPIRES_IN ?? '1d',
 };
 
 const cb = function(resolve, reject) {
@@ -44,7 +34,7 @@ export function createToken(payload, options = defaultOptions) {
     return new Promise((resolve, reject) => {
         jwt.sign(
             payload, 
-            JWT_SECRET, 
+            JWT_SECRET ?? 'my-jwt-secret-key', 
             options, 
             cb(resolve, reject)
         );
@@ -61,7 +51,7 @@ export function verifyToken(token) {
     return new Promise((resolve, reject) => {
         jwt.verify(
             token, 
-            JWT_SECRET, 
+            JWT_SECRET ?? 'my-jwt-secret-key', 
             {},
             cb(resolve, reject)
         );

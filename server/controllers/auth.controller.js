@@ -92,7 +92,7 @@ export async function login(req, res, next) {
         }
 
         res.cookie(
-            AUTH_COOKIE_NAME,
+            AUTH_COOKIE_NAME ?? 'auth-cookie',
             authToken,
             cookieOptions
         )

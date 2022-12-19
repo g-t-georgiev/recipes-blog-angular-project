@@ -27,7 +27,7 @@ export function expressAppInit() {
 
     const app = express(); // init app
     app.use( express.json() ); // parse json
-    app.use( cookieParser( AUTH_COOKIE_SECRET ) ); // parse cookies
+    app.use( cookieParser( AUTH_COOKIE_SECRET ?? 'my-super-secret-cookie-key' ) ); // parse cookies
     app.use( express.static( path.resolve( globals.__basedir, 'static' ) ) ); // serve static files from 'static' directory
     app.use( cors( corsOptions ) ); // pars cross-origin requests
     app.use( '/api', router ); // setup router
