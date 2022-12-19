@@ -35,19 +35,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
 	) { }
 
 	ngOnInit(): void {
-		this.componentState.updateMenuBtnToggleState(this.vpResizeService.hasMatch());
-		this.componentState.toggleNavigation(!this.vpResizeService.hasMatch());
 
-		this.subscription = this.vpResizeService.onMaxWidth780$.subscribe({
-			next: ({ matches }) => {
-				this.componentState.updateMenuBtnToggleState(matches); // show toggle nav button on match
-				this.componentState.toggleNavigation(!matches); // hide navigation on match
-			}
-		});
+		this.subscription = this.componentState.maxwidthMatchEffect(
+			this.vpResizeService.hasMatch()
+		);
+
 	}
 
 	ngOnDestroy(): void {
-		this.subscription?.unsubscribe();
+		this.subscription?.unsubscribe?.();
 	}
 
 	onHeaderAreaClick(ev: PointerEvent, showNavigation: boolean) {
