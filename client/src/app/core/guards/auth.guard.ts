@@ -16,6 +16,7 @@ export class AuthGuard implements CanActivate {
 	canActivate(
 		route: ActivatedRouteSnapshot,
 		state: RouterStateSnapshot): Observable<boolean | UrlTree> {
+		// console.log(route, state);
 		return this.authService.isLoggedIn$.pipe(
 			map((isLoggedIn) => {
 
@@ -25,11 +26,11 @@ export class AuthGuard implements CanActivate {
 
 				const routerOptions = {
 					queryParams: {
-						redirectTo: `/${route.url.map(f => f.path).join('/')}`
+						redirectTo: state.url
 					}
 				};
 
-				return this.router.createUrlTree(['/uusers', 'login'], routerOptions);
+				return this.router.createUrlTree(['/users', 'login'], routerOptions);
 			})
 		);
 	}
