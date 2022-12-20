@@ -16,12 +16,12 @@ export async function duplicateCrendetialsCheck(req, res, next) {
 
     try {
 
-        console.log(credentials);
+        // console.log(credentials);
         let duplicateUser = await User.findOne({ email: credentials }) || await User.findOne({ username: credentials });
 
-        duplicateUser = duplicateUser && bsonToJson(duplicateUser);
-        duplicateUser = duplicateUser && removePassword(duplicateUser);
-        console.log(duplicateUser);
+        // duplicateUser = duplicateUser && bsonToJson(duplicateUser);
+        // duplicateUser = duplicateUser && removePassword(duplicateUser);
+        // console.log(duplicateUser);
 
         res.status(200).json(duplicateUser ? true : false);
 
