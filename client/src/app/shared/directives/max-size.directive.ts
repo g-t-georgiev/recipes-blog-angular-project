@@ -3,7 +3,7 @@ import { AbstractControl, NG_VALIDATORS, ValidationErrors, Validator } from '@an
 import { maxSizeValidator } from '../validators';
 
 @Directive({
-	selector: '[maxSize]',
+	selector: '[maxsize]',
 	providers: [
 		{
 			provide: NG_VALIDATORS,
