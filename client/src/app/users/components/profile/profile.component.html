@@ -1,1 +1,9 @@
-<p>profile works!</p>
+<ng-container
+    [ngTemplateOutlet]="profile" 
+    [ngTemplateOutletContext]="{ currentUser: currentUser$ | async }"
+></ng-container>
+
+<ng-template #profile let-currentUser="currentUser">
+    <p>Hello, {{currentUser.username}}!</p>
+    <p>This is your profile page.</p>
+</ng-template>
