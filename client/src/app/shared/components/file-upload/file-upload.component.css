@@ -2,7 +2,7 @@
     --file-upload-hint__color: #444;
 
     --file-upload-button__bg-color: hsl(120, 100%, 30%);
-    --file-upload-button__bg-color--hover: hsl(120, 100%, 28%);
+    --file-upload-button__bg-color--hover: hsl(120, 100%, 25%);
     --file-upload-button__color: #222;
 
     --selected-file__color: #444;
@@ -12,7 +12,7 @@
     --file-upload-hint__color: #aaa;
 
     --file-upload-button__bg-color: hsl(120, 100%, 20%);
-    --file-upload-button__bg-color--hover: hsl(120, 100%, 18%);
+    --file-upload-button__bg-color--hover: hsl(120, 100%, 15%);
     --file-upload-button__color: #ccc;
 
     --selected-file__color: #aaa;
@@ -77,6 +77,10 @@
 }
 
 .file-upload-button:hover {
+    background-color: var(--file-upload-button__bg-color--hover);
+}
+
+#file-upload-input:focus ~ .file-upload-button {
     background-color: var(--file-upload-button__bg-color--hover);
 }
 
