@@ -46,6 +46,7 @@
                     ngModel 
                     required 
                     email 
+                    emailExists
                     #emailControl="ngModel" 
                     class="form-input"
                     type="email" 
@@ -65,6 +66,12 @@
                     [ngTemplateOutlet]="formInputErrorMsg"
                     [ngTemplateOutletContext]="{ $implicit: 'Invalid email' }"
                     *ngIf="emailControl.touched && emailControl.errors?.['email']"
+                ></ng-container>
+
+                <ng-container
+                    [ngTemplateOutlet]="formInputErrorMsg",
+                    [ngTemplateOutletContext]="{ $implicit: 'Email is already taken'}"
+                    *ngIf="emailControl.touched && emailControl.errors?.['duplicateEmail']"
                 ></ng-container>
     
             </section>
