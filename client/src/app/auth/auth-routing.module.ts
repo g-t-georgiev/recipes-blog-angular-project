@@ -11,11 +11,18 @@ const routes: Routes = [
     },
     {
         path: 'login',
-        component: SignInComponent
+        component: SignInComponent,
+        title: 'Sign in'
     },
     {
         path: 'register',
-        component: SignUpComponent
+        component: SignUpComponent,
+        title: 'Sign up'
+    },
+    {
+        path: 'profile',
+        loadChildren: () => import('../users/users.module').then(m => m.UsersModule),
+        title: 'Profile'
     }
 ];
 
