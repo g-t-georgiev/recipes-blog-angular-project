@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Directive, forwardRef } from '@angular/core';
 import { NG_ASYNC_VALIDATORS, AsyncValidator, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Observable, timer } from 'rxjs';
@@ -8,16 +7,16 @@ import { UsersService } from 'src/app/core/services';
 
 
 @Directive({
-	selector: '[emailExists]',
+	selector: '[duplicateCredentialsCheck]',
 	providers: [
 		{
 			provide: NG_ASYNC_VALIDATORS,
-			useExisting: forwardRef(() => ExistingEmailValidatorDirective),
+			useExisting: forwardRef(() => DuplicateCredentialsValidatorDirective),
 			multi: true
 		}
 	]
 })
-export class ExistingEmailValidatorDirective implements AsyncValidator {
+export class DuplicateCredentialsValidatorDirective implements AsyncValidator {
 
 	constructor(
 		private readonly usersService: UsersService
