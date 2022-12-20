@@ -73,8 +73,8 @@ export async function login(req, res, next) {
         } = req.body;
 
         let user = await User.findOne({ username });
-        let passwordMatches = user ? user.matchPassword(password) : false;
-
+        let passwordMatches = user ? await user.matchPassword(password) : false;
+        console.log(passwordMatches);
         if (!passwordMatches) {
             throw new ResponseError({ message: 'Wrong email or password', status: 401 });
         }
