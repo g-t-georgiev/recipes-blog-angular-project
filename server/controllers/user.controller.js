@@ -12,20 +12,59 @@ import { ResponseError, helpers } from '../utils/index.js';
 const { bsonToJson, removePassword } = helpers;
 
 export async function authenticate(req, res, next) {
-    let { user } = req;
+    let { 
+        user, 
+        params: {
+            email,
+            username
+        }
+    } = req;
+
+    let message;
+    let status;
+    let matchingUserByEmail;
+    let matchingUserByUsername;
 
     try {
 
-        const message = `Welcome back, ${user?.username ?? 'guest'}!`;
+        if (email || username) {
+
+            if (
+                email && 
+                (matchingUserByEmail = await  User.findOne({ email }))
+            ) {
+                status = 403;
+                message = 'Email is already taken';
+            }
+
+            if (
+                username && 
+                (matchingUserByUsername = await User.findOne({ username }))
+            ) {
+                status = 403;
+                message = 'Username is already taken';
+            }
+            
+            message = 'All is good';
+            status = 200;
+
+            res.status(status).json({ message });
+            return;
+        }
+
+        message = `Welcome back, ${user?.username ?? 'guest'}!`;
     
         if (!user) {
-            throw new ResponseError({ message, status: 401 });
+            status = 401;
+            throw new ResponseError({ message, status });
         }
 
         user = bsonToJson(user);
         user = removePassword(user);
         
-        res.status(200).json({ user, message });
+        status = 200;
+
+        res.status(status).json({ user, message });
 
     } catch (err) {
 
