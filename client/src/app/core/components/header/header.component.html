@@ -23,7 +23,6 @@
     
             <a class="nav-link" routerLinkActive="active" ariaCurrentWhenActive="page" routerLink="/home">Home</a>
             <a class="nav-link" routerLinkActive="active" ariaCurrentWhenActive="page" routerLink="/recipes">Recipes</a>
-            <a class="nav-link" routerLinkActive="active" ariaCurrentWhenActive="page" routerLink="/users/profile">Profile</a>
             
             <section class="nav-auth-section">
     
@@ -33,6 +32,7 @@
                 </ng-container>
 
                 <ng-container *ngIf="currentUser">
+                    <a class="nav-link" routerLinkActive="active" ariaCurrentWhenActive="page" [routerLink]="['/users', 'profile']">Profile</a>
                     <a href="javascript:void(0);" (pointerup)="logoutHandler()" [attr.disabled]="signingOut" class="nav-link">{{signingOut ? 'Processing...' : 'Signout'}}</a>
                 </ng-container>
         
