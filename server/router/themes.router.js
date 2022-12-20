@@ -3,18 +3,14 @@ import express from 'express';
 import { authMiddleware } from '../middlewares/index.js';
 import { themesController, subscriptionsController } from '../controllers/index.js';
 
-// middlewares added specific to this router
+export const themesRouter = express.Router();
 
-const router = express.Router();
+themesRouter.get('/', themesController.getThemes);
+themesRouter.post('/', authMiddleware(), themesController.createTheme);
 
-router.get('/', themesController.getThemes);
-router.post('/', authMiddleware(), themesController.createTheme);
+themesRouter.get('/:themeId', themesController.getTheme);
+themesRouter.put('/:themeId', themesController.editTheme);
+themesRouter.delete('/:themeId', themesController.deleteTheme);
 
-router.get('/:themeId', themesController.getTheme);
-router.put('/:themeId', themesController.editTheme);
-router.delete('/:themeId', themesController.deleteTheme);
-
-router.post('/:themeId/subscribe', authMiddleware(), subscriptionsController.subscribe);
-router.delete('/:themeId/subscribe', authMiddleware(), subscriptionsController.unsubscribe);
-
-export default router;
+themesRouter.post('/:themeId/subscribe', authMiddleware(), subscriptionsController.subscribe);
+themesRouter.delete('/:themeId/subscribe', authMiddleware(), subscriptionsController.unsubscribe);

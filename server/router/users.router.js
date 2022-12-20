@@ -3,18 +3,16 @@ import express from 'express';
 import { authMiddleware } from '../middlewares/index.js';
 import { usersController } from '../controllers/index.js';
 
-import { router as auth } from './auth.router.js';
+import { authRouter } from './auth.router.js';
 
-const router = express.Router();
+export const usersRouter = express.Router();
 
-router.get('/auth', auth);
-
-router.get('/profile', authMiddleware(), usersController.getProfileInfo);
-router.put('/profile', authMiddleware(), usersController.editProfileInfo);
-
-router.get('/themes', authMiddleware(), usersController.getUserThemes);
-router.get('/posts', authMiddleware(), usersController.getUserPosts);
-router.get('/subscriptions', authMiddleware(), usersController.getUserSubscriptions);
-router.get('/likes', authMiddleware(), usersController.getUserLikes);
-
-export default router;
+usersRouter.use('/auth', authRouter);
+usersRouter
+usersRouter.get('/profile', authMiddleware(), usersController.getProfileInfo);
+usersRouter.put('/profile', authMiddleware(), usersController.editProfileInfo);
+usersRouter
+usersRouter.get('/themes', authMiddleware(), usersController.getUserThemes);
+usersRouter.get('/posts', authMiddleware(), usersController.getUserPosts);
+usersRouter.get('/subscriptions', authMiddleware(), usersController.getUserSubscriptions);
+usersRouter.get('/likes', authMiddleware(), usersController.getUserLikes);

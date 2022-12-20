@@ -3,16 +3,12 @@ import express from 'express';
 import { authMiddleware } from '../middlewares/index.js';
 import { postsController, likesController } from '../controllers/index.js';
 
-// middlewares added specific to this router
+export const postsRouter = express.Router();
 
-const router = express.Router();
+postsRouter.get('/', postsController.getLatestsPosts);
+postsRouter.post('/', authMiddleware(), postsController.createPost);
+postsRouter.put('/:postId', authMiddleware(), postsController.editPost);
+postsRouter.delete('/:postId', authMiddleware(), postsController.deletePost);
 
-router.get('/', postsController.getLatestsPosts);
-router.post('/', authMiddleware(), postsController.createPost);
-router.put('/:postId', authMiddleware(), postsController.editPost);
-router.delete('/:postId', authMiddleware(), postsController.deletePost);
-
-router.post('/:postId/like', authMiddleware(), likesController.like);
-router.delete('/:postId/like', authMiddleware(), likesController.unlike);
-
-export default router;
+postsRouter.post('/:postId/like', authMiddleware(), likesController.like);
+postsRouter.delete('/:postId/like', authMiddleware(), likesController.unlike);
