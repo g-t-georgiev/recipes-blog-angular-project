@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Directive, forwardRef } from '@angular/core';
 import { NG_ASYNC_VALIDATORS, AsyncValidator, AbstractControl, ValidationErrors } from '@angular/forms';
-import { Observable, of } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { Observable, timer } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 
-import { environment } from 'src/environments/environment';
+import { UsersService } from 'src/app/core/services';
 
 
 @Directive({
@@ -20,21 +20,14 @@ import { environment } from 'src/environments/environment';
 export class ExistingEmailValidatorDirective implements AsyncValidator {
 
 	constructor(
-		private readonly http: HttpClient
+		private readonly usersService: UsersService
 	) { }
 
 	validate(control: AbstractControl<any, any>): Observable<ValidationErrors | null> {
-		return this.http.get<{ message: string }>(environment.apiUrl + '/users/auth/email', { params: { email: control.value } })
-			.pipe(
-				map(({ message }) => {
-					console.log(message);
-					return null;
-				}),
-				catchError((error) => {
-					console.log(error);
-					return of({ emailExists: true });
-				})
-			);
+		return timer(700).pipe(
+				switchMap(() => this.usersService.duplicateCredentialsCheck(control.value)),
+				map(result => result ? { duplicateEmail: true } : null)
+		);
 	}
 
 }
