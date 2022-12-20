@@ -11,60 +11,19 @@ import { ResponseError, helpers } from '../utils/index.js';
 
 const { bsonToJson, removePassword } = helpers;
 
-export async function authenticate(req, res, next) {
-    let { 
-        user, 
-        params: {
-            email,
-            username
-        }
-    } = req;
-
-    let message;
-    let status;
-    let matchingUserByEmail;
-    let matchingUserByUsername;
+export async function duplicateCrendetialsCheck(req, res, next) {
+    const { credentials } = req.query;
 
     try {
 
-        if (email || username) {
+        console.log(credentials);
+        let duplicateUser = await User.findOne({ email: credentials }) || await User.findOne({ username: credentials });
 
-            if (
-                email && 
-                (matchingUserByEmail = await  User.findOne({ email }))
-            ) {
-                status = 403;
-                message = 'Email is already taken';
-            }
+        duplicateUser = duplicateUser && bsonToJson(duplicateUser);
+        duplicateUser = duplicateUser && removePassword(duplicateUser);
+        console.log(duplicateUser);
 
-            if (
-                username && 
-                (matchingUserByUsername = await User.findOne({ username }))
-            ) {
-                status = 403;
-                message = 'Username is already taken';
-            }
-            
-            message = 'All is good';
-            status = 200;
-
-            res.status(status).json({ message });
-            return;
-        }
-
-        message = `Welcome back, ${user?.username ?? 'guest'}!`;
-    
-        if (!user) {
-            status = 401;
-            throw new ResponseError({ message, status });
-        }
-
-        user = bsonToJson(user);
-        user = removePassword(user);
-        
-        status = 200;
-
-        res.status(status).json({ user, message });
+        res.status(200).json(duplicateUser ? true : false);
 
     } catch (err) {
 
@@ -80,7 +39,7 @@ export async function getProfileInfo(req, res, next) {
 
         // finding by Id and return without password and __v
         let user = await User.findOne(
-            { _id: userId }, 
+            { _id: userId },
             { password: 0, __v: 0 }
         );
 
@@ -105,10 +64,10 @@ export async function editProfileInfo(req, res, next) {
 
         const { _id: userId } = req.user;
         const { username, email } = req.body;
-    
+
         let updatedUser = await User.findOneAndUpdate(
-            { _id: userId }, 
-            { username, email }, 
+            { _id: userId },
+            { username, email },
             { runValidators: true, new: true }
         );
 
@@ -118,11 +77,11 @@ export async function editProfileInfo(req, res, next) {
 
         updatedUser = bsonToJson(updatedUser);
         updatedUser = removePassword(updatedUser);
-        
+
         res.status(200).json({ user: updatedUser, message: 'Profile editted successfully' });
-        
+
     } catch (err) {
-        
+
         if (err.name === 'MongoError' && err.code === 11000) {
             let field = err.message.split("index: ")[1];
             field = field.split(" dup key")[0];
@@ -130,13 +89,13 @@ export async function editProfileInfo(req, res, next) {
 
             return next({ message: `This ${field} is already registered!`, status: 409 });
         }
-        
+
         next(err);
     }
 }
 
 export async function getUserThemes(req, res, next) {
-    
+
     try {
 
         const { _id: userId } = req.user;
@@ -177,7 +136,7 @@ export async function getUserSubscriptions(req, res, next) {
 
 export async function getUserPosts(req, res, next) {
 
-        try {
+    try {
 
         const { _id: userId } = req.user;
 
