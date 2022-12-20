@@ -9,7 +9,8 @@ const routes: Routes = [
         path: '',
         pathMatch: 'full',
         canActivate: [AuthGuard],
-        component: ProfileComponent
+        component: ProfileComponent,
+        title: 'Profile'
     },
 
 ];
