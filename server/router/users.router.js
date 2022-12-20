@@ -3,11 +3,11 @@ import express from 'express';
 import { authMiddleware } from '../middlewares/index.js';
 import { usersController } from '../controllers/index.js';
 
-// middlewares added specific to this router
+import { router as auth } from './auth.router.js';
 
 const router = express.Router();
 
-router.get('/auth', authMiddleware(false), usersController.authenticate);
+router.get('/auth', auth);
 
 router.get('/profile', authMiddleware(), usersController.getProfileInfo);
 router.put('/profile', authMiddleware(), usersController.editProfileInfo);
