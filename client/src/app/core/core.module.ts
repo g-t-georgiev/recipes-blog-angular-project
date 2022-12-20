@@ -20,8 +20,6 @@ import {
 	MenuToggleButtonComponent 
 } from './components';
 
-import { AuthGuard } from './guards';
-
 
 
 @NgModule({
@@ -58,7 +56,6 @@ export class CoreModule {
 				ThemeSwitchService,
 				ViewportResizeService, 
 				AuthService,
-				AuthGuard,
 				UsersService
 			]
 		}
