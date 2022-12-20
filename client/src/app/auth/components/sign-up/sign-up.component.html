@@ -90,6 +90,7 @@
                     required 
                     minlength="4" 
                     customMaxlength="30" 
+                    duplicateCredentialsCheck 
                     pattern="(?=[A-Za-z]+)^[A-Za-z0-9]+$" 
                     #usernameControl="ngModel" 
                     class="form-input" 
@@ -122,6 +123,12 @@
                     [ngTemplateOutlet]="formInputErrorMsg" 
                     [ngTemplateOutletContext]="{ $implicit: 'Username should start with a letter and contain letters and digits only' }"
                     *ngIf="usernameControl.touched && usernameControl.errors?.['pattern']"
+                ></ng-container>
+
+                <ng-container
+                    [ngTemplateOutlet]="formInputErrorMsg",
+                    [ngTemplateOutletContext]="{ $implicit: 'Username is already taken'}"
+                    *ngIf="usernameControl.touched && usernameControl.errors?.['duplicateEmail']"
                 ></ng-container>
     
             </section>
