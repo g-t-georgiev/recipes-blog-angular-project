@@ -13,7 +13,7 @@ const { apiUrl } = environment;
 const signInUrl = `${apiUrl}/login`;
 const signUpUrl = `${apiUrl}/register`;
 const signOutUrl = `${apiUrl}/logout`;
-const authUrl = `${apiUrl}/users/auth`;
+const authUrl = `${apiUrl}/users/profile`;
 
 export interface IUserSignInDto {
 	username: string;
