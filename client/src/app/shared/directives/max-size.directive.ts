@@ -14,7 +14,7 @@ import { maxSizeValidator } from '../validators';
 })
 export class MaxSizeDirective implements Validator {
 
-	@Input('maxSize') limit: number = 5;
+	@Input('maxsize') limit: number = 5;
 
 	constructor() { }
 
