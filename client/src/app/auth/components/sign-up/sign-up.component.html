@@ -133,12 +133,31 @@
     
             </section>
     
-            <app-file-upload 
-                [ngModel]="null"
-                name="profilePicture"
-                label="Choose profile picture" 
-                accept=".jpeg, .jpg, .png, .svg"
-            ></app-file-upload>
+            <section>
+
+                <app-file-upload 
+                    [ngModel]="null" 
+                    [maxsize]="0.2" 
+                    required
+                    #fileUploadControl="ngModel"
+                    name="profilePicture"
+                    label="Choose profile picture" 
+                    accept=".jpeg, .jpg, .png, .svg"
+                ></app-file-upload>
+
+                <ng-container
+                    [ngTemplateOutlet]="formInputErrorMsg"
+                    [ngTemplateOutletContext]="{ $implicit: 'File upload is required'}"
+                    *ngIf="fileUploadControl.touched && fileUploadControl.errors?.['required']"
+                ></ng-container>
+
+                <ng-container 
+                    [ngTemplateOutlet]="formInputErrorMsg"
+                    [ngTemplateOutletContext]="{ $implicit: 'File is bigger than 5MB' }"
+                    *ngIf="fileUploadControl.touched && fileUploadControl.errors?.['maxsize']"
+                ></ng-container>
+                <!-- {{fileUploadControl.errors | json}} -->
+            </section>
 
             <ng-container #passwordsGroup="ngModelGroup" ngModelGroup="passwords" passwordsMatch>
         
