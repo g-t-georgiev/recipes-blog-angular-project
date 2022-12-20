@@ -6,9 +6,19 @@ import { RouterModule } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
 
 import { AttachCookieInterceptor, AuthInterceptor } from './interceptors';
-import { AuthService, DarkModeSwitchService as ThemeSwitchService, ViewportResizeService } from './services';
 
-import { HeaderComponent, DarkModeSwitchComponent, MenuToggleButtonComponent } from './components';
+import { 
+	AuthService, 
+	DarkModeSwitchService as ThemeSwitchService, 
+	UsersService, 
+	ViewportResizeService 
+} from './services';
+
+import { 
+	HeaderComponent, 
+	DarkModeSwitchComponent, 
+	MenuToggleButtonComponent 
+} from './components';
 
 
 
@@ -45,7 +55,8 @@ export class CoreModule {
 				},
 				ThemeSwitchService,
 				ViewportResizeService, 
-				AuthService
+				AuthService,
+				UsersService
 			]
 		}
 	}
