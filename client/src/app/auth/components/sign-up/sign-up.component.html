@@ -218,8 +218,8 @@
                     required 
                     #confirmPasswordControl="ngModel" 
                     class="form-input" 
-                    [class.ng-valid]="confirmPasswordControl.valid && passwordsGroup.valid" 
-                    [class.ng-invalid]="confirmPasswordControl.touched && passwordsGroup.invalid"
+                    [class.ng-valid]="confirmPasswordControl.valid && !passwordsGroup.control.errors?.['mismatch']" 
+                    [class.ng-invalid]="confirmPasswordControl.touched && confirmPasswordControl.invalid || passwordsGroup.control.errors?.['mismatch']"
                     type="password" 
                     name="repeatPassword" 
                     id="confirm-password" 
