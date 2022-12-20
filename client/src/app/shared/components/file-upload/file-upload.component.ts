@@ -1,8 +1,8 @@
 import { Component, ElementRef, forwardRef, Input, ViewChild } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR, ValidationErrors } from '@angular/forms';
 
 @Component({
-	selector: 'app-file-upload',
+	selector: 'app-file-upload, app-file-upload[ngModel], app-file-upload[formControl], app-file-upload[formControlName]',
 	templateUrl: './file-upload.component.html',
 	styleUrls: ['./file-upload.component.css'],
 	providers: [
@@ -15,48 +15,43 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 })
 export class FileUploadComponent implements ControlValueAccessor {
 
-	selectedFile: File | null = null;
-	fileName: string = 'No file selected yet';
-	@Input('label') title: string = 'Choose files to upload';
+	@Input() placeholder: string = 'No file selected yet';
+	@Input() disabled: boolean = false;
+	@Input() label: string = 'Choose files to upload';
 	@Input('accept') allowedFilesList!: string;
+
 	@ViewChild('fileUploadInput') readonly fieUploadInput!: ElementRef<HTMLInputElement>
 
-	private _onChange: (value: File | null) => void = () => {};
-	private _onTouch: (touched: boolean) => void = () => {};
-	private _isDisabled: boolean = false;
+	private _selectedFile: File | null = null;
+	private _onChangeCallback: any = () => {};
+	private _onTouchedCallback: any = () => {};
 
-	public get isDisabled(): boolean {
-		return this._isDisabled;
-	}
-
-	constructor() { }
-
-	handleFileUploadBtnClick() {
+	handleFileUploadBtnClick(): void {
 		this.fieUploadInput.nativeElement.click();
 	}
 
-	handleFileSelectChange(ev: Event) {
+	handleFileSelectChange(ev: Event): void {
 		const fileUploadInput = ev.currentTarget as HTMLInputElement;
-		this.selectedFile = fileUploadInput.files?.[0] ?? null;
-		this.fileName = this.selectedFile ? this.selectedFile.name : 'No file selected yet';
-		this._onChange(this.selectedFile);
-		this._onTouch(true);
+		this.writeValue(fileUploadInput.files?.[0] ?? null);
+		this.placeholder = this._selectedFile ? this._selectedFile.name : 'No file selected yet';
+		this._onChangeCallback(this._selectedFile);
+		this._onTouchedCallback(true);
 	}
 
-	writeValue(obj: any): void {
-		this.selectedFile = obj;
+	writeValue(value: File | null): void {
+		this._selectedFile = value;
 	}
 
 	registerOnChange(fn: any): void {
-		this._onChange = fn;
+		this._onChangeCallback = fn;
 	}
 
 	registerOnTouched(fn: any): void {
-		this._onTouch = fn;
+		this._onTouchedCallback = fn;
 	}
 
-	setDisabledState(isDisabled: boolean): void {
-		this._isDisabled = isDisabled;
+	setDisabledState?(isDisabled: boolean): void {
+		this.disabled = isDisabled;
 	}
 
 }
