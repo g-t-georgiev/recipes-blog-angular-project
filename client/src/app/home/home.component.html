@@ -1,12 +1,15 @@
 <ng-container
     [ngTemplateOutlet]="home" 
-    [ngTemplateOutletContext]="{ $implicit: (currentUser$ | async) ?? 'guest' }"
+    [ngTemplateOutletContext]="{ 
+        $implicit: (currentUser$ | async), 
+        isLoggedIn: isLoggedIn$ | async 
+    }"
 ></ng-container>
 
-<ng-template #home let-currentUser>
+<ng-template #home let-currentUser let-isLoggedIn="isLoggedIn">
 
     <section>
-        <h1>Hello, {{currentUser.username ?? 'guest'}}!</h1>
+        <h1>Hello, {{isLoggedIn ? currentUser.username : 'guest'}}!</h1>
         <p>This is the home page.</p>
     </section>
 

@@ -1,9 +1,14 @@
 <ng-container 
     [ngTemplateOutlet]="header" 
-    [ngTemplateOutletContext]="{ $implicit: localState$ | async, currentUser: currentUser$ | async, signingOut: signingOut$ | async }"
+    [ngTemplateOutletContext]="{ 
+        $implicit: localState$ | async, 
+        currentUser: currentUser$ | async, 
+        isLoggedIn: isLoggedIn$ | async,
+        signingOut: signingOut$ | async 
+    }"
 ></ng-container>
 
-<ng-template #header let-localState let-currentUser="currentUser" let-signingOut="signingOut">
+<ng-template #header let-localState let-currentUser="currentUser" let-isLoggedIn="isLoggedIn" let-signingOut="signingOut">
     {{localState | json}}
     {{currentUser | json}}
     <header 
@@ -26,12 +31,12 @@
             
             <section class="nav-auth-section">
     
-                <ng-container *ngIf="!currentUser">
+                <ng-container *ngIf="!isLoggedIn">
                     <a class="nav-link" routerLinkActive="active" ariaCurrentWhenActive="page" routerLink="/users/login">Login</a>
                     <a class="nav-link" routerLinkActive="active" ariaCurrentWhenActive="page" routerLink="/users/register">Signup</a>
                 </ng-container>
 
-                <ng-container *ngIf="currentUser">
+                <ng-container *ngIf="isLoggedIn">
                     <a class="nav-link" routerLinkActive="active" ariaCurrentWhenActive="page" [routerLink]="['/users', 'profile']">Profile</a>
                     <a href="javascript:void(0);" (pointerup)="logoutHandler()" [attr.disabled]="signingOut" class="nav-link">{{signingOut ? 'Processing...' : 'Signout'}}</a>
                 </ng-container>

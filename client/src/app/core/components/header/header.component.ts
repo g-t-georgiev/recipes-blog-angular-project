@@ -1,13 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Store } from '@ngrx/store';
-
 import { Subscription, Observable } from 'rxjs';
 
-import { IRootState } from 'src/app/state';
+import { AuthService } from '../../services';
+
 import { IUser } from 'src/app/shared/interfaces';
 import { ViewportResizeService } from '../../services/viewport-resize.service';
 import { HeaderComponentState, ILocalState } from './header.component.state';
-
 
 
 @Component({
@@ -20,14 +18,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
 	private subscription: Subscription = new Subscription();
 
-	readonly currentUser$: Observable<IUser | null> = this.globalState.select((state) => state.currentUser);
+	readonly currentUser$: Observable<IUser | null> = this.authService.currentUser$;
+	readonly isLoggedIn$: Observable<boolean> = this.authService.isLoggedIn$;
 	readonly localState$: Observable<ILocalState> = this.componentState.localState$;
 	readonly signingOut$: Observable<boolean> = this.componentState.signingOut$;
 
 	constructor(
+		private readonly authService: AuthService,
 		private readonly vpResizeService: ViewportResizeService,
-		private readonly componentState: HeaderComponentState,
-		private readonly globalState: Store<IRootState>
+		private readonly componentState: HeaderComponentState
 	) { }
 
 	ngOnInit(): void {
