@@ -72,15 +72,15 @@ export async function login(req, res, next) {
             password
         } = req.body;
 
-        let user = await User.findOne({ username });
+        let user = await User.findOne({ username }, { password: 0, __v: 0 }); // querying and filtering of user document
         let passwordMatches = user ? await user.matchPassword(password) : false;
-        console.log(passwordMatches);
+
         if (!passwordMatches) {
-            throw new ResponseError({ message: 'Wrong email or password', status: 401 });
+            throw new ResponseError({ message: 'Wrong username or password', status: 401 });
         }
 
         user = bsonToJson(user);
-        user = removePassword(user);
+        user = removePassword(user); // additional filtering of retrieved user document properties
 
         const authToken = await jwt.createToken({ id: user._id });
 
