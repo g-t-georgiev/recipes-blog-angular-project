@@ -1,19 +1,33 @@
 import crypto from 'crypto';
 
 /**
- * Parse binary JSON to JSON format.
- * @param {BSON} data 
- * @returns {JSON}
+ * @typedef User 
+ * @property {string} username 
+ * @property {string} email 
+ * @property {string} imageUrl 
+ * @property {string | undefined} password 
+ * @property {Date | string | undefined} createdAt 
+ * @property {Date | string | undefined} updatedAt 
+ * @property {string} _id 
+ * @property {number | undefined} __v
  */
-export const bsonToJson = (data) => { return JSON.parse(JSON.stringify(data)) };
+
+/**
+ * Parse binary JSON to JSON format.
+ * @param {User} data 
+ * @returns {User}
+ */
+export function bsonToJson(data) { 
+    return JSON.parse(JSON.stringify(data)) 
+};
 
 /**
  * Removes unnecessary fields from retrieved user entry from database.
- * @param {{ username: string, email: string, imageUrl: string, password?: string, createdAt: Date, updatedAt: Date, _id: string, __v?: number}} data 
- * @returns {}
+ * @param {User} data 
+ * @returns {Omit<User, 'password' | 'createdAt' | 'updatedAt' | '__v'>}
  */
-export const removePassword = (data) => {
-    const { password, __v, ...userData } = data;
+export function removePassword(data) {
+    const { password, __v, createdAt, updatedAt, ...userData } = data;
     return userData
 }
 
