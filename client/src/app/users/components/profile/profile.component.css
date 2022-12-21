@@ -1,0 +1,21 @@
+:host {
+
+}
+
+.page-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.sidebar {
+    flex-grow: 1;
+}
+
+.sidebar-navigation {
+    display: flex;
+    flex-direction: column;
+}
+
+.page-content {
+    flex-grow: 2;
+}
