@@ -9,7 +9,7 @@ export const bsonToJson = (data) => { return JSON.parse(JSON.stringify(data)) };
 
 /**
  * Removes unnecessary fields from retrieved user entry from database.
- * @param {{ username: string, email: string, imageUrl: string, password: string, createdAt: Date, updatedAt: Date, _id: string, __v: number}} data 
+ * @param {{ username: string, email: string, imageUrl: string, password?: string, createdAt: Date, updatedAt: Date, _id: string, __v?: number}} data 
  * @returns {}
  */
 export const removePassword = (data) => {
