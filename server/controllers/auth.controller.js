@@ -72,7 +72,7 @@ export async function login(req, res, next) {
             password
         } = req.body;
 
-        let user = await User.findOne({ username }, { password: 0, __v: 0 }); // querying and filtering of user document
+        let user = await User.findOne({ username });
         let passwordMatches = user ? await user.matchPassword(password) : false;
 
         if (!passwordMatches) {
