@@ -37,18 +37,17 @@ export async function getProfileInfo(req, res, next) {
 
     try {
 
-        // finding by Id and return without password and __v
         let user = await User.findOne(
             { _id: userId },
             { password: 0, __v: 0 }
-        );
+        ); // querying and filtering of user document
 
         if (!user) {
             throw new ResponseError({ message: 'No entry matches id', status: 404 });
         }
 
         user = bsonToJson(user);
-        user = removePassword(user);
+        user = removePassword(user); // additional filtering of retrieved user document properties
 
         res.status(200).json({ user, message: 'Profile retrieved successfully' });
 
