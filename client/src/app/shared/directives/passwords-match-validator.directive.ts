@@ -1,7 +1,8 @@
 import { Directive, forwardRef } from '@angular/core';
 import { AbstractControl, NG_VALIDATORS, ValidationErrors, Validator } from '@angular/forms';
 
-import { passwordsMatchValidator } from '../validators';
+import { CustomValidatorsService } from '../services';
+// import { passwordsMatchValidator } from '../validators';
 
 
 @Directive({
@@ -16,8 +17,12 @@ import { passwordsMatchValidator } from '../validators';
 })
 export class PasswordsMatchValidatorDirective implements Validator {
 
+	constructor(
+		private readonly customValidators: CustomValidatorsService
+	) { }
+
 	validate(formGroup: AbstractControl<any, any>): ValidationErrors | null {
-		return passwordsMatchValidator(formGroup);
+		return this.customValidators.passwordsMatchValidator(formGroup);
 	}
 
 }

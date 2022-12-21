@@ -1,6 +1,8 @@
 import { Directive, forwardRef, Input } from '@angular/core';
 import { AbstractControl, NG_VALIDATORS, ValidationErrors, Validator } from '@angular/forms';
-import { maxSizeValidator } from '../validators';
+
+import { CustomValidatorsService } from '../services';
+// import { maxSizeValidator } from '../validators';
 
 @Directive({
 	selector: '[maxsize]',
@@ -16,10 +18,12 @@ export class MaxSizeDirective implements Validator {
 
 	@Input('maxsize') limit: number = 5;
 
-	constructor() { }
+	constructor(
+		private readonly customValidators: CustomValidatorsService
+	) { }
 
 	validate(control: AbstractControl<any, any>): ValidationErrors | null {
-		return maxSizeValidator(this.limit)(control);
+		return this.customValidators.maxSizeValidator(this.limit)(control);
 	}
 
 }

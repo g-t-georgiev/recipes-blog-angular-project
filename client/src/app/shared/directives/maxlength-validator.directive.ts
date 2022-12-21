@@ -1,7 +1,8 @@
 import { Directive, forwardRef, Input } from '@angular/core';
 import { AbstractControl, NG_VALIDATORS, ValidationErrors, Validator } from '@angular/forms';
 
-import { maxlengthValidator } from '../validators';
+import { CustomValidatorsService } from '../services';
+// import { maxlengthValidator } from '../validators';
 
 @Directive({
 	selector: '[customMaxlength]',
@@ -21,10 +22,12 @@ export class MaxlengthValidatorDirective implements Validator {
 		return parseInt(this._maxlength, 10);
 	}
 
-	constructor() { }
+	constructor(
+		private readonly customValidators: CustomValidatorsService
+	) { }
 
 	validate(control: AbstractControl<any, any>): ValidationErrors | null {
-		return maxlengthValidator(this.maxlength)(control);
+		return this.customValidators.maxlengthValidator(this.maxlength)(control);
 	}
 
 }
