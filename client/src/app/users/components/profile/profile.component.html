@@ -4,14 +4,25 @@
 ></ng-container>
 
 <ng-template #profile let-currentUser="currentUser">
-    <p>Hello, {{currentUser.username}}!</p>
-    <p>This is your profile page.</p>
-    
-    <aside>
-        <nav>
-            <a [routerLink]="['/users', 'profile', currentUser._id]">Profile details</a>
-        </nav>
-    </aside>
-    <router-outlet></router-outlet>
+
+    <section class="page-container">
+
+        <aside class="sidebar">
+            <nav class="sidebar-navigation">
+                <a [routerLink]="['/users', 'profile', currentUser._id]">Profile details</a>
+            </nav>
+        </aside>
+
+        <section class="page-content">
+
+            <p>Hello, {{currentUser.username}}!</p>
+            <p>This is your profile page.</p>
+            
+        
+            <router-outlet></router-outlet>
+
+        </section>
+
+    </section>
 
 </ng-template>
