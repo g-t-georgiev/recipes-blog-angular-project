@@ -6,4 +6,12 @@
 <ng-template #profile let-currentUser="currentUser">
     <p>Hello, {{currentUser.username}}!</p>
     <p>This is your profile page.</p>
+    
+    <aside>
+        <nav>
+            <a [routerLink]="['/users', 'profile', currentUser._id]">Profile details</a>
+        </nav>
+    </aside>
+    <router-outlet></router-outlet>
+
 </ng-template>
