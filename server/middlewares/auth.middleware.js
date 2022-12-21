@@ -22,7 +22,9 @@ export function authMiddleware(redirectUnauthenticated = true) {
      * @returns {void}
      */
     return function (req, res, next) {
+
         const token = req.cookies[AUTH_COOKIE_NAME ?? 'auth-cookie'] ?? '';
+
         Promise.all([
             jwt.verifyToken(token),
             TokenBlacklist.findOne({ token })
