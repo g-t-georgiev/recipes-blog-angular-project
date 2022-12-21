@@ -21,7 +21,7 @@
         </section>
 
         <section 
-            *ngIf="localState.message"
+            *ngIf="localState.error"
             class="form-status-message"
         >
 
@@ -51,6 +51,8 @@
                     required 
                     #usernameControl="ngModel" 
                     class="form-input" 
+                    [class.ng-valid]="usernameControl.valid && !localState.error" 
+                    [class.ng-invalid]="usernameControl.invalid || localState.error"
                     type="text" 
                     name="username" 
                     id="username" 
@@ -82,6 +84,8 @@
                     required 
                     #passwordControl="ngModel" 
                     class="form-input" 
+                    [class.ng-valid]="passwordControl.valid && !localState.error" 
+                    [class.ng-invalid]="passwordControl.invalid || localState.error"
                     type="password" 
                     name="password" 
                     id="password" 
