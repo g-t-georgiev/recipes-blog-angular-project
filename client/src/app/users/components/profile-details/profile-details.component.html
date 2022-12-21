@@ -1,0 +1,37 @@
+<ng-container
+    [ngTemplateOutlet]="profileDetails"
+    [ngTemplateOutletContext]="{ 
+        currentUser: currentUserDetails$ | async, 
+        loading: isLoading$ | async,
+        message: message$ | async,
+        error: errorHappened$ | async,
+        inEditMode: isInEditMode$ | async
+    }"
+></ng-container>
+
+<ng-template 
+    #profileDetails 
+    let-currentUser="currentUser" 
+    let-loading="loading" 
+    let-error="error" 
+    let-message="message"
+>
+
+    <section *ngIf="loading">
+        Loading profile...
+    </section>
+
+    <section *ngIf="!loading && message">
+        <p>{{message}}</p>
+    </section>
+
+    <section *ngIf="!loading && currentUser">
+        <p>{{currentUser.username}}</p>
+        <p>{{currentUser.email}}</p>
+    </section>
+
+    <section *ngIf="!loading && error">
+        <p>Error: {{message}}</p>
+    </section>
+
+</ng-template>
