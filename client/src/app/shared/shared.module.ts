@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FileUploadComponent } from './components/file-upload/file-upload.component';
 import { SpreadPipe, RemoveDotsPipe } from './pipes';
 import { MaxlengthValidatorDirective, PasswordsMatchValidatorDirective, DuplicateCredentialsValidatorDirective, MaxSizeDirective } from './directives';
+import { CustomValidatorsService } from './services';
 
 
 @NgModule({
@@ -27,6 +28,9 @@ import { MaxlengthValidatorDirective, PasswordsMatchValidatorDirective, Duplicat
 		PasswordsMatchValidatorDirective,
 		DuplicateCredentialsValidatorDirective,
 		MaxSizeDirective
+	],
+	providers: [
+		CustomValidatorsService
 	]
 })
 export class SharedModule { }
