@@ -14,7 +14,8 @@ const recipeSchema = new Schema({
     },
     authorId: {
         type: ObjectId,
-        ref: "User"
+        ref: "User",
+        required: true
     }
 },  { 
         timestamps: true, 
