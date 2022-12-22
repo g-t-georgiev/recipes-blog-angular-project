@@ -9,8 +9,8 @@
 ></ng-container>
 
 <ng-template #header let-localState let-currentUser="currentUser" let-isLoggedIn="isLoggedIn" let-signingOut="signingOut">
-    {{localState | json}}
-    {{currentUser | json}}
+    <!-- {{localState | json}} -->
+    <!-- {{currentUser | json}} -->
     <header 
         [class.fullscreen]="localState.showNavigation" 
         (pointerup)="onHeaderAreaClick($event, localState.showNavigation)"
@@ -28,6 +28,7 @@
     
             <a class="nav-link" routerLinkActive="active" ariaCurrentWhenActive="page" routerLink="/home">Home</a>
             <a class="nav-link" routerLinkActive="active" ariaCurrentWhenActive="page" routerLink="/recipes">Recipes</a>
+            <a clss="nav-link" routerLinkActive="active" ariaCurrentWhenActive="page" [routerLink]="['/recipes', 'add']">Add Recipe</a>
             
             <section class="nav-auth-section">
     
@@ -37,7 +38,7 @@
                 </ng-container>
 
                 <ng-container *ngIf="isLoggedIn">
-                    <a class="nav-link" routerLinkActive="active" ariaCurrentWhenActive="page" [routerLink]="['/users', 'profile']">Profile</a>
+                    <a class="nav-link" routerLinkActive="active" ariaCurrentWhenActive="page" [routerLink]="['/users', 'profile', currentUser._id]">Profile</a>
                     <a href="javascript:void(0);" (pointerup)="logoutHandler()" [attr.disabled]="signingOut" class="nav-link">{{signingOut ? 'Processing...' : 'Signout'}}</a>
                 </ng-container>
         
