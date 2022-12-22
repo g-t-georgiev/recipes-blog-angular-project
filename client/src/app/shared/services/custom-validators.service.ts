@@ -127,7 +127,7 @@ export class CustomValidatorsService {
 
         return timer(700).pipe(
             switchMap(() => this.usersService.duplicateCredentialsCheck(control.value)),
-            map(result => result ? { duplicateEmail: true } : null)
+            map(result => result ? { duplicate: true } : null)
         );
     }
     
