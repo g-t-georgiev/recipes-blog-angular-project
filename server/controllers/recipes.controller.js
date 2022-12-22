@@ -15,11 +15,11 @@ export async function getAll(req, res, next) {
 
     try {
 
-        if (!page || page < 1) {
+        if (!page || isNaN(page) ||  page < 1) {
             page = 1;
         }
 
-        if (!size || isNaN(size)) {
+        if (!size || isNaN(size) || size < 1) {
             size = 10;
         }
 
@@ -49,8 +49,8 @@ export async function getAll(req, res, next) {
         const recipesQuery = Recipe.find(queryFilter, queryProjection, queryOptions);
         const recipesCountQuery = Recipe.estimatedDocumentCount(queryFilter);
 
-        const [ recipes, total ] = await Promise.all([ recipesQuery.exec(), recipesCountQuery.exec() ]);
-        console.log(recipes, total);
+        let [ recipes, total ] = await Promise.all([ recipesQuery.exec(), recipesCountQuery.exec() ]);
+        recipes = recipes ?? [];
 
         res.status(200)
             .json({ recipes, message: 'Recipes retrieved successfully', total });
