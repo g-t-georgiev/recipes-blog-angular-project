@@ -8,24 +8,52 @@ import { Recipe } from '../models/index.js';
  * @returns {void}
  */
 
-export async function getThemes(req, res, next) {
+export async function getAll(req, res, next) {
+
+    const { user, query } = req;
+    let { page, size, title } = query;
 
     try {
 
-        const recipes = await Recipe
-            .find({})
-            .populate([
-                {
-                    path: 'authorId',
-                    select: {
-                        username: 1
-                    }
-                }
-            ]);
+        if (!page || page < 1) {
+            page = 1;
+        }
 
-        res
-            .status(200)
-            .json({ recipes, message: 'Recipes retrieved successfully' });
+        if (!size || isNaN(size)) {
+            size = 10;
+        }
+
+        console.log(page, size, title);
+
+        const queryFilter = {};
+
+        if (title && typeof title === 'string') {
+            queryFilter.title = title;
+        }
+
+        if (user) {
+            queryFilter.authorId = { $ne: user._id };
+        }
+
+        const queryProjection = {
+            content: 0
+        }
+
+        const queryOptions = {
+            limit: Number(size),
+            skip: size * (page - 1),
+        }
+
+        console.log(queryFilter, queryProjection, queryOptions);
+
+        const recipesQuery = Recipe.find(queryFilter, queryProjection, queryOptions);
+        const recipesCountQuery = Recipe.estimatedDocumentCount(queryFilter);
+
+        const [ recipes, total ] = await Promise.all([ recipesQuery.exec(), recipesCountQuery.exec() ]);
+        console.log(recipes, total);
+
+        res.status(200)
+            .json({ recipes, message: 'Recipes retrieved successfully', total });
     
     } catch (err) {
 
@@ -41,7 +69,7 @@ export async function getThemes(req, res, next) {
  * @returns {void}
  */
 
-export async function getTheme(req, res, next) {
+export async function get(req, res, next) {
 
     try {
 
@@ -85,14 +113,14 @@ export async function getTheme(req, res, next) {
  * @returns {void}
  */
 
- export async function createTheme(req, res, next) {
+ export async function create(req, res, next) {
 
     try {
 
         const { title, content } = req.body;
         const { _id: userId } = req.user;
     
-        const createdRecipe = await Recipe.create(
+        const createdRecipe = userId && await Recipe.create(
             { 
                 title, 
                 content,
@@ -129,7 +157,7 @@ export async function getTheme(req, res, next) {
  * @returns {void}
  */
 
-export async function editTheme(req, res, next) {
+export async function edit(req, res, next) {
 
     try {
 
@@ -171,7 +199,7 @@ export async function editTheme(req, res, next) {
  * @returns {void}
  */
 
-export async function deleteTheme(req, res, next) {
+export async function remove(req, res, next) {
 
     try {
 
