@@ -33,16 +33,21 @@
         class="profile-preview"
         *ngIf="!localState.processing && localState.currentUser">
 
-        <img 
-            [src]="localState.currentUser.imageUrl"  
-            width="200" 
-            height="200" 
-            alt="Profile picture" 
-            loading="lazy"
-        />
+        <section class="profile-picture-container">
 
-        <p>{{localState.currentUser.username}}</p>
-        <p>{{localState.currentUser.email}}</p>
+            <img 
+                class="profile-picture"
+                [src]="localState.currentUser.imageUrl"  
+                width="200" 
+                height="200" 
+                alt="Profile picture" 
+                loading="lazy"
+            />
+
+        </section>
+
+        <p class="text-row">Username: {{localState.currentUser.username}}</p>
+        <p class="text-row">Email: {{localState.currentUser.email}}</p>
 
         <button 
             class="profile-edit-button"
