@@ -6,18 +6,24 @@ import {
     Like
 } from '../models/index.js';
 
-import { ResponseError, helpers } from '../utils/index.js';
+import { ResponseError, helpers, disk } from '../utils/index.js';
 
 
 const { bsonToJson, removePassword } = helpers;
 
 export async function duplicateCrendetialsCheck(req, res, next) {
+    const { user } = req;
     const { credentials } = req.query;
 
     try {
 
+        if (user && (user.username === credentials || user.email === credentials)) {
+            res.status(200).json(false);
+            return;
+        }
+
         // console.log(credentials);
-        let duplicateUser = await User.findOne({ email: credentials }) || await User.findOne({ username: credentials });
+        let duplicateUser = await User.exists({ email: credentials }) || await User.exists({ username: credentials });
 
         // duplicateUser = duplicateUser && bsonToJson(duplicateUser);
         // duplicateUser = duplicateUser && removePassword(duplicateUser);
@@ -62,13 +68,33 @@ export async function editProfileInfo(req, res, next) {
     try {
 
         const { _id: userId } = req.user;
-        const { username, email } = req.body;
+        const { username, email } = req.fields;
+        const { profilePicture } = req.files;
 
-        let updatedUser = await User.findOneAndUpdate(
-            { _id: userId },
-            { username, email },
-            { runValidators: true, new: true }
-        );
+        console.log(profilePicture);
+
+        if (await User.exists({ username }) && req.user.username !== username) {
+            throw new ResponseError({ message: 'This username is already taken', status: 403 });
+        }
+
+        if (await User.exists({ email }) && req.user.email !== email) {
+            throw new ResponseError({ message: 'This email is already taken', status: 403 });
+        }
+
+        let imageUrl;
+
+        if (profilePicture) {
+            // console.log(profilePicture);
+            const uploadId = await disk.uploadFile(profilePicture);
+            imageUrl = `https://drive.google.com/uc?id=${uploadId}`;
+        }
+
+
+        const filter = { _id: userId };
+        const update = { username, email, ...(imageUrl ? { imageUrl } : {}) };
+        const options = { runValidators: true, new: true };
+
+        let updatedUser = await User.findOneAndUpdate(filter, update, options);
 
         if (!updatedUser) {
             throw new ResponseError({ message: 'No entry matches id', status: 404 });
@@ -80,14 +106,6 @@ export async function editProfileInfo(req, res, next) {
         res.status(200).json({ user: updatedUser, message: 'Profile editted successfully' });
 
     } catch (err) {
-
-        if (err.name === 'MongoError' && err.code === 11000) {
-            let field = err.message.split("index: ")[1];
-            field = field.split(" dup key")[0];
-            field = field.substring(0, field.lastIndexOf("_"));
-
-            return next({ message: `This ${field} is already registered!`, status: 409 });
-        }
 
         next(err);
     }
