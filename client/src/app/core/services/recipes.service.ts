@@ -19,7 +19,7 @@ export class RecipesService {
     ) { }
 
     getAll(page: number, size: number, filterOptions: { [key: string]: string } = {}): Observable<IRecipesQueryResponse> {
-        return this.http.get<IRecipesQueryResponse>(environment.apiUrl, { params: { page, size, ...filterOptions }});
+        return this.http.get<IRecipesQueryResponse>(`${environment.apiUrl}/recipes`, { params: { page, size, ...filterOptions }});
     }
 
 }
