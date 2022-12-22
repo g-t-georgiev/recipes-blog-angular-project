@@ -1,4 +1,4 @@
-import { Theme } from '../models/index.js';
+import { Recipe } from '../models/index.js';
 
 /**
  * 
@@ -12,7 +12,7 @@ export async function getThemes(req, res, next) {
 
     try {
 
-        const themes = await Theme
+        const recipes = await Recipe
             .find({})
             .populate([
                 {
@@ -25,7 +25,7 @@ export async function getThemes(req, res, next) {
 
         res
             .status(200)
-            .json({ data: themes });
+            .json({ recipes, message: 'Recipes retrieved successfully' });
     
     } catch (err) {
 
@@ -45,10 +45,10 @@ export async function getTheme(req, res, next) {
 
     try {
 
-        const { themeId } = req.params;
+        const { recipeId } = req.params;
 
-        const theme = new Theme
-            .findById(themeId)
+        const recipe = new Recipe
+            .findById(recipeId)
             .populate([
                 {
                     path: 'posts',
@@ -69,7 +69,7 @@ export async function getTheme(req, res, next) {
 
         res
             .status(200)
-            .json({ data: theme });
+            .json({ recipe, message: 'Recipe retrieved successfully' });
 
     } catch (err) {
 
@@ -89,17 +89,18 @@ export async function getTheme(req, res, next) {
 
     try {
 
-        const { title } = req.body;
+        const { title, content } = req.body;
         const { _id: userId } = req.user;
     
-        const createdTheme = await Theme.create(
+        const createdRecipe = await Recipe.create(
             { 
                 title, 
+                content,
                 authorId: userId 
             }
         );
 
-        if (!createdTheme) {
+        if (!createdRecipe) {
 
             return res
                 .status(401)
@@ -110,7 +111,7 @@ export async function getTheme(req, res, next) {
             .status(201)
             .json({ 
                 message: 'Created theme successfully!', 
-                data: createdTheme 
+                recipe: createdRecipe 
             });
 
 
@@ -132,17 +133,17 @@ export async function editTheme(req, res, next) {
 
     try {
 
-        const { title } = req.body;
-        const { themeId } = req.params;
+        const { title, content } = req.body;
+        const { recipeId } = req.params;
         const { _id: userId } = req.user;
 
-        const updatedTheme = await Theme.findByIdAndUpdate(
-            themeId,
-            { title },
+        const updatedRecipe = await Recipe.findByIdAndUpdate(
+            recipeId,
+            { title, content },
             { new: true }
         );
 
-        if (!updatedTheme) {
+        if (!updatedRecipe) {
 
             return res
                 .status(401)
@@ -153,7 +154,7 @@ export async function editTheme(req, res, next) {
             .status(201)
             .json({ 
                 message: 'Updated theme successfully!', 
-                data: updatedTheme 
+                recipe: updatedRecipe 
             });
 
     } catch (err) {
@@ -175,16 +176,20 @@ export async function deleteTheme(req, res, next) {
     try {
 
         const { title } = req.body;
-        const { themeId } = req.params;
+        const { recipeId } = req.params;
         const { _id: userId } = req.user;
     
-        const deletedTheme = await Theme.findByIdAndDelete(
-            themeId, 
-            { title }, 
+        const deletedRecipe = await Recipe.findByIdAndDelete(
+            recipeId, 
+            { 
+                title, 
+                content, 
+                authorId: userId 
+            }, 
             { new: true }
         );
 
-        if (!deletedTheme) {
+        if (!deletedRecipe) {
 
             return res
                 .status(401)
@@ -195,7 +200,7 @@ export async function deleteTheme(req, res, next) {
             .status(200)
             .json({ 
                 message: 'Deleted theme successfully!', 
-                data: deletedTheme 
+                recipe: deletedRecipe
             });
 
     } catch (err) {
