@@ -37,7 +37,13 @@
         <p>{{localState.currentUser.username}}</p>
         <p>{{localState.currentUser.email}}</p>
 
-        <button type="button" (pointerdown)="toggleEditMode()">Edit</button>
+        <button 
+            class="profile-edit-button"
+            type="button" 
+            (pointerdown)="toggleEditMode()"
+        >
+            Edit
+        </button>
 
     </section>
 
