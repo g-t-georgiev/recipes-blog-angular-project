@@ -3,18 +3,21 @@ import { CommonModule } from '@angular/common';
 
 import { RecipesRoutingModule } from './recipes-routing.module';
 import { RecipeListComponent } from './components';
+import { AddRecipeComponent } from './components/add-recipe/add-recipe.component';
 
 
 @NgModule({
 	declarations: [
-    	RecipeListComponent
+    	RecipeListComponent,
+     	AddRecipeComponent
   ],
 	imports: [
 		CommonModule,
 		RecipesRoutingModule
 	],
 	exports: [
-		RecipeListComponent
+		RecipeListComponent,
+		AddRecipeComponent
 	]
 })
 export class RecipesModule { }
