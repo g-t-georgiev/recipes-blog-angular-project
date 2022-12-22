@@ -26,18 +26,16 @@ export async function register(req, res, next) {
             throw new ResponseError({ message: 'Passwords do not match!', status: 403 });
         }
 
-        // console.log(req.fields, req.files);
-
         let imageUrl;
 
         if (profilePicture) {
-
             // console.log(profilePicture);
             const uploadId = await disk.uploadFile(profilePicture);
             imageUrl = `https://drive.google.com/uc?id=${uploadId}`;
             
         } else {
-            imageUrl = 'https://drive.google.com/uc?id=1iUrhiwfp4XxCp0xLXDUB1rL8DXVltF2n';
+            const defaultId = '1N4l3u-7KVZJCknZtV-7_bEnJCAVEPjfE';
+            imageUrl = `https://drive.google.com/uc?id=${defaultId}`;
         }
 
         let matchedUserByEmail;
