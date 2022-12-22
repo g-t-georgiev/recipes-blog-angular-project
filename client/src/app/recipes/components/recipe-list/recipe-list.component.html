@@ -1,1 +1,33 @@
-<p>recipe-list works!</p>
+<ng-container
+    [ngTemplateOutlet]="recipesList",
+    [ngTemplateOutletContext]="{ $implicit: localState$ | async }"
+></ng-container>
+
+<ng-template #recipesList let-localState>
+    Page: {{localState.page}}
+    Limit: {{localState.limit}}
+    Total: {{localState.total}}
+
+    <ng-container *ngIf="localState.loading">
+        Loading, please wait...
+    </ng-container>
+
+    <ng-container *ngIf="!localState.loading">
+
+        <ng-container *ngIf="localState.recipes && localState.recipes?.length">
+
+            <section *ngFor="let recipe of localState.recipes">
+                <p>{{recipe.title}}</p>
+                <p>{{recipe.authorId}}</p>
+                <p>{{recipe.createdAt}}</p>
+            </section>
+
+        </ng-container>
+    
+        <ng-container *ngIf="!localState.recipes || !localState.recipes?.length">
+            No recipes to display.
+        </ng-container>
+
+    </ng-container>
+
+</ng-template>
