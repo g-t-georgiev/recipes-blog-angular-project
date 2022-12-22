@@ -1,9 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ProfileComponent } from './components/profile/profile.component';
-import { UsersRoutingModule } from './users-routing.module';
-import { ProfileDetailsComponent } from './components/profile-details/profile-details.component';
+import { FormsModule } from '@angular/forms';
 
+import { UsersRoutingModule } from './users-routing.module';
+import { SharedModule } from '../shared/shared.module';
+
+import { ProfileComponent, ProfileDetailsComponent } from './components';
 
 @NgModule({
 	declarations: [
@@ -12,7 +14,9 @@ import { ProfileDetailsComponent } from './components/profile-details/profile-de
   ],
 	imports: [
 		CommonModule,
-		UsersRoutingModule
+		UsersRoutingModule, 
+		FormsModule,
+		SharedModule
 	],
 	exports: [
 		ProfileComponent
