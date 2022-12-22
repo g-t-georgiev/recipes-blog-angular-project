@@ -11,6 +11,11 @@ export interface IRecipesQueryResponse {
     total: number;
 }
 
+export interface IRecipeCreateResponse {
+    recipe?: IRecipe;
+    message: string;
+}
+
 @Injectable()
 export class RecipesService {
 
@@ -20,6 +25,10 @@ export class RecipesService {
 
     getAll(page: number, size: number, filterOptions: { [key: string]: string } = {}): Observable<IRecipesQueryResponse> {
         return this.http.get<IRecipesQueryResponse>(`${environment.apiUrl}/recipes`, { params: { page, size, ...filterOptions }});
+    }
+
+    create(payload: Pick<IRecipe, 'title' | 'content'>): Observable<IRecipeCreateResponse> {
+        return this.http.post<IRecipeCreateResponse>(`${environment.apiUrl}/recipes`, payload);
     }
 
 }
