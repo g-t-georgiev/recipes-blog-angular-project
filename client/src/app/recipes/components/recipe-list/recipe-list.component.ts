@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { tap } from 'rxjs/operators';
 
 import { RecipeListComponentState } from './recipe-list.component.state';
 
@@ -15,6 +14,8 @@ export class RecipeListComponent implements OnInit, OnDestroy {
 
 	private readonly subscription = new Subscription();
 
+	readonly localState$ = this.componentState.localState$;
+
 	constructor(
 		private readonly activatedRoute: ActivatedRoute,
 		private readonly router: Router,
@@ -22,50 +23,42 @@ export class RecipeListComponent implements OnInit, OnDestroy {
 	) { }
 
 	ngOnInit(): void {
-		this.subscription.add(
-			this.activatedRoute.queryParamMap.pipe(
-				tap((paramMap) => {
-					const page = paramMap.get('page');
-					const size = paramMap.get('size');
 
-					let updatedUrlQueries;
+		this.subscription.add(
+			this.activatedRoute.queryParams.subscribe({
+				next: (params => {
+					let { page, size } = params;
+					let updatedQueryParams;
 
 					if (!page || isNaN(+page) || +page < 1) {
-
-						updatedUrlQueries = {
-							...(this.activatedRoute.snapshot.queryParams),
-							...updatedUrlQueries ?? {},
+						updatedQueryParams = {
+							...params,
 							page: 1
-						};
-
+						}
 					}
 
 					if (!size || isNaN(+size) || +size < 1) {
-						updatedUrlQueries = {
-							...(this.activatedRoute.snapshot.queryParams),
-							...updatedUrlQueries ?? {},
+						updatedQueryParams = {
+							...params,
 							size: 10
-						};
-
+						}
 					}
 
-					if (updatedUrlQueries) {
-						const urlTree = this.router.createUrlTree([], {
-							queryParams: updatedUrlQueries,
+					if (updatedQueryParams) {
+						const updatedUrlTree = this.router.createUrlTree([], {
+							queryParams: updatedQueryParams,
 							relativeTo: this.activatedRoute
 						});
 
-						this.router.navigateByUrl(urlTree);
+						this.router.navigateByUrl(updatedUrlTree);
+						return;
 					}
+
+					this.componentState.queryParamsChangeEffect(params);
 				})
-			).subscribe()
+			})
 		);
 
-		this.subscription.add(
-			this.componentState.queryParamsChangeEffect(
-				this.activatedRoute.queryParams
-			)
-		);
 	}
 
 	ngOnDestroy(): void {
