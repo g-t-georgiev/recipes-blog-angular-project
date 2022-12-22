@@ -37,6 +37,7 @@
 		"mongoose": "^6.7.3"
 	},
 	"devDependencies": {
+		"@types/express-formidable": "^1.2.0",
 		"nodemon": "^2.0.20"
 	}
 }
