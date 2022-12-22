@@ -1,9 +1,6 @@
 import {
     User,
-    Subscription,
-    Post,
-    Theme,
-    Like
+    Recipe,
 } from '../models/index.js';
 
 import { ResponseError, helpers, disk } from '../utils/index.js';
@@ -111,82 +108,85 @@ export async function editProfileInfo(req, res, next) {
     }
 }
 
+// TODO: 
+// Refactore actions below
+
 export async function getUserThemes(req, res, next) {
 
-    try {
+    // try {
 
-        const { _id: userId } = req.user;
+    //     const { _id: userId } = req.user;
 
-        const themes = await Theme.find({ authorId: userId });
+    //     const themes = await Theme.find({ authorId: userId });
 
-        if (!themes) {
-            throw new ResponseError({ message: 'No entries match id', status: 404 });
-        }
+    //     if (!themes) {
+    //         throw new ResponseError({ message: 'No entries match id', status: 404 });
+    //     }
 
-        res.status(200).json({ data: themes });
+    //     res.status(200).json({ data: themes });
 
-    } catch (err) {
+    // } catch (err) {
 
-        next(err);
-    }
+    //     next(err);
+    // }
 }
 
 export async function getUserSubscriptions(req, res, next) {
 
-    try {
+    // try {
 
-        const { _id: userId } = req.user;
+    //     const { _id: userId } = req.user;
 
-        const subscriptions = await Subscription.find({ authorId: userId });
+    //     const subscriptions = await Subscription.find({ authorId: userId });
 
-        if (!subscriptions) {
-            throw new ResponseError({ message: 'No entries match id', status: 404 });
-        }
+    //     if (!subscriptions) {
+    //         throw new ResponseError({ message: 'No entries match id', status: 404 });
+    //     }
 
-        res.status(200).json({ data: subscriptions });
+    //     res.status(200).json({ data: subscriptions });
 
-    } catch (err) {
+    // } catch (err) {
 
-        next(err);
-    }
+    //     next(err);
+    // }
 }
 
 export async function getUserPosts(req, res, next) {
 
-    try {
+    // try {
 
-        const { _id: userId } = req.user;
+    //     const { _id: userId } = req.user;
 
-        const posts = await Post.find({ authorId: userId });
+    //     const posts = await Post.find({ authorId: userId });
 
-        if (!posts) {
-            throw new ResponseError({ message: 'No entries match id', status: 404 });
-        }
+    //     if (!posts) {
+    //         throw new ResponseError({ message: 'No entries match id', status: 404 });
+    //     }
 
-        res.status(200).json({ data: posts });
+    //     res.status(200).json({ data: posts });
 
-    } catch (err) {
+    // } catch (err) {
 
-        next(err);
-    }
+    //     next(err);
+    // }
 }
 
 export async function getUserLikes(req, res, next) {
 
-    try {
+    // try {
 
-        const { _id: userId } = req.user;
+    //     const { _id: userId } = req.user;
 
-        const likes = await Like.find({ authorId: userId });
+    //     const likes = await Like.find({ authorId: userId });
 
-        if (!likes) {
-            throw new ResponseError({ message: 'No entries match id', status: 404 });
-        }
+    //     if (!likes) {
+    //         throw new ResponseError({ message: 'No entries match id', status: 404 });
+    //     }
 
-        res.status(200).json({ data: likes });
+    //     res.status(200).json({ data: likes });
 
-    } catch (err) {
+    // } catch (err) {
 
-        next(err);
-    }
+    //     next(err);
+    // }
 }
