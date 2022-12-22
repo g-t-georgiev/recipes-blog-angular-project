@@ -1,10 +1,15 @@
 import { Injectable } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store';
+import { Store } from '@ngrx/store';
 import { EMPTY, Observable } from 'rxjs';
-import { catchError, switchMap, tap } from 'rxjs/operators';
+import { catchError, switchMap, mergeMap, tap } from 'rxjs/operators';
 
 import { UsersService } from 'src/app/core/services';
+
 import { IUser } from 'src/app/shared/interfaces';
+
+import { IRootState } from 'src/app/state';
+import { login } from 'src/app/state/current-user/current-user.actions';
 
 
 interface ILocalState {
@@ -26,23 +31,28 @@ const initialState: ILocalState = {
 @Injectable()
 export class ProfileDetailsState extends ComponentStore<ILocalState> {
 
-    readonly currentUserDetails$: Observable<IUser | null | undefined> = this.select(state => state.currentUser);
+    readonly localState$: Observable<ILocalState> = this.select(state => ({ ...state }));
+
+    readonly currentUser$: Observable<IUser | null | undefined> = this.select(state => state.currentUser);
     readonly isLoading$: Observable<boolean> = this.select(state => state.processing);
     readonly errorHappened$: Observable<boolean> = this.select(state => state.error);
     readonly isInEditMode$: Observable<boolean> = this.select(state => state.inEditMode);
     readonly message$: Observable<string> = this.select(state => state.message);
 
     constructor(
-        private readonly usersService: UsersService
+        private readonly usersService: UsersService, 
+        private readonly globalState: Store<IRootState>
     ) {
         super(initialState);
     }
 
     readonly updateLoadingStatus = this.updater((state, processing: boolean) => ({ ...state, processing }));
-    readonly updateProfileDetails = this.updater((state, currentUser: IUser | undefined) => ({ ...state, currentUser }));
+    readonly updateEditModeStatus = this.updater((state) => ({ ...state, inEditMode: !state.inEditMode }));
+
     readonly updateErrorState = this.updater((state, { processing, error, message, user }: { processing: boolean, error: boolean, message: string, user: undefined  }) => ({ ...state, processing, error, message, currentUser: user }));
     readonly updateSuccessState = this.updater((state, { processing, user, message, error }: {  processing: boolean, user: IUser, message: string, error: boolean }) => ({ ...state, processing, currentUser: user, message, error }));
-    readonly loadProfileDetails = this.effect(
+    
+    readonly loadProfileEffect = this.effect(
         (empty$: Observable<undefined>) => {
             return empty$.pipe(
                 tap(() => {
@@ -67,5 +77,32 @@ export class ProfileDetailsState extends ComponentStore<ILocalState> {
             )
         }
     )
+
+    readonly editProfileEffect = this.effect(
+        (userData$: Observable<{ username: string, email: string, profilePicture?: File }>) => {
+            return userData$.pipe(
+                tap(() => {
+                    this.updateLoadingStatus(true);
+                }),
+                mergeMap((userData) => {
+                    return this.usersService.editProfile(userData).pipe(
+                        tap(({ user, message }) => {
+
+                            if (user) {
+                                this.updateSuccessState({ processing: false, user, message, error: false });
+                                this.globalState.dispatch(login({ user }));
+                                this.updateEditModeStatus();
+                            }
+
+                        }),
+                        catchError((error) => {
+                            this.updateErrorState({ processing: false, error: true, message: error.message, user: undefined });
+                            return EMPTY;
+                        })
+                    );
+                })
+            );
+        }
+    );
 
 }
