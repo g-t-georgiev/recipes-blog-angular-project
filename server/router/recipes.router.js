@@ -5,12 +5,12 @@ import { recipesController, subscriptionsController } from '../controllers/index
 
 export const recipesRouter = express.Router();
 
-recipesRouter.get('/', recipesController.getThemes);
-recipesRouter.post('/', authMiddleware(), recipesController.createTheme);
+recipesRouter.get('/', recipesController.getAll);
+recipesRouter.post('/', authMiddleware(), recipesController.create);
 
-recipesRouter.get('/:recipeId', recipesController.getTheme);
-recipesRouter.put('/:recipeId', recipesController.editTheme);
-recipesRouter.delete('/:recipeId', recipesController.deleteTheme);
+recipesRouter.get('/:recipeId', recipesController.get);
+recipesRouter.put('/:recipeId', recipesController.edit);
+recipesRouter.delete('/:recipeId', recipesController.remove);
 
 recipesRouter.post('/:recipeId/subscribe', authMiddleware(), subscriptionsController.subscribe);
 recipesRouter.delete('/:recipeId/subscribe', authMiddleware(), subscriptionsController.unsubscribe);
