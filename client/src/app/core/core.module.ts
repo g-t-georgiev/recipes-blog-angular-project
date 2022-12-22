@@ -11,6 +11,7 @@ import {
 	AuthService, 
 	DarkModeSwitchService as ThemeSwitchService, 
 	UsersService, 
+	RecipesService,
 	ViewportResizeService 
 } from './services';
 
@@ -59,7 +60,8 @@ export class CoreModule {
 				ViewportResizeService, 
 				AuthService,
 				AuthGuard,
-				UsersService
+				UsersService,
+				RecipesService
 			]
 		}
 	}
