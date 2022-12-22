@@ -44,7 +44,7 @@ export class RecipeListComponentState extends ComponentStore<ILocalState> {
     readonly updateRecipesTotalCount = this.updater((state, total: number) => ({ ...state, total }));
 
     readonly queryParamsChangeEffect = this.effect(
-        (queryParams$: Observable<{ [key: string]: string }>) => {
+        (queryParams$: Observable<any>) => {
 
             return queryParams$.pipe(
                 mergeMap((params) => {
