@@ -20,8 +20,13 @@
 </ng-template>
 
 <ng-template #profilePreview let-localState>
+    
     <section *ngIf="localState.processing">
         Loading profile...
+    </section>
+
+    <section *ngIf="!localState.loading && localState.error">
+        <p>Error: {{localState.message}}</p>
     </section>
 
     <section *ngIf="!localState.processing && localState.currentUser">
@@ -47,9 +52,6 @@
 
     </section>
 
-    <section *ngIf="!localState.loading && localState.error">
-        <p>Error: {{localState.message}}</p>
-    </section>
 </ng-template>
 
 <ng-template #editProfile let-localState>
