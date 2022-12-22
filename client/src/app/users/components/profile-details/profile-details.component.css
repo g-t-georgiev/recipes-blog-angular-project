@@ -1,7 +1,17 @@
 :host {
+    --profile-edit-btn__margin-block: .5rem 0;
+    --profile-edit-btn__padding-block: .5rem;
+    --profile-edit-btn__padding-inline: .25rem;
+    --profile-edit-btn__bg-color: hsl(210, 29%, 97%);
+    --profile-edit-btn__border-color: hsl(0, 0%, 7%);
+    --profile-edit-btn__border-style: solid;
+    --profile-edit-btn__border-width: .1rem;
+    --profile-edit-btn__cursor: pointer; 
+
     --form-cancel-btn__margin-block: .5rem 0;
     --form-cancel-btn__padding-block: .5rem;
     --form-cancel-btn__padding-inline: .25rem;
+    --form-submit-btn__bg-color: hsl(210, 29%, 97%);
     --form-cancel-btn__border-color: hsl(0, 0%, 7%);
     --form-cancel-btn__border-style: solid;
     --form-cancel-btn__border-width: .1rem;
@@ -9,8 +19,29 @@
 }
 
 :host-context(.theme--dark) {
+    --profile-edit-btn__bg-color: hsl(218, 80%, 2%);
+    --profile-edit-btn__border-color: hsl(210, 29%, 97%);
+
     --form-cancel-btn__bg-color: hsl(218, 80%, 2%);
     --form-cancel-btn__border-color: hsl(210, 29%, 97%);
+}
+
+.profile-edit-button {
+    margin-block: var(--profile-edit-btn__margin-block);
+
+    padding-block: var(--profile-edit-btn__padding-block);
+    padding-inline: var(--profile-edit-btn__padding-inline);
+
+    text-align: center;
+
+    color: currentColor;
+    background-color: var(--profile-edit-btn__bg-color);
+    border-color: var(--profile-edit-btn__border-color);
+    border-style: var(--profile-edit-btn__border-style);
+    border-width: var(--profile-edit-btn__border-width);
+    outline: none;
+
+    cursor: var(--profile-edit-btn__cursor);
 }
 
 .form-cancel-button {
