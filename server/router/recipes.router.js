@@ -8,9 +8,9 @@ export const recipesRouter = express.Router();
 recipesRouter.get('/', recipesController.getThemes);
 recipesRouter.post('/', authMiddleware(), recipesController.createTheme);
 
-recipesRouter.get('/:themeId', recipesController.getTheme);
-recipesRouter.put('/:themeId', recipesController.editTheme);
-recipesRouter.delete('/:themeId', recipesController.deleteTheme);
+recipesRouter.get('/:recipeId', recipesController.getTheme);
+recipesRouter.put('/:recipeId', recipesController.editTheme);
+recipesRouter.delete('/:recipeId', recipesController.deleteTheme);
 
-recipesRouter.post('/:themeId/subscribe', authMiddleware(), subscriptionsController.subscribe);
-recipesRouter.delete('/:themeId/subscribe', authMiddleware(), subscriptionsController.unsubscribe);
+recipesRouter.post('/:recipeId/subscribe', authMiddleware(), subscriptionsController.subscribe);
+recipesRouter.delete('/:recipeId/subscribe', authMiddleware(), subscriptionsController.unsubscribe);
