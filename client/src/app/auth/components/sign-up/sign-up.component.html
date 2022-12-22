@@ -71,7 +71,7 @@
                 <ng-container
                     [ngTemplateOutlet]="formInputErrorMsg",
                     [ngTemplateOutletContext]="{ $implicit: 'Email is already taken'}"
-                    *ngIf="emailControl.touched && emailControl.errors?.['duplicateEmail']"
+                    *ngIf="emailControl.touched && emailControl.errors?.['duplicate']"
                 ></ng-container>
     
             </section>
@@ -128,7 +128,7 @@
                 <ng-container
                     [ngTemplateOutlet]="formInputErrorMsg",
                     [ngTemplateOutletContext]="{ $implicit: 'Username is already taken'}"
-                    *ngIf="usernameControl.touched && usernameControl.errors?.['duplicateEmail']"
+                    *ngIf="usernameControl.touched && usernameControl.errors?.['duplicate']"
                 ></ng-container>
     
             </section>
