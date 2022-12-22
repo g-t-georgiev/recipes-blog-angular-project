@@ -23,7 +23,7 @@ export async function getAll(req, res, next) {
             size = 10;
         }
 
-        console.log(page, size, title);
+        // console.log(page, size, title);
 
         const queryFilter = {};
 
@@ -44,7 +44,7 @@ export async function getAll(req, res, next) {
             skip: size * (page - 1),
         }
 
-        console.log(queryFilter, queryProjection, queryOptions);
+        // console.log(queryFilter, queryProjection, queryOptions);
 
         const recipesQuery = Recipe.find(queryFilter, queryProjection, queryOptions);
         const recipesCountQuery = Recipe.estimatedDocumentCount(queryFilter);
