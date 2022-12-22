@@ -1,0 +1,32 @@
+:host {
+    --form-cancel-btn__margin-block: .5rem 0;
+    --form-cancel-btn__padding-block: .5rem;
+    --form-cancel-btn__padding-inline: .25rem;
+    --form-cancel-btn__border-color: hsl(0, 0%, 7%);
+    --form-cancel-btn__border-style: solid;
+    --form-cancel-btn__border-width: .1rem;
+    --form-cancel-btn__cursor: pointer;
+}
+
+:host-context(.theme--dark) {
+    --form-cancel-btn__bg-color: hsl(218, 80%, 2%);
+    --form-cancel-btn__border-color: hsl(210, 29%, 97%);
+}
+
+.form-cancel-button {
+    margin-block: var(--form-cancel-btn__margin-block);
+
+    padding-block: var(--form-cancel-btn__padding-block);
+    padding-inline: var(--form-cancel-btn__padding-inline);
+
+    text-align: center;
+
+    color: currentColor;
+    background-color: var(--form-cancel-btn__bg-color);
+    border-color: var(--form-cancel-btn__border-color);
+    border-style: var(--form-cancel-btn__border-style);
+    border-width: var(--form-cancel-btn__border-width);
+    outline: none;
+
+    cursor: var(--form-cancel-btn__cursor);
+}
