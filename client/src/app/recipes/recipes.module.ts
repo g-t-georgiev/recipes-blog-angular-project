@@ -17,4 +17,4 @@ import { RecipeListComponent } from './components';
 		RecipeListComponent
 	]
 })
-export class FeatureModule { }
+export class RecipesModule { }
