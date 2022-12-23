@@ -14,15 +14,15 @@
 
     <ng-container *ngIf="!localState.loading">
 
-        <ng-container *ngIf="localState.recipes && localState.recipes?.length">
+        <section class="recipes-list" *ngIf="localState.recipes && localState.recipes?.length">
 
-            <section *ngFor="let recipe of localState.recipes">
+            <article class="recipe-thumb" *ngFor="let recipe of localState.recipes">
                 <p>Title: {{recipe.title | uppercase}}</p>
                 <p>Author: {{recipe.authorId}}</p>
                 <p>Created: {{recipe.createdAt | date}}</p>
-            </section>
+            </article>
 
-        </ng-container>
+        </section>
     
         <ng-container *ngIf="!localState.recipes || !localState.recipes?.length">
             No recipes to display.

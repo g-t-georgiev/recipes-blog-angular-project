@@ -1,0 +1,10 @@
+.recipes-list {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.recipe-thumb {
+    padding: .5em .25em;
+}
