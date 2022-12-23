@@ -2,8 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { RecipesRoutingModule } from './recipes-routing.module';
-import { RecipeListComponent } from './components';
-import { AddRecipeComponent } from './components/add-recipe/add-recipe.component';
+import { RecipeListComponent, AddRecipeComponent } from './components';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -13,7 +13,8 @@ import { AddRecipeComponent } from './components/add-recipe/add-recipe.component
   ],
 	imports: [
 		CommonModule,
-		RecipesRoutingModule
+		RecipesRoutingModule,
+		FormsModule
 	],
 	exports: [
 		RecipeListComponent,
