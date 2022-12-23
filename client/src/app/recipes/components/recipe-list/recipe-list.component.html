@@ -17,9 +17,9 @@
         <ng-container *ngIf="localState.recipes && localState.recipes?.length">
 
             <section *ngFor="let recipe of localState.recipes">
-                <p>{{recipe.title}}</p>
-                <p>{{recipe.authorId}}</p>
-                <p>{{recipe.createdAt}}</p>
+                <p>Title: {{recipe.title | uppercase}}</p>
+                <p>Author: {{recipe.authorId}}</p>
+                <p>Created: {{recipe.createdAt | date}}</p>
             </section>
 
         </ng-container>
