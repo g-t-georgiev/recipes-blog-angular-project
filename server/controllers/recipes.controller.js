@@ -10,8 +10,7 @@ import { Recipe } from '../models/index.js';
 
 export async function getAll(req, res, next) {
 
-    const { user, query } = req;
-    let { page, size, title } = query;
+    let { page, size, title } = req.query;
 
     try {
 
@@ -28,15 +27,15 @@ export async function getAll(req, res, next) {
         const queryFilter = {};
 
         if (title && typeof title === 'string') {
-            queryFilter.title = title;
+            queryFilter.title = { $regex: title, $options: 'i' };
         }
 
-        if (user) {
-            queryFilter.authorId = { $ne: user._id };
-        }
+        console.log(queryFilter);
 
         const queryProjection = {
-            content: 0
+            content: 0, 
+            updatedAt: 0, 
+            __v: 0,
         }
 
         const queryOptions = {
@@ -44,13 +43,16 @@ export async function getAll(req, res, next) {
             skip: size * (page - 1),
         }
 
-        // console.log(queryFilter, queryProjection, queryOptions);
+        // console.log(queryOptions);
 
-        const recipesQuery = Recipe.find(queryFilter, queryProjection, queryOptions);
-        const recipesCountQuery = Recipe.estimatedDocumentCount(queryFilter);
+        let [ recipes, total ] = await Promise.all([
+            Recipe.find(queryFilter, queryProjection, queryOptions).exec(),
+            Recipe.countDocuments(queryFilter).exec()
+        ]);
 
-        let [ recipes, total ] = await Promise.all([ recipesQuery.exec(), recipesCountQuery.exec() ]);
         recipes = recipes ?? [];
+        // console.log(recipes);
+        // console.log(total);
 
         res.status(200)
             .json({ recipes, message: 'Recipes retrieved successfully', total });
