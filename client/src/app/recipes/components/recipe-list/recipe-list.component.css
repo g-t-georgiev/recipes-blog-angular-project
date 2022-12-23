@@ -1,10 +1,24 @@
 .recipes-list {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: flex-start;
 }
 
 .recipe-thumb {
     padding: .5em .25em;
+    flex-basis: 30%;
+}
+
+@media screen and (max-width: 480px) {
+
+    .recipes-list {
+        flex-direction: column;
+    }
+
+    .recipe-thumb {
+        flex-basis: 100%;
+    }
+
 }
