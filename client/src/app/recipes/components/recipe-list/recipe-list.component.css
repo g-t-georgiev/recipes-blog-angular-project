@@ -4,6 +4,8 @@
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: flex-start;
+
+    margin-block: 3em;
 }
 
 .recipe-thumb {
@@ -11,19 +13,54 @@
     flex-basis: 30%;
 }
 
+.page-toggle-controls {
+    display: flex;
+    justify-content: space-between;
+
+    inline-size: 100%;
+}
+
+.pagination-button {
+    background-color: transparent;
+    color: currentColor;
+    
+    border: none;
+    outline: none;
+
+    font-size: 1.15em;
+
+    cursor: pointer;
+}
+
+.disabled {
+    /* pointer-events: none; */
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
 .filter-form-title-input {
     background-color: transparent;
     color: currentColor;
     
-    padding: .5em;
-
-    border-radius: 3px;
+    padding-block: 1.15em;
+    padding-inline: 1em;
 
     border-color: currentColor;
-    border-style: solid;
-    border-width: .1em;
 
     outline: none;
+}
+
+.filter-form-title-input::placeholder {
+    opacity: 1;
+    color: currentColor;
+}
+
+.select-row {
+    align-self: flex-start;
+}
+
+.filter-form-limit-select {
+    border-color: currentColor;
 }
 
 @media screen and (max-width: 480px) {
