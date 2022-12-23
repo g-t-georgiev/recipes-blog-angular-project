@@ -96,4 +96,42 @@ export class RecipeListComponent implements OnInit, AfterViewInit, OnDestroy {
 		this.subscription?.unsubscribe?.();
 	}
 
+	getTotalPagesCount(entriesPerPageCount: number, totalEntriesCount: number) {
+		return Math.ceil(totalEntriesCount / entriesPerPageCount);
+	}
+
+	togglePreviousPage(ev: PointerEvent, currentPage: number) {
+		ev.preventDefault();
+
+		console.log('#prev', currentPage);
+		if (currentPage <= 1) {
+			return;
+		}
+
+		const updatedUrlTree = this.router.createUrlTree([], {
+			queryParams: { page: currentPage - 1, size: 1 },
+			relativeTo: this.activatedRoute
+		});
+
+		this.router.navigateByUrl(updatedUrlTree);
+	}
+
+	toggleNextPage(ev: PointerEvent, currentPage: number, entriesPerPageCount: number, totalEntriesCount: number) {
+		ev.preventDefault();
+
+		let totalPagesCount = this.getTotalPagesCount(entriesPerPageCount, totalEntriesCount);
+
+		console.log('#next', currentPage, totalPagesCount);
+		if (currentPage >= totalPagesCount) {
+			return;
+		}
+
+		const updatedUrlTree = this.router.createUrlTree([], {
+			queryParams: { page: currentPage + 1, size: 1 },
+			relativeTo: this.activatedRoute
+		});
+
+		this.router.navigateByUrl(updatedUrlTree);
+	}
+
 }
