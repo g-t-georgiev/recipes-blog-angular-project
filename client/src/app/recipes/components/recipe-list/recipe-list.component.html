@@ -24,7 +24,7 @@
 
             <article class="recipe-thumb" *ngFor="let recipe of localState.recipes">
                 <p>Title: {{recipe.title | uppercase}}</p>
-                <p>Author: {{recipe.authorId}}</p>
+                <p>Author: {{recipe.authorId?.username}}</p>
                 <p>Created: {{recipe.createdAt | date}}</p>
             </article>
 
