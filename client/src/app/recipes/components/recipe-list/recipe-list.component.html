@@ -16,6 +16,10 @@
 
         <section class="recipes-list" *ngIf="localState.recipes && localState.recipes?.length">
 
+            <form #filterForm="ngForm">
+                <input ngModel type="text" name="title" placeholder="Filter results by title..." />
+            </form>
+
             <article class="recipe-thumb" *ngFor="let recipe of localState.recipes">
                 <p>Title: {{recipe.title | uppercase}}</p>
                 <p>Author: {{recipe.authorId}}</p>
