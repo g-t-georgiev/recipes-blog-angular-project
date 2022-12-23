@@ -30,7 +30,7 @@ export async function getAll(req, res, next) {
             queryFilter.title = { $regex: title, $options: 'i' };
         }
 
-        console.log(queryFilter);
+        // console.log(queryFilter);
 
         const queryProjection = {
             content: 0, 
