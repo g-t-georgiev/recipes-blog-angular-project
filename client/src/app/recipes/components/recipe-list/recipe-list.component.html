@@ -4,9 +4,11 @@
 ></ng-container>
 
 <ng-template #recipesList let-localState>
-    Page: {{localState.page}}
-    Limit: {{localState.limit}}
-    Total: {{localState.total}}
+    <p>
+        <br>Page: <span>{{localState.page}}</span>
+        <br>Entries per page: {{localState.limit}}
+        <br>Total results: {{localState.total}}
+    </p>
 
     <ng-container *ngIf="localState.loading">
         Loading, please wait...
@@ -14,8 +16,8 @@
 
     <ng-container *ngIf="!localState.loading">
 
-        <form ngForm>
-            <input #filterByTitleInput="ngModel" [ngModel]="localState.filter?.title" type="text" name="title" placeholder="Filter results by title..." />
+        <form class="filter-form" ngForm>
+            <input class="filter-form-title-input" #filterByTitleInput="ngModel" [ngModel]="localState.filter?.title" type="text" name="title" placeholder="Filter results by title..." />
         </form>
 
         <section class="recipes-list" *ngIf="localState.recipes && localState.recipes?.length">

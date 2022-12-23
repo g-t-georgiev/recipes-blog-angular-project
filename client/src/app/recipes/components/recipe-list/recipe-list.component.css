@@ -11,6 +11,21 @@
     flex-basis: 30%;
 }
 
+.filter-form-title-input {
+    background-color: transparent;
+    color: currentColor;
+    
+    padding: .5em;
+
+    border-radius: 3px;
+
+    border-color: currentColor;
+    border-style: solid;
+    border-width: .1em;
+
+    outline: none;
+}
+
 @media screen and (max-width: 480px) {
 
     .recipes-list {
