@@ -6,6 +6,11 @@ import { RecipesService } from "src/app/core/services";
 import { IRecipe } from "src/app/shared/interfaces";
 
 
+
+interface IFilter {
+    title: string;
+}
+
 export interface ILocalState {
     recipes: Pick<IRecipe, 'title' | '_id' | 'authorId'>[];
     error: boolean;
@@ -13,6 +18,7 @@ export interface ILocalState {
     page: number;
     limit: number;
     total: number;
+    filter: IFilter
 }
 
 const initialState: ILocalState = {
@@ -21,7 +27,8 @@ const initialState: ILocalState = {
     loading: false,
     page: 1,
     limit: 10,
-    total: Infinity
+    total: Infinity,
+    filter: { title: '' }
 }
 
 @Injectable()
@@ -43,6 +50,8 @@ export class RecipeListComponentState extends ComponentStore<ILocalState> {
     readonly updateRecipeLimitPerPage = this.updater((state, limit: number) => ({ ...state, limit }));
     readonly updateRecipesTotalCount = this.updater((state, total: number) => ({ ...state, total }));
 
+    readonly updateFilterState = this.updater((state, filter: IFilter) => ({ ...state, filter }))
+
     readonly queryParamsChangeEffect = this.effect(
         (queryParams$: Observable<any>) => {
 
@@ -53,6 +62,9 @@ export class RecipeListComponentState extends ComponentStore<ILocalState> {
 
                     this.updateCurrentPage(+page);
                     this.updateRecipeLimitPerPage(+size);
+
+                    const { title } = filters;
+                    this.updateFilterState({ title });
 
                     return this.recipesService.getAll(+page, +size, filters).pipe(
                         tap(() => {

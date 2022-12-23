@@ -14,11 +14,11 @@
 
     <ng-container *ngIf="!localState.loading">
 
-        <section class="recipes-list" *ngIf="localState.recipes && localState.recipes?.length">
+        <form ngForm>
+            <input #filterByTitleInput="ngModel" [ngModel]="localState.filter?.title" type="text" name="title" placeholder="Filter results by title..." />
+        </form>
 
-            <form #filterForm="ngForm">
-                <input ngModel type="text" name="title" placeholder="Filter results by title..." />
-            </form>
+        <section class="recipes-list" *ngIf="localState.recipes && localState.recipes?.length">
 
             <article class="recipe-thumb" *ngFor="let recipe of localState.recipes">
                 <p>Title: {{recipe.title | uppercase}}</p>

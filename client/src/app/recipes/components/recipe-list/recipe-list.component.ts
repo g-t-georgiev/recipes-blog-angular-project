@@ -1,6 +1,7 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged, Subject, Subscription, switchMap, takeUntil, tap } from 'rxjs';
 
 import { RecipeListComponentState } from './recipe-list.component.state';
 
@@ -10,11 +11,13 @@ import { RecipeListComponentState } from './recipe-list.component.state';
 	styleUrls: ['./recipe-list.component.css'],
 	providers: [RecipeListComponentState]
 })
-export class RecipeListComponent implements OnInit, OnDestroy {
+export class RecipeListComponent implements OnInit, AfterViewInit, OnDestroy {
 
 	private readonly subscription = new Subscription();
 
 	readonly localState$ = this.componentState.localState$;
+
+	@ViewChild('filterByTitleInput') filterByTitleInput!: NgForm;
 
 	constructor(
 		private readonly activatedRoute: ActivatedRoute,
@@ -27,7 +30,8 @@ export class RecipeListComponent implements OnInit, OnDestroy {
 		this.subscription.add(
 			this.activatedRoute.queryParams.subscribe({
 				next: (params => {
-					let { page, size } = params;
+
+					let { page, size, title } = params;
 					let updatedQueryParams;
 
 					if (!page || isNaN(+page) || +page < 1) {
@@ -54,10 +58,37 @@ export class RecipeListComponent implements OnInit, OnDestroy {
 						return;
 					}
 
+					
 					this.componentState.queryParamsChangeEffect(params);
 				})
 			})
 		);
+
+	}
+
+	ngAfterViewInit(): void {
+
+		this.filterByTitleInput.valueChanges?.pipe(
+			debounceTime(500),
+			distinctUntilChanged(), 
+			tap((title) => {
+
+				title = title?.trim();
+				console.log(title);
+
+				if (title != null) {
+					let queryParams = title.length ? { title } : null;
+
+					const updatedUrlTree = this.router.createUrlTree([], {
+						queryParams,
+						relativeTo: this.activatedRoute
+					});
+	
+					this.router.navigateByUrl(updatedUrlTree);
+				}
+
+			})
+		).subscribe();
 
 	}
 
