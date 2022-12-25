@@ -30,8 +30,8 @@ export class PaginatorComponent implements OnChanges {
 		if (total <= 7) {
 			return [...Array(total).keys()].map(i => ++i);
 		}
-		
-		return [];
+
+		return [1, 2, 3, 4, 5, -1, total];
 	}
 
 	onGoTo(page: number): void {
