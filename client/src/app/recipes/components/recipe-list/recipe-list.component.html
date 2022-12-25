@@ -20,7 +20,11 @@
 
     <ng-container *ngIf="!localState.loading">
 
-        <form class="filter-form form" ngForm>
+        <form 
+            #filterResultsForm="ngForm" 
+            class="filter-form form" 
+            ngForm
+        >
 
             <section class="page-toggle-controls form-row">
 
@@ -28,7 +32,7 @@
                     class="pagination-button" 
                     [class.disabled]="localState.page <= 1"
                     [disabled]="localState.page <= 1" 
-                    (pointerdown)="togglePreviousPage($event, localState.page)"
+                    (pointerdown)="togglePreviousPage(localState.page)"
                 >
                     Prev
                 </button>
@@ -37,7 +41,7 @@
                     class="pagination-button" 
                     [class.disabled]="localState.page >= getTotalPagesCount(localState.limit, localState.total)"
                     [disabled]="localState.page >= getTotalPagesCount(localState.limit, localState.total)" 
-                    (pointerdown)="toggleNextPage($event, localState.page, localState.limit, localState.total)"
+                    (pointerdown)="toggleNextPage(localState.page, localState.limit, localState.total)"
                 >
                     Next
                 </button>
