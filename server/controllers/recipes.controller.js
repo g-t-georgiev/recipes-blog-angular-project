@@ -41,7 +41,7 @@ export async function getAll(req, res, next) {
         const queryOptions = {
             limit: Number(size),
             skip: size * (page - 1),
-            populate: 'authorId'
+            populate: { path: 'authorId', select: 'username' }
         }
 
         // console.log(queryOptions);
