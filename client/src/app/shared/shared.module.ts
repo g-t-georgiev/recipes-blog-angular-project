@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { FileUploadComponent } from './components/file-upload/file-upload.component';
+import { FileUploadComponent, PaginatorComponent } from './components';
 import { SpreadPipe, RemoveDotsPipe } from './pipes';
 import { MaxlengthValidatorDirective, PasswordsMatchValidatorDirective, DuplicateCredentialsValidatorDirective, MaxSizeDirective } from './directives';
 import { CustomValidatorsService } from './services';
@@ -15,7 +15,8 @@ import { CustomValidatorsService } from './services';
        	MaxlengthValidatorDirective,
         PasswordsMatchValidatorDirective,
         DuplicateCredentialsValidatorDirective,
-        MaxSizeDirective
+        MaxSizeDirective,
+        PaginatorComponent
   ],
 	imports: [
 		CommonModule,
@@ -27,7 +28,8 @@ import { CustomValidatorsService } from './services';
 		MaxlengthValidatorDirective,
 		PasswordsMatchValidatorDirective,
 		DuplicateCredentialsValidatorDirective,
-		MaxSizeDirective
+		MaxSizeDirective,
+		PaginatorComponent
 	],
 	providers: [
 		CustomValidatorsService
