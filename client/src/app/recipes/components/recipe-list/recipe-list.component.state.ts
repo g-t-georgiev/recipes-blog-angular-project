@@ -7,9 +7,6 @@ import { IRecipe } from "src/app/shared/interfaces";
 
 
 
-interface IFilter {
-    title: string;
-}
 
 export interface ILocalState {
     recipes: Pick<IRecipe, 'title' | '_id' | 'authorId'>[];
@@ -18,7 +15,7 @@ export interface ILocalState {
     page: number;
     limit: number;
     total: number;
-    filter: IFilter
+    filter: any
 }
 
 const initialState: ILocalState = {
@@ -27,8 +24,8 @@ const initialState: ILocalState = {
     loading: false,
     page: 1,
     limit: 10,
-    total: Infinity,
-    filter: { title: '' }
+    total: 0,
+    filter: {}
 }
 
 @Injectable()
@@ -47,54 +44,31 @@ export class RecipeListComponentState extends ComponentStore<ILocalState> {
     readonly updateErrorState = this.updater((state, error: boolean ) => ({ ...state, error }));
 
     readonly updateCurrentPage = this.updater((state, page: number) => ({ ...state, page }));
-    readonly updateRecipeLimitPerPage = this.updater((state, limit: number) => ({ ...state, limit }));
+    readonly updateRecipesLimitPerPage = this.updater((state, limit: number) => ({ ...state, limit }));
     readonly updateRecipesTotalCount = this.updater((state, total: number) => ({ ...state, total }));
 
-    readonly updateFilterState = this.updater((state, filter: IFilter) => ({ ...state, filter }))
+    readonly updateFilterState = this.updater((state, filter: any) => ({ ...state, filter }));
 
-    readonly queryParamsChangeEffect = this.effect(
-        (queryParams$: Observable<any>) => {
+    readonly initializerEffect = this.effect(
+        (empty$: Observable<undefined>) => empty$.pipe(
+            tap(() => this.updateLoadingState(true)),
+            mergeMap(() => this.recipesService.getAll(initialState.page, initialState.limit, initialState.filter).pipe(
+                tap(({ recipes, message, total}) => {
+                    this.updateLoadingState(false);
+                    this.updateRecipesState(recipes);
+                    this.updateRecipesTotalCount(total);
 
-            return queryParams$.pipe(
-                mergeMap((params) => {
-
-                    let { page, size, ...filters } = params;
-
-                    this.updateCurrentPage(+page);
-                    this.updateRecipeLimitPerPage(+size);
-
-                    const { title } = filters;
-                    this.updateFilterState({ title });
-
-                    return this.recipesService.getAll(+page, +size, filters).pipe(
-                        tap(() => {
-                            this.updateLoadingState(true);
-                        }),
-                        map(({ recipes, message, total}) => {
-
-                            this.updateLoadingState(false);
-                            this.updateRecipesState(recipes);
-                            this.updateRecipesTotalCount(total);
-                            this.updateErrorState(false);
-
-                            console.log(message);
-
-                            return { recipes, message, total };
-                        }),
-                        catchError((error) => {
-
-                            this.updateLoadingState(false);
-                            this.updateErrorState(true);
-                            this.updateRecipesState([]);
-
-                            console.log(error?.message ?? 'Something went wrong');
-
-                            return EMPTY;
-                        })
-                    );
+                    console.log(message);
+                }),
+                catchError((error) => {
+                    this.updateLoadingState(false);
+                    this.updateErrorState(true);
+                    
+                    console.log(error);
+                    return EMPTY;
                 })
-            );
-        }
+            ))
+        )
     );
 
 }
