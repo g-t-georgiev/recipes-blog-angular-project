@@ -12,5 +12,17 @@
             </button>
 
         </li>
+
+        <li>
+
+            <button
+                type="button" 
+                [attr.aria-disabled]="currentPage >= totalPagesCount"
+                [disabled]="currentPage >= totalPagesCount" 
+                (pointerdown)="onNext()"
+            >
+                Next
+            </button>
+        </li>
     </ul>
 </nav>
