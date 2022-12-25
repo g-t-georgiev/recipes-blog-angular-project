@@ -26,7 +26,12 @@ export class PaginatorComponent implements OnChanges {
 	}
 
 	getPages(current: number, total: number): number[] {
-		return this.pages;
+
+		if (total <= 7) {
+			return [...Array(total).keys()].map(i => ++i);
+		}
+		
+		return [];
 	}
 
 	onGoTo(page: number): void {
