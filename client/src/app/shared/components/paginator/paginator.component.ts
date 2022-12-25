@@ -1,11 +1,11 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 
 @Component({
 	selector: 'app-paginator',
 	templateUrl: './paginator.component.html',
 	styleUrls: ['./paginator.component.css']
 })
-export class PaginatorComponent {
+export class PaginatorComponent implements OnChanges {
 
 	@Input('current') currentPage: number = 0;
 	@Input('total') totalPagesCount: number = 0;
@@ -13,6 +13,21 @@ export class PaginatorComponent {
 	@Output() goTo: EventEmitter<number> = new EventEmitter<number>();
 	@Output() next: EventEmitter<number> = new EventEmitter<number>();
 	@Output() previous: EventEmitter<number> = new EventEmitter<number>();
+
+	pages: number[] = [];
+
+	ngOnChanges(changes: SimpleChanges): void {
+		if (
+			(changes['current'] && changes['current'].currentValue) || 
+			(changes['total'] && changes['total'].currentValue)
+		) {
+			this.pages = this.getPages(this.currentPage, this.totalPagesCount);
+		}
+	}
+
+	getPages(current: number, total: number): number[] {
+		return this.pages;
+	}
 
 	onGoTo(page: number): void {
 		this.goTo.emit(page);
