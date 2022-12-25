@@ -1,1 +1,16 @@
-<p>paginator works!</p>
+<nav aria-label="pagination">
+    <ul>
+        <li>
+
+            <button
+                type="button" 
+                [attr.aria-disabled]="currentPage === 1" 
+                [disabled]="currentPage === 1" 
+                (pointerdown)="onPrevious()"
+            >
+                Prev
+            </button>
+
+        </li>
+    </ul>
+</nav>
