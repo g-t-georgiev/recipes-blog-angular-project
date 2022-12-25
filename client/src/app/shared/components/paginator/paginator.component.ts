@@ -31,6 +31,16 @@ export class PaginatorComponent implements OnChanges {
 			return [...Array(total).keys()].map(i => ++i);
 		}
 
+		if (current > 5) {
+
+			if (current >= total - 4) {
+				return [1, -1, total - 4, total - 3, total - 2, total - 1, total];
+			} else {
+				return [1, -1, current - 1, current, current + 1, -1, total];
+			}
+
+		}
+
 		return [1, 2, 3, 4, 5, -1, total];
 	}
 
