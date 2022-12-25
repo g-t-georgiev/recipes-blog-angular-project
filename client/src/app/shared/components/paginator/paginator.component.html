@@ -4,6 +4,7 @@
 
             <button
                 type="button" 
+                aria-label="Previous page"
                 [attr.aria-disabled]="currentPage === 1" 
                 [disabled]="currentPage === 1" 
                 (pointerdown)="onPrevious()"
@@ -17,6 +18,7 @@
 
             <button
                 type="button" 
+                aria-label="Next page"
                 [attr.aria-disabled]="currentPage >= totalPagesCount"
                 [disabled]="currentPage >= totalPagesCount" 
                 (pointerdown)="onNext()"
