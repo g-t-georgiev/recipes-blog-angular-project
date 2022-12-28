@@ -26,8 +26,7 @@ import { currentUser, IRootState, theme } from './state';
         StoreModule.forRoot<IRootState>({
             darkModeOn: theme.reducers.darkModeReducer,
             currentUser: currentUser.reducers.currentUserReducer
-        }),
-        StoreModule.forRoot({}, {})
+        })
     ],
     providers: [
         {
