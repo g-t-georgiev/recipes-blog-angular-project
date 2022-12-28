@@ -54,9 +54,7 @@ export class RecipeListComponent implements OnInit, AfterViewInit, OnDestroy {
 
 	}
 
-	toggleNextPage(currentPage: number, entriesPerPageCount: number, totalEntriesCount: number) {
-
-		let totalPagesCount = this.getTotalPagesCount(entriesPerPageCount, totalEntriesCount);
+	toggleNextPage(currentPage: number, totalPagesCount: number ) {
 
 		if (currentPage >= totalPagesCount) {
 			return;
