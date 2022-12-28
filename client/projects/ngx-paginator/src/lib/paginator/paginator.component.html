@@ -24,8 +24,8 @@
                 [attr.aria-label]="page === currentPage ? 'Current page: ' + page : 'Go to page: ' + page" 
                 tabindex="0" 
                 [class.current]="page === currentPage" 
-                [attr.aria-disabled]="currentPage >= totalPagesCount" 
-                [attr.disabled]="currentPage >= totalPagesCount"
+                [attr.aria-disabled]="page === currentPage" 
+                [attr.disabled]="page === currentPage"
                 (pointerdown)="onGoTo(page)" 
                 (keyup.index)="onGoTo(page)"
             >
