@@ -71,4 +71,6 @@ export class RecipeListComponentState extends ComponentStore<ILocalState> {
         )
     );
 
+    // TODO: Add toggle prev/next page state effec
+
 }

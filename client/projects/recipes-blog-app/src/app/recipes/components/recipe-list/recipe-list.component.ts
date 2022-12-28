@@ -42,6 +42,7 @@ export class RecipeListComponent implements OnInit, AfterViewInit, OnDestroy {
 
 	toggleClickedPage(page: number) {
 		console.log(page);
+		// TODO: Integrate with component state
 	}
 
 	togglePreviousPage(prevPage: number) {
@@ -51,7 +52,7 @@ export class RecipeListComponent implements OnInit, AfterViewInit, OnDestroy {
 		}
 
 		console.log(prevPage);
-
+		// TODO: Integrate with component state
 	}
 
 	toggleNextPage(nextPage: number, totalPagesCount: number ) {
@@ -61,7 +62,7 @@ export class RecipeListComponent implements OnInit, AfterViewInit, OnDestroy {
 		}
 
 		console.log(nextPage);
-
+		// TODO: Integrate with component state
 	}
 
 }
