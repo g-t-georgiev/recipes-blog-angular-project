@@ -55,7 +55,7 @@ export class SignInComponentState extends ComponentStore<ILocalState> {
                             }
                             
                         }),
-                        catchError(({ error }) => {
+                        catchError((error) => {
                             
                             // console.log(error);
                             let errorMsg;
