@@ -1,16 +1,14 @@
 import { NgModule } from '@angular/core';
-import { NgxPaginatorComponent } from './ngx-paginator.component';
-
+import { PaginatorComponent } from './paginator/paginator.component';
 
 
 @NgModule({
-  declarations: [
-    NgxPaginatorComponent
-  ],
-  imports: [
-  ],
-  exports: [
-    NgxPaginatorComponent
-  ]
+	declarations: [
+		PaginatorComponent
+	],
+	imports: [],
+	exports: [
+		PaginatorComponent
+	]
 })
 export class NgxPaginatorModule { }
