@@ -1,13 +1,12 @@
 {
-  "name": "recipes-blog",
+  "name": "client-apps",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "analytics:disable": "ng analytics disable"
+    "test": "ng test"
   },
   "private": true,
   "dependencies": {
@@ -19,15 +18,13 @@
     "@angular/platform-browser": "^15.0.0",
     "@angular/platform-browser-dynamic": "^15.0.0",
     "@angular/router": "^15.0.0",
-    "@ngrx/component-store": "^15.0.0",
-    "@ngrx/store": "^15.0.0-rc.0",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.12.0"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^15.0.0",
-    "@angular/cli": "~15.0.0",
+    "@angular-devkit/build-angular": "^15.0.4",
+    "@angular/cli": "~15.0.4",
     "@angular/compiler-cli": "^15.0.0",
     "@types/jasmine": "~4.3.0",
     "jasmine-core": "~4.5.0",
@@ -36,6 +33,7 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.0.0",
+    "ng-packagr": "^15.0.0",
     "typescript": "~4.8.2"
   }
 }
