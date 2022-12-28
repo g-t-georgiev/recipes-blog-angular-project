@@ -40,11 +40,17 @@ export class RecipeListComponent implements OnInit, AfterViewInit, OnDestroy {
 		return Math.ceil(totalEntriesCount / entriesPerPageCount);
 	}
 
+	toggleClickedPage(page: number) {
+		console.log(page);
+	}
+
 	togglePreviousPage(currentPage: number) {
 
 		if (currentPage <= 1) {
 			return;
 		}
+
+		console.log(currentPage - 1);
 
 	}
 
@@ -55,6 +61,8 @@ export class RecipeListComponent implements OnInit, AfterViewInit, OnDestroy {
 		if (currentPage >= totalPagesCount) {
 			return;
 		}
+
+		console.log(currentPage + 1);
 
 	}
 
