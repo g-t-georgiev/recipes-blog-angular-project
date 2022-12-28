@@ -1,11 +1,19 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { 
+	Component, 
+	OnInit, 
+	OnChanges, 
+	SimpleChanges, 
+	Input, 
+	Output, 
+	EventEmitter, 
+} from '@angular/core';
 
 @Component({
 	selector: 'ngx-paginator',
 	templateUrl: './paginator.component.html',
 	styleUrls: ['./paginator.component.css']
 })
-export class PaginatorComponent implements OnChanges {
+export class PaginatorComponent implements OnInit, OnChanges {
 
 	@Input('current') currentPage: number = 0;
 	@Input('total') totalPagesCount: number = 0;
@@ -16,11 +24,25 @@ export class PaginatorComponent implements OnChanges {
 
 	pages: number[] = [];
 
+	ngOnInit() {
+
+		// console.log(this.currentPage, this.totalPagesCount);
+		
+		if (
+			this.currentPage && 
+			this.totalPagesCount
+		) {
+			this.pages = this.getPages(this.currentPage, this.totalPagesCount);
+		}
+	}
+
 	ngOnChanges(changes: SimpleChanges): void {
+
 		if (
 			(changes['current'] && changes['current'].currentValue) || 
 			(changes['total'] && changes['total'].currentValue)
 		) {
+			// console.log(changes['current'].currentValue, changes['total'].currentValue);
 			this.pages = this.getPages(this.currentPage, this.totalPagesCount);
 		}
 	}
