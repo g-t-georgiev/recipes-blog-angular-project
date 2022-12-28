@@ -27,7 +27,7 @@ export class PaginatorComponent implements OnInit, OnChanges {
 	ngOnInit() {
 
 		// console.log(this.currentPage, this.totalPagesCount);
-		
+
 		if (
 			this.currentPage && 
 			this.totalPagesCount
@@ -67,6 +67,11 @@ export class PaginatorComponent implements OnInit, OnChanges {
 	}
 
 	onGoTo(page: number): void {
+
+		if (page === this.currentPage) {
+			return;
+		}
+
 		this.goTo.emit(page);
 	}
 
