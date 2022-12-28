@@ -23,7 +23,7 @@ const initialState: ILocalState = {
     error: false,
     loading: false,
     page: 1,
-    limit: 10,
+    limit: 3, // 10
     total: 0,
     filter: {}
 }
