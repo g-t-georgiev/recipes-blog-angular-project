@@ -28,10 +28,10 @@
 
             <ngx-paginator
                 [current]="localState.page" 
-                [total]="localState.total" 
+                [total]="getTotalPagesCount(localState.limit, localState.total)" 
                 (previous)="togglePreviousPage($event)" 
                 (goTo)="toggleClickedPage($event)"
-                (next)="toggleNextPage($event, localState.limit, localState.total)"
+                (next)="toggleNextPage($event, getTotalPagesCount(localState.limit, localState.total))"
             ></ngx-paginator>
 
             <section class="select-row form-row">
