@@ -44,23 +44,23 @@ export class RecipeListComponent implements OnInit, AfterViewInit, OnDestroy {
 		console.log(page);
 	}
 
-	togglePreviousPage(currentPage: number) {
+	togglePreviousPage(prevPage: number) {
 
-		if (currentPage <= 1) {
+		if (prevPage <= 1) {
 			return;
 		}
 
-		console.log(currentPage - 1);
+		console.log(prevPage);
 
 	}
 
-	toggleNextPage(currentPage: number, totalPagesCount: number ) {
+	toggleNextPage(nextPage: number, totalPagesCount: number ) {
 
-		if (currentPage >= totalPagesCount) {
+		if (nextPage >= totalPagesCount) {
 			return;
 		}
 
-		console.log(currentPage + 1);
+		console.log(nextPage);
 
 	}
 
