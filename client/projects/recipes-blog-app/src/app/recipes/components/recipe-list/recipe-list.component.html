@@ -26,27 +26,13 @@
             ngForm
         >
 
-            <!-- <section class="page-toggle-controls form-row">
-
-                <button 
-                    class="pagination-button" 
-                    [class.disabled]="localState.page <= 1"
-                    [disabled]="localState.page <= 1" 
-                    (pointerdown)="togglePreviousPage(localState.page)"
-                >
-                    Prev
-                </button>
-    
-                <button 
-                    class="pagination-button" 
-                    [class.disabled]="localState.page >= getTotalPagesCount(localState.limit, localState.total)"
-                    [disabled]="localState.page >= getTotalPagesCount(localState.limit, localState.total)" 
-                    (pointerdown)="toggleNextPage(localState.page, localState.limit, localState.total)"
-                >
-                    Next
-                </button>
-    
-            </section> -->
+            <ngx-paginator
+                [current]="localState.page" 
+                [total]="localState.total" 
+                (previous)="togglePreviousPage($event)" 
+                (goTo)="toggleClickedPage($event)"
+                (next)="toggleNextPage($event, localState.limit, localState.total)"
+            ></ngx-paginator>
 
             <section class="select-row form-row">
 
