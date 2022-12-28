@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AuthService } from 'src/app/core/services';
-import { IUser } from 'src/app/shared/interfaces';
+import { AuthService } from 'projects/recipes-blog-app/src/app/core/services';
+import { IUser } from 'projects/recipes-blog-app/src/app/shared/interfaces';
 
 
 @Component({

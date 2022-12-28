@@ -4,12 +4,12 @@ import { Store } from '@ngrx/store';
 import { EMPTY, Observable } from 'rxjs';
 import { catchError, switchMap, mergeMap, tap } from 'rxjs/operators';
 
-import { UsersService } from 'src/app/core/services';
+import { UsersService } from 'projects/recipes-blog-app/src/app/core/services';
 
-import { IUser } from 'src/app/shared/interfaces';
+import { IUser } from 'projects/recipes-blog-app/src/app/shared/interfaces';
 
-import { IRootState } from 'src/app/state';
-import { login } from 'src/app/state/current-user/current-user.actions';
+import { IRootState } from 'projects/recipes-blog-app/src/app/state';
+import { login } from 'projects/recipes-blog-app/src/app/state/current-user/current-user.actions';
 
 
 interface ILocalState {

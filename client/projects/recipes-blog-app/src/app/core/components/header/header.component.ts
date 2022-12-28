@@ -3,7 +3,7 @@ import { Subscription, Observable } from 'rxjs';
 
 import { AuthService } from '../../services';
 
-import { IUser } from 'src/app/shared/interfaces';
+import { IUser } from 'projects/recipes-blog-app/src/app/shared/interfaces';
 import { ViewportResizeService } from '../../services/viewport-resize.service';
 import { HeaderComponentState, ILocalState } from './header.component.state';
 

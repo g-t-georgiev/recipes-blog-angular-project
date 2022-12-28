@@ -1,9 +1,9 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { IRecipe } from "src/app/shared/interfaces";
+import { IRecipe } from "projects/recipes-blog-app/src/app/shared/interfaces";
 
-import { environment } from "src/environments/environment";
+import { environment } from "projects/recipes-blog-app/src/environments/environment";
 
 export interface IRecipesQueryResponse {
     recipes: IRecipe[] | [];

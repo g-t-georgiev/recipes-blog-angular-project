@@ -4,10 +4,10 @@ import { Store } from '@ngrx/store';
 import { EMPTY, Observable, throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
-import { IRootState } from 'src/app/state';
-import { login, logout } from 'src/app/state/current-user/current-user.actions';
-import { IUser } from 'src/app/shared/interfaces';
-import { environment } from 'src/environments/environment';
+import { IRootState } from 'projects/recipes-blog-app/src/app/state';
+import { login, logout } from 'projects/recipes-blog-app/src/app/state/current-user/current-user.actions';
+import { IUser } from 'projects/recipes-blog-app/src/app/shared/interfaces';
+import { environment } from 'projects/recipes-blog-app/src/environments/environment';
 
 const { apiUrl } = environment;
 const signInUrl = `${apiUrl}/login`;

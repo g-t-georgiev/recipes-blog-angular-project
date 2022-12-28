@@ -5,4 +5,5 @@ export const WINDOW = new InjectionToken<typeof globalThis & Window>(
     { 
         providedIn: 'root', 
         factory: () => window || globalThis 
-    });
+    }
+);

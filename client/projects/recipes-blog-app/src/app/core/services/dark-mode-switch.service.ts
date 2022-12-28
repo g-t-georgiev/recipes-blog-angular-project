@@ -4,8 +4,8 @@ import { Observable, fromEvent } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 
-import { WINDOW } from 'src/app/shared/custom-di-tokens';
-import { IRootState, theme as colorThemeState } from 'src/app/state';
+import { WINDOW } from 'projects/recipes-blog-app/src/app/shared/custom-di-tokens';
+import { IRootState, theme as colorThemeState } from 'projects/recipes-blog-app/src/app/state';
 
 
 @Injectable()

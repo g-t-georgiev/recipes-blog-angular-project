@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, AfterViewInit, ViewChild, ElementRef } fr
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 
-import { IRootState } from 'src/app/state';
+import { IRootState } from 'projects/recipes-blog-app/src/app/state';
 import { DarkModeSwitchService } from '../../services/dark-mode-switch.service';
 
 @Component({

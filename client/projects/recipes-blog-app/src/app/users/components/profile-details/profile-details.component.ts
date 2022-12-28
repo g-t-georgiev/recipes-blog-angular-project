@@ -3,7 +3,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { tap, withLatestFrom } from 'rxjs/operators';
-import { EditProfileDto } from 'src/app/core/services';
+import { EditProfileDto } from 'projects/recipes-blog-app/src/app/core/services';
 
 import { ProfileDetailsState } from './profile-details.component.state';
 

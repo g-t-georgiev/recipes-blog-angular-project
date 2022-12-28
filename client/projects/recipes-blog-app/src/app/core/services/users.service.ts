@@ -1,9 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 
-import { IUser } from 'src/app/shared/interfaces';
+import { IUser } from 'projects/recipes-blog-app/src/app/shared/interfaces';
 import { environment } from '../../../environments/environment';
 
 

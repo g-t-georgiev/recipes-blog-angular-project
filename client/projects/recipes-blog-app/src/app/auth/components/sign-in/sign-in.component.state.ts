@@ -4,7 +4,7 @@ import { Observable, EMPTY } from 'rxjs';
 import { tap, mergeMap, catchError } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { AuthService, IUserSignInDto, IUserSignInResponse } from 'src/app/core/services';
+import { AuthService, IUserSignInDto, IUserSignInResponse } from 'projects/recipes-blog-app/src/app/core/services';
 
 export interface ILocalState {
     message: string | null;

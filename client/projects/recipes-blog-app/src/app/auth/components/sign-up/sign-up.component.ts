@@ -2,7 +2,7 @@ import { Component, OnDestroy } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 
-import { IUserSignUpDto } from 'src/app/core/services';
+import { IUserSignUpDto } from 'projects/recipes-blog-app/src/app/core/services';
 import { SignUpComponentState, ILocalState } from './sign-up.component.state';
 
 @Component({

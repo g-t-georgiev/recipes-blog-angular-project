@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import { IUser } from 'src/app/shared/interfaces';
+import { IUser } from 'projects/recipes-blog-app/src/app/shared/interfaces';
 import { login, logout } from './current-user.actions';
 
 const initialState: IUser | null = null;

@@ -4,7 +4,7 @@ import { ComponentStore } from '@ngrx/component-store';
 import { EMPTY, Observable } from 'rxjs';
 import { catchError, mergeMap, tap } from 'rxjs/operators';
 
-import { AuthService, IUserSignUpDto, IUserSignUpResponse } from 'src/app/core/services';
+import { AuthService, IUserSignUpDto, IUserSignUpResponse } from 'projects/recipes-blog-app/src/app/core/services';
 
 
 export interface ILocalState {

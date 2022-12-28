@@ -10,7 +10,7 @@ import {
 	fromEvent, 
 } from 'rxjs';
 
-import { WINDOW } from 'src/app/shared/custom-di-tokens';
+import { WINDOW } from 'projects/recipes-blog-app/src/app/shared/custom-di-tokens';
 
 
 

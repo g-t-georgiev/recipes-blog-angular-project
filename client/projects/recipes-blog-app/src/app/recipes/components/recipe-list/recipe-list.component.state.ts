@@ -2,8 +2,8 @@ import { Injectable } from "@angular/core";
 import { ComponentStore } from "@ngrx/component-store";
 import { catchError, EMPTY, map, mergeMap, Observable, tap } from "rxjs";
 
-import { RecipesService } from "src/app/core/services";
-import { IRecipe } from "src/app/shared/interfaces";
+import { RecipesService } from "projects/recipes-blog-app/src/app/core/services";
+import { IRecipe } from "projects/recipes-blog-app/src/app/shared/interfaces";
 
 
 
