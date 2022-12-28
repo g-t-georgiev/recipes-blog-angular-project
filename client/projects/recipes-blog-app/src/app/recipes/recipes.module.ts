@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { NgxPaginatorModule } from 'ngx-paginator';
+import { PaginatorModule } from 'ngx-paginator';
 
 import { RecipesRoutingModule } from './recipes-routing.module';
 import { RecipeListComponent, AddRecipeComponent } from './components';
@@ -17,7 +17,7 @@ import { FormsModule } from '@angular/forms';
 		CommonModule,
 		RecipesRoutingModule,
 		FormsModule, 
-		NgxPaginatorModule, 
+		PaginatorModule, 
 	],
 	exports: [
 		RecipeListComponent,
