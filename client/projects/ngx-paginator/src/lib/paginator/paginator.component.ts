@@ -1,11 +1,11 @@
-import { 
-	Component, 
-	OnInit, 
-	OnChanges, 
-	SimpleChanges, 
-	Input, 
-	Output, 
-	EventEmitter, 
+import {
+	Component,
+	OnInit,
+	OnChanges,
+	SimpleChanges,
+	Input,
+	Output,
+	EventEmitter,
 } from '@angular/core';
 
 @Component({
@@ -29,7 +29,7 @@ export class PaginatorComponent implements OnInit, OnChanges {
 		// console.log(this.currentPage, this.totalPagesCount);
 
 		if (
-			this.currentPage && 
+			this.currentPage &&
 			this.totalPagesCount
 		) {
 			this.pages = this.getPages(this.currentPage, this.totalPagesCount);
@@ -39,7 +39,7 @@ export class PaginatorComponent implements OnInit, OnChanges {
 	ngOnChanges(changes: SimpleChanges): void {
 
 		if (
-			(changes['current'] && changes['current'].currentValue) || 
+			(changes['current'] && changes['current'].currentValue) ||
 			(changes['total'] && changes['total'].currentValue)
 		) {
 			// console.log(changes['current'].currentValue, changes['total'].currentValue);
@@ -76,11 +76,23 @@ export class PaginatorComponent implements OnInit, OnChanges {
 	}
 
 	onNext(): void {
-		this.next.emit(this.currentPage);
+
+		if (this.currentPage >= this.totalPagesCount) {
+			return;
+		}
+
+		const nextPage = this.currentPage + 1;
+		this.next.emit(nextPage);
 	}
 
 	onPrevious(): void {
-		this.previous.emit(this.currentPage);
+
+		if (this.currentPage === 1) {
+			return;
+		}
+		
+		const prevPage = this.currentPage - 1;
+		this.previous.emit(prevPage);
 	}
 
 }
