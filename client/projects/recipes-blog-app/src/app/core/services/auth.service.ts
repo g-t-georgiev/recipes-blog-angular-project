@@ -94,7 +94,7 @@ export class AuthService {
 						errorMsg = error.error?.message ?? error?.message ?? error?.statusText ?? 'Something went wrong';
 					}
 					
-					console.log(errorMsg);
+					// console.log(errorMsg);
 					return EMPTY;
 				})
 			);

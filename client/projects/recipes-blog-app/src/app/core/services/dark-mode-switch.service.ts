@@ -30,7 +30,7 @@ export class DarkModeSwitchService {
 
 	
 	getPreference(): string {
-		console.log(this.colorSchemeDark.matches ? 'dark' : 'light');
+		// console.log(this.colorSchemeDark.matches ? 'dark' : 'light');
 		return this.colorSchemeDark.matches ? 'dark' : 'light';
 	}
 
