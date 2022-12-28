@@ -1,0 +1,54 @@
+<ng-container 
+    [ngTemplateOutlet]="header" 
+    [ngTemplateOutletContext]="{ 
+        $implicit: localState$ | async, 
+        currentUser: currentUser$ | async, 
+        isLoggedIn: isLoggedIn$ | async,
+        signingOut: signingOut$ | async 
+    }"
+></ng-container>
+
+<ng-template #header let-localState let-currentUser="currentUser" let-isLoggedIn="isLoggedIn" let-signingOut="signingOut">
+    <!-- {{localState | json}} -->
+    <!-- {{currentUser | json}} -->
+    <header 
+        [class.fullscreen]="localState.showNavigation" 
+        (pointerup)="onHeaderAreaClick($event, localState.showNavigation)"
+    >
+
+        <app-menu-toggle-button 
+            class="menu-toggle-btn"
+            *ngIf="localState.showMenuButton"
+        ></app-menu-toggle-button>
+    
+        <nav 
+            class="nav--primary" 
+            [class.toggle]="localState.showMenuButton && localState.showNavigation"
+        >
+    
+            <a class="nav-link" routerLinkActive="active" ariaCurrentWhenActive="page" routerLink="/home">Home</a>
+            <a class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" ariaCurrentWhenActive="page" routerLink="/recipes">Recipes</a>
+            <a class="nav-link" routerLinkActive="active" ariaCurrentWhenActive="page" [routerLink]="['/recipes', 'add']">Add Recipe</a>
+            
+            <section class="nav-auth-section">
+    
+                <ng-container *ngIf="!isLoggedIn">
+                    <a class="nav-link" routerLinkActive="active" ariaCurrentWhenActive="page" routerLink="/users/login">Login</a>
+                    <a class="nav-link" routerLinkActive="active" ariaCurrentWhenActive="page" routerLink="/users/register">Signup</a>
+                </ng-container>
+
+                <ng-container *ngIf="isLoggedIn">
+                    <a class="nav-link" routerLinkActive="active" ariaCurrentWhenActive="page" [routerLink]="['/users', 'profile', currentUser._id]">Profile</a>
+                    <a href="javascript:void(0);" (pointerup)="logoutHandler()" [attr.disabled]="signingOut" class="nav-link">{{signingOut ? 'Processing...' : 'Signout'}}</a>
+                </ng-container>
+        
+            </section>
+        </nav>
+    
+        <app-dark-mode-switch 
+            class="theme-switch"
+        ></app-dark-mode-switch>
+    
+    </header>
+
+</ng-template>

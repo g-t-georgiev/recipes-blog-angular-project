@@ -1,0 +1,49 @@
+body {
+    --bg-color1: hsl(210, 29%, 97%);
+
+    --txt__color: hsl(0, 0%, 7%);
+
+    --link__color: hsl(326, 100%, 39%);
+    --link__color--active: hsl(325, 95%, 47%);
+    --link__color--visited: hsl(326, 100%, 31%);
+
+    --image__filter: none;
+}
+
+.theme--dark,
+body.theme--dark {
+    --bg-color1: hsl(218, 80%, 2%);
+
+    --txt__color: hsl(210, 17%, 82%);
+
+    --link__color: hsl(181, 100%, 50%);
+    --link__color--active: hsl(181, 100%, 50%);
+    --link__color--visited: hsl(181, 92%, 37%);
+
+    --image__filter: brightness(70%);
+}
+
+body {
+    background-color: var(--bg-color1);
+    color: var(--txt__color);
+}
+
+a {
+    color: var(--link__color);
+}
+
+a:is(:active) { 
+    color: var(--link__color--active);
+}
+
+a:is(:visited) {
+    color: var(--link__color--visited);
+}
+
+a:is(:focus-visible) {
+    outline-color: var(--link__color--active);
+}
+
+img, picture {
+    filter: var(--image__filter);
+}

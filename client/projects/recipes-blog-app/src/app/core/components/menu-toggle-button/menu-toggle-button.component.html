@@ -1,0 +1,33 @@
+<ng-container 
+    [ngTemplateOutlet]="menuToggleButton" 
+    [ngTemplateOutletContext]="{ $implicit: showNavigation$ | async }"
+></ng-container>
+
+<ng-template #menuToggleButton let-showNavigation>
+    <!-- {{ showNavigation }} -->
+    <button 
+        type="button" 
+        [attr.value]="getbtnTextValue(showNavigation)" 
+        class="menu-toggle-btn" 
+        [class.toggled]="showNavigation"
+        title="Toggle mobile menu" 
+        [attr.aria-label]="getbtnTextValue(showNavigation)" 
+        aria-live="polite" 
+        (pointerup)="toggleNavigation(showNavigation)"
+    >
+        <svg 
+            class="menu-toggle-icon"
+            viewBox="0 0 10 10" 
+            width="10" 
+            height="10" 
+            aria-hidden="true"
+        >
+
+            <line class="line" x1="1" x2="8" y1="2" [attr.y2]="showNavigation ? 8 : 2" stroke="currentColor" />
+            <line class="line" x1="1" x2="6" y1="5" [attr.y2]="showNavigation ? 8 : 5" stroke="currentColor" />
+            <line class="line" x1="1" x2="8" y1="8" [attr.y2]="showNavigation ? 2 : 8" stroke="currentColor" />
+
+        </svg>
+    </button>
+
+</ng-template>

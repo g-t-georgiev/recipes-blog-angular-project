@@ -1,0 +1,24 @@
+<ng-container
+    [ngTemplateOutlet]="profile" 
+    [ngTemplateOutletContext]="{ currentUser: currentUser$ | async }"
+></ng-container>
+
+<ng-template #profile let-currentUser="currentUser">
+
+    <section class="page-container">
+
+        <aside class="sidebar">
+            <nav class="sidebar-navigation">
+                <a [routerLink]="['/users', 'profile', currentUser._id]">Profile details</a>
+            </nav>
+        </aside>
+
+        <section class="page-content">
+        
+            <router-outlet></router-outlet>
+
+        </section>
+
+    </section>
+
+</ng-template>

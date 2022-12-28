@@ -1,1 +1,4 @@
-/* You can add global styles to this file, and also import other style files */
+@import './assets/styles/reset.css' layer(reset);
+@import './assets/styles/theme.css' layer(theme);
+@import './assets/styles/typography.css' layer(typography);
+@import './assets/styles/forms.css' layer(forms);

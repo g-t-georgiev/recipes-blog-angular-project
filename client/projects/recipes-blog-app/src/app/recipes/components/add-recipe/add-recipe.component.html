@@ -1,0 +1,112 @@
+<ng-container
+    [ngTemplateOutlet]="signUpSection" 
+    [ngTemplateOutletContext]="{ $implicit: localState$ | async }"
+></ng-container>
+
+<ng-template #signUpSection let-localState>
+
+    <section class="form-container">
+        <!-- {{localState | json}} -->
+        <header class="form-container-header">
+            <h2>Create recipe</h2>
+        </header>
+    
+        <section 
+            *ngIf="hasEmptyFields(createRecipeForm)"
+            class="form-status-message"
+        >
+            Please fill in all the fields below!
+        </section>
+
+        <section 
+            *ngIf="localState.error && localState.message || localState.message"
+            class="form-status-message"
+        >
+
+            {{localState.message}}
+
+        </section>
+
+        <form 
+            #createRecipeForm="ngForm" 
+            (ngSubmit)="submitHandler(createRecipeForm)"
+            class="form"
+        >
+    
+            <section class="form-row">
+    
+                <label 
+                    class="form-input-label" 
+                    for="title"
+                >
+                    Title
+                </label>
+    
+                <input 
+                    ngModel 
+                    required 
+                    #titleControl="ngModel" 
+                    class="form-input"
+                    type="text" 
+                    name="title" 
+                    id="title" 
+                    placeholder="Title" 
+                    aria-required="true"
+                />
+    
+                <ng-container 
+                    [ngTemplateOutlet]="formInputErrorMsg"
+                    [ngTemplateOutletContext]="{ $implicit: 'Title is required' }"
+                    *ngIf="titleControl.touched && titleControl.errors?.['required']"
+                ></ng-container>
+    
+            </section>
+        
+            <section class="form-row">
+    
+                <label 
+                    class="form-input-label" 
+                    for="content"
+                >
+                    Content
+                </label>
+    
+                <textarea 
+                    ngModel 
+                    required 
+                    #contentControl="ngModel" 
+                    class="form-input" 
+                    type="text" 
+                    name="content" 
+                    id="content" 
+                    placeholder="Content" 
+                    aria-required="true" 
+                ></textarea>
+    
+                <ng-container 
+                    [ngTemplateOutlet]="formInputErrorMsg" 
+                    [ngTemplateOutletContext]="{ $implicit: 'Content is required' }"
+                    *ngIf="contentControl.touched && contentControl.errors?.['required']"
+                ></ng-container>
+    
+            </section>
+        
+            <button 
+                [disabled]="createRecipeForm.invalid || localState.processing"
+                class="form-submit-btn" 
+                type="submit"
+            >
+                {{localState.processing ? 'Processing...' : 'Create'}}
+            </button>
+    
+        </form>
+    
+    </section>
+
+</ng-template>
+
+<ng-template #formInputErrorMsg let-errorTxt>
+    <section class="form-input-error">
+        {{errorTxt}}
+    </section>
+</ng-template>

@@ -1,0 +1,231 @@
+body {
+    --form-container-header__font-size--min: 1.65rem;
+    --form-container-header__font-size--max: 1.9rem;
+    --form-container-header__font-size--prefered: 3.3vw;
+    --form-container-header__font-weight: 500;
+
+    --form-status-message__font-size: 1.12em;
+    --form-status-message__color: hsl(0, 74%, 47%);
+
+    --form__inline-size--min: 265px;
+    --form__inline-size--max: 300px;
+    --form__inline-size--prefered: 33vw;
+
+    --form-input-label__padding-block: 0;
+    --form-input-label__padding-inline: 0;
+    --form-input-label__offset-inline: -0.25rem;
+    --form-input-label__offset-block: -100%;
+
+    --form-input__bg-color: hsl(210, 29%, 97%);
+    --form-input__border-color: hsl(0, 0%, 7%);
+    --form-input__border-color--invalid: hsl(0, 74%, 47%);
+    --form-input__border-color--valid: hsl(133, 64%, 37%);
+    --form-input__border-style: solid;
+    --form-input__border-width: .1rem;
+    --form-input__padding-inline: .85rem;
+    --form-input__padding-block: .65rem;
+
+    --form-submit-btn__margin-block: .5rem 0;
+    --form-submit-btn__padding-block: .5rem;
+    --form-submit-btn__padding-inline: .25rem;
+    --form-submit-btn__bg-color: hsl(210, 29%, 97%);
+    --form-submit-btn__border-color: hsl(0, 0%, 7%);
+    --form-submit-btn__border-style: solid;
+    --form-submit-btn__border-width: .1rem;
+    --form-submit-btn__cursor: pointer;
+
+    --form-input-error__padding-block: .5em;
+    --form-input-error__padding-inline: .25em;
+    --form-input-error__font-size: 1em;
+    --form-input-error__color: hsl(0, 74%, 47%);
+}
+
+body.theme--dark {
+    --form-status-message__color: hsl(0, 44%, 37%);
+
+    --form-input__bg-color: hsl(218, 80%, 2%);
+    --form-input__border-color: hsl(210, 17%, 82%);
+    --form-input__border-color--invalid: hsl(0, 44%, 37%);
+    --form-input__border-color--valid: hsl(133, 44%, 27%);
+
+    --form-submit-btn__bg-color: hsl(218, 80%, 2%);
+    --form-submit-btn__border-color: hsl(210, 29%, 97%);
+
+    --form-input-error__color: hsl(0, 44%, 37%);
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+}
+
+.form-container-header {
+    font-size: clamp( var(--form-container-header__font-size--min), var(--form-container-header__font-size--prefered), var(--form-container-header__font-size--max) );
+    font-weight: var(--form-container-header__font-weight);
+}
+
+.form-status-message {
+    font-size: var(--form-status-message__font-size);
+    color: var(--form-status-message__color);
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.25rem;
+
+    inline-size: clamp(var(--form__inline-size--min), var(--form__inline-size--prefered), var(--form__inline-size--max));
+}
+
+.form-row {
+    position: relative;
+    z-index: 0;
+}
+
+.form-input-label {
+    position: absolute;
+    top: calc( var(--form-input__border-width) + var(--form-input__padding-block) );
+    left: calc( var(--form-input__border-width) + var(--form-input__padding-inline) );
+
+    padding-block: var(--form-input-label__padding-block);
+    padding-inline: var(--form-input-label__padding-inline);
+
+    background-color: var(--form-input__bg-color);
+}
+
+.form-input {
+    width: 100%;
+
+    padding-block: var(--form-input__padding-block);
+    padding-inline: var(--form-input__padding-inline);
+
+    color: currentColor;
+    background-color: var(--form-input__bg-color);
+    border-color: var(--form-input__border-color);
+    border-style: var(--form-input__border-style);
+    border-width: var(--form-input__border-width);
+    outline: none;
+}
+
+.form-input::placeholder {
+    opacity: 0;
+}
+
+.form-row:has(
+    :is(
+        .form-input:not(:placeholder-shown), 
+        .form-input:focus
+    )
+) .form-input-label {     
+    --form-input-label__padding-block: .15rem;
+    --form-input-label__padding-inline: .25rem;
+    --form-input-label__font-size: .85em;
+
+    padding-block: var(--form-input-label__padding-block);
+    padding-inline: var(--form-input-label__padding-inline);
+
+    font-size: var(--form-input-label__font-size);
+}
+
+@supports (translate: var(--form-input-label__offset-inline) var(--form-input-label__offset-block)) {
+
+    .form-row:has(
+        :is(
+            .form-input:not(:placeholder-shown), 
+            .form-input:focus
+        )
+    ) .form-input-label {
+        translate: var(--form-input-label__offset-inline) var(--form-input-label__offset-block);
+    }
+
+}
+
+@supports not (translate: var(--login-form-label__offset-inline) var(--login-form-label__offset-block)) {
+
+    .form-row:has(
+        :is(
+            .form-input:not(:placeholder-shown), 
+            .form-input:focus
+        )
+    ) .form-input-label {
+        transform: translate(
+            var(--form-input-label__offset-inline), 
+            var(--form-input-label__offset-block)
+        );
+    }
+    
+}
+
+.form-submit-btn {
+    margin-block: var(--form-submit-btn__margin-block);
+
+    padding-block: var(--form-submit-btn__padding-block);
+    padding-inline: var(--form-submit-btn__padding-inline);
+
+    text-align: center;
+
+    color: currentColor;
+    background-color: var(--form-submit-btn__bg-color);
+    border-color: var(--form-submit-btn__border-color);
+    border-style: var(--form-submit-btn__border-style);
+    border-width: var(--form-submit-btn__border-width);
+    outline: none;
+
+    cursor: var(--form-submit-btn__cursor);
+}
+
+.form-submit-btn:disabled {
+    --form-submit-btn__cursor: not-allowed;
+    cursor: var(--form-submit-btn__cursor);
+}
+
+.form-input-error {
+    /* position: absolute;
+    left: 0;
+    bottom: -60%; */
+
+    inline-size: auto;
+
+    padding-block: var(--form-input-error__padding-block);
+    padding-inline: var(--form-input-error__padding-inline);
+
+    font-size: var(--form-input-error__font-size);
+    color: var(--form-input-error__color);
+}
+
+.ng-touched.ng-invalid:not(:focus) {
+    border-color: var(--form-input__border-color--invalid);
+}
+
+.ng-touched.ng-valid:not(:focus) {
+    border-color: var(--form-input__border-color--valid);
+}
+
+.form-row:has(
+    .ng-touched.ng-invalid:not(:focus)
+) .form-input-label {
+    color: var(--form-input__border-color--invalid);
+}
+
+.form-row:has(
+    .ng-touched.ng-valid:not(:focus)
+) .form-input-label {
+    color: var(--form-input__border-color--valid);
+}
+
+
+@media (prefers-reduced-motion: no-preference) {
+
+    .form-input-label {
+        transition: 
+            padding-inline .12s ease-out,
+            font-size .12s ease-out,
+            translate .1s ease-in,
+            transform .1s ease-in;
+    }
+
+}

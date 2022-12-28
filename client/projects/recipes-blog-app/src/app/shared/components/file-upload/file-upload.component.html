@@ -1,0 +1,35 @@
+<input 
+    type="file" 
+    [accept]="allowedFilesList | spread"
+    [disabled]="disabled"
+    id="file-upload-input" 
+    #fileUploadInput 
+    (change)="handleFileSelectChange($event)"
+/>
+
+<section class="file-upload-ui-container">
+
+    <label 
+        for="file-upload-input"
+        class="file-upload-label"
+    >
+        {{label}}
+        <span class="file-upload-hint">*Allowed file formats: {{allowedFilesList | spread | removeDots | uppercase}}</span>
+    </label>
+
+    <section class="file-upload-select">
+
+        <button 
+            class="file-upload-button" 
+            type="button" 
+            [disabled]="disabled"
+            (pointerdown)="handleFileUploadBtnClick()"
+        >
+            Select file
+        </button>
+
+        <span class="selected-file">{{placeholder}}</span>
+
+    </section>
+
+</section>
