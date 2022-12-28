@@ -5,5 +5,8 @@ const initialState = false;
 
 export const darkModeReducer = createReducer<boolean>(
     initialState,
-    on(toggleDarkMode, (_, action) => action.darkModeOn )
+    on(toggleDarkMode, (_, action) => {
+        // console.log(action.darkModeOn);
+        return action.darkModeOn;
+    } )
 );

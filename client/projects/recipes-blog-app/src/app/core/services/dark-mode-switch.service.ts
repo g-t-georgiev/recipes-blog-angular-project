@@ -30,17 +30,17 @@ export class DarkModeSwitchService {
 
 	
 	getPreference(): string {
-
+		console.log(this.colorSchemeDark.matches ? 'dark' : 'light');
 		return this.colorSchemeDark.matches ? 'dark' : 'light';
 	}
 
 	setPreference(theme: string): void {
-
+		// console.log(theme);
 		this.state.dispatch(colorThemeState.actions.toggleDarkMode({ darkModeOn: theme === 'dark' }));
 	}
 
 	setStyles(darkModeOn: boolean): void {
-
+		// console.log(darkModeOn);
 		this.document.body.classList.toggle('theme--dark', darkModeOn);
 	}
 

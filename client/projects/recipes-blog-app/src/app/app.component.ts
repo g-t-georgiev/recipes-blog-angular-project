@@ -28,9 +28,13 @@ export class AppComponent implements OnInit {
 			).subscribe();
 
         this.state.select(
-            (globalState) => globalState.darkModeOn
+            (globalState) => {
+                // console.log(globalState);
+                return globalState.darkModeOn;
+            }
         ).pipe(
             tap((darkModeOn) => {
+                // console.log(darkModeOn);
                 this.themeService.setStyles(darkModeOn);
             })
         ).subscribe();
