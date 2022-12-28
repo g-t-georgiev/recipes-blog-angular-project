@@ -1,3 +1,5 @@
+{{pages | json}}
+
 <nav aria-label="pagination">
     <ul>
         <li>
@@ -22,6 +24,8 @@
                 [attr.aria-label]="page === currentPage ? 'Current page: ' + page : 'Go to page: ' + page" 
                 tabindex="0" 
                 [class.current]="page === currentPage" 
+                [attr.aria-disabled]="currentPage >= totalPagesCount" 
+                [attr.disabled]="currentPage >= totalPagesCount"
                 (pointerdown)="onGoTo(page)" 
                 (keyup.index)="onGoTo(page)"
             >
