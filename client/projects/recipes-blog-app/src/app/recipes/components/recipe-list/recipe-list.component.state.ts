@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { ComponentStore } from "@ngrx/component-store";
-import { catchError, EMPTY, map, mergeMap, Observable, tap } from "rxjs";
+import { catchError, combineLatestWith, concatMap, EMPTY, map, mergeMap, Observable, tap } from "rxjs";
 
 import { IRecipesQueryResponse, RecipesService } from "projects/recipes-blog-app/src/app/core/services";
 import { IRecipe } from "projects/recipes-blog-app/src/app/shared/interfaces";
@@ -109,10 +109,11 @@ export class RecipeListComponentState extends ComponentStore<ILocalState> {
             tap(() => {
                 this.updateLoadingState(true);
             }),
-            map(({ pageIndex, pageEntriesLimit, pageQueryFilter }) => {
+            map(({  pageIndex, pageEntriesLimit, pageQueryFilter }) => {
                 pageIndex = pageIndex ?? initialState.pageOptions.pageIndex;
                 pageEntriesLimit = pageEntriesLimit ?? initialState.pageOptions.pageEntriesLimit;
                 pageQueryFilter = pageQueryFilter ?? initialState.pageOptions.pageQueryFilter;
+                // console.log(pageIndex, pageEntriesLimit, pageQueryFilter);
 
                 this.updateCurrentPage(pageIndex);
                 this.updateRecipesLimitPerPage(pageEntriesLimit);
