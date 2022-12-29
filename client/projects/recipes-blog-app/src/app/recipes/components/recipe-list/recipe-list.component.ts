@@ -58,7 +58,7 @@ export class RecipeListComponent implements OnInit, OnDestroy {
 		value = value.trim();
 		const filters = { ...(value ? { title: value } : {}) };
 		// console.log(filters);
-		this.componentState.onFiltersChangeEffect({ pageQueryFilter: filters }).unsubscribe();
+		this.componentState.onFiltersChangeEffect({ pageQueryFilter: filters, pageEntriesLimit: state.pageOptions.pageEntriesLimit }).unsubscribe();
 	}
 
 	getTotalPagesCount(entriesPerPageCount: number, totalEntriesCount: number) {
