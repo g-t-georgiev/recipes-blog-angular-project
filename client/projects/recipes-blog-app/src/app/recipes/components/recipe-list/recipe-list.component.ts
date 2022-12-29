@@ -42,27 +42,27 @@ export class RecipeListComponent implements OnInit, AfterViewInit, OnDestroy {
 
 	toggleClickedPage(page: number) {
 		console.log(page);
-		// TODO: Integrate with component state
+		this.componentState.onFiltersChangeEffect({ pageIndex: page });
 	}
 
 	togglePreviousPage(prevPage: number) {
 
-		if (prevPage <= 1) {
+		if (prevPage < 1) {
 			return;
 		}
 
 		console.log(prevPage);
-		// TODO: Integrate with component state
+		this.componentState.onFiltersChangeEffect({ pageIndex: prevPage });
 	}
 
 	toggleNextPage(nextPage: number, totalPagesCount: number ) {
 
-		if (nextPage >= totalPagesCount) {
+		if (nextPage > totalPagesCount) {
 			return;
 		}
 
 		console.log(nextPage);
-		// TODO: Integrate with component state
+		this.componentState.onFiltersChangeEffect({ pageIndex: nextPage });
 	}
 
 }
