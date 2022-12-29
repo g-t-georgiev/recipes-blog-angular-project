@@ -6,26 +6,33 @@ import { IRecipesQueryResponse, RecipesService } from "projects/recipes-blog-app
 import { IRecipe } from "projects/recipes-blog-app/src/app/shared/interfaces";
 
 
-
+export interface PageOptions {
+    pageIndex: number;
+    pageEntriesLimit: number;
+    pageQueryFilter: any;
+    pageButtonsCount: number;
+}
 
 export interface ILocalState {
-    recipes: Pick<IRecipe, 'title' | '_id' | 'authorId'>[];
-    error: boolean;
     loading: boolean;
-    page: number;
-    limit: number;
-    total: number;
-    filter: any
+    error: boolean;
+    message?: string;
+    recipes: Pick<IRecipe, 'title' | '_id' | 'authorId'>[];
+    recipesCount: number;
+    pageOptions: PageOptions;
 }
 
 const initialState: ILocalState = {
-    recipes: [],
-    error: false,
     loading: false,
-    page: 1,
-    limit: 3, // 10
-    total: 0,
-    filter: {}
+    error: false,
+    recipes: [],
+    recipesCount: 0,
+    pageOptions: {
+        pageIndex: 1,
+        pageEntriesLimit: 3, // 10
+        pageQueryFilter: {},
+        pageButtonsCount: 5
+    }
 }
 
 @Injectable()
@@ -40,14 +47,14 @@ export class RecipeListComponentState extends ComponentStore<ILocalState> {
     }
 
     readonly updateRecipesState = this.updater((state, recipes: IRecipe[] | []) => ({ ...state, recipes }));
+    readonly updateRecipesTotalCount = this.updater((state, count: number) => ({ ...state, recipesCount: count }));
+
     readonly updateLoadingState = this.updater((state, loading: boolean) => ({ ...state, loading }));
     readonly updateErrorState = this.updater((state, error: boolean ) => ({ ...state, error }));
 
-    readonly updateCurrentPage = this.updater((state, page: number) => ({ ...state, page }));
-    readonly updateRecipesLimitPerPage = this.updater((state, limit: number) => ({ ...state, limit }));
-    readonly updateRecipesTotalCount = this.updater((state, total: number) => ({ ...state, total }));
-
-    readonly updateFilterState = this.updater((state, filter: any) => ({ ...state, filter }));
+    readonly updateCurrentPage = this.updater((state, page: number) => ({ ...state, pageOptions: { ...state.pageOptions, pageIndex: page } }));
+    readonly updateRecipesLimitPerPage = this.updater((state, limit: number) => ({ ...state, pageOptions: { ...state.pageOptions, pageEntriesLimit: limit } }));
+    readonly updateFilterState = this.updater((state, filter: any) => ({ ...state, pageOptions: { ...state.pageOptions, pageQueryFilter: filter } }));
 
     readonly recipesStateChangeEffect = this.effect(
         (result$: Observable<IRecipesQueryResponse>) => result$.pipe(
@@ -71,31 +78,35 @@ export class RecipeListComponentState extends ComponentStore<ILocalState> {
     readonly initializerEffect = this.effect(
         (empty$: Observable<undefined>) => empty$.pipe(
             tap(() => this.updateLoadingState(true)),
-            mergeMap(() => this.recipesService.getAll(initialState.page, initialState.limit, initialState.filter).pipe(
-                tap(({ recipes, message, total}) => {
-                    this.recipesStateChangeEffect({ recipes, message, total });
-                })
+            mergeMap(() => this.recipesService.getAll(
+                    initialState.pageOptions.pageIndex, 
+                    initialState.pageOptions.pageEntriesLimit, 
+                    initialState.pageOptions.pageQueryFilter
+                ).pipe(
+                    tap(({ recipes, message, total}) => {
+                        this.recipesStateChangeEffect({ recipes, message, total });
+                    })
             ))
         )
     );
 
     readonly onFiltersChangeEffect = this.effect(
-        (filters$: Observable<Partial<Pick<ILocalState, 'page' | 'limit' | 'filter'>>>) => filters$.pipe(
+        (filters$: Observable<Partial<Pick<PageOptions, 'pageIndex' | 'pageEntriesLimit' | 'pageQueryFilter'>>>) => filters$.pipe(
             tap(() => {
                 this.updateLoadingState(true);
             }),
-            map(({ page, limit, filter }) => {
-                page = page ?? initialState.page;
-                limit = limit ?? initialState.limit;
-                filter = filter ?? initialState.filter;
+            map(({ pageIndex, pageEntriesLimit, pageQueryFilter }) => {
+                pageIndex = pageIndex ?? initialState.pageOptions.pageIndex;
+                pageEntriesLimit = pageEntriesLimit ?? initialState.pageOptions.pageEntriesLimit;
+                pageQueryFilter = pageQueryFilter ?? initialState.pageOptions.pageQueryFilter;
 
-                this.updateCurrentPage(page);
-                this.updateRecipesLimitPerPage(limit);
-                this.updateFilterState(filter);
-                return { page, limit, filter };
+                this.updateCurrentPage(pageIndex);
+                this.updateRecipesLimitPerPage(pageEntriesLimit);
+                this.updateFilterState(pageQueryFilter);
+                return { pageIndex, pageEntriesLimit, pageQueryFilter };
             }),
-            mergeMap(({ page, limit, filter }) => {
-                return this.recipesService.getAll(page, limit, filter).pipe(
+            mergeMap(({ pageIndex, pageEntriesLimit, pageQueryFilter }) => {
+                return this.recipesService.getAll(pageIndex, pageEntriesLimit, pageQueryFilter).pipe(
                     tap(({ recipes, message, total }) => {
                         this.recipesStateChangeEffect({ recipes, message, total });
                     }),
