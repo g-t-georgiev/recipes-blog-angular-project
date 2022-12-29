@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { ComponentStore } from "@ngrx/component-store";
 import { catchError, EMPTY, map, mergeMap, Observable, tap } from "rxjs";
 
-import { RecipesService } from "projects/recipes-blog-app/src/app/core/services";
+import { IRecipesQueryResponse, RecipesService } from "projects/recipes-blog-app/src/app/core/services";
 import { IRecipe } from "projects/recipes-blog-app/src/app/shared/interfaces";
 
 
@@ -49,28 +49,59 @@ export class RecipeListComponentState extends ComponentStore<ILocalState> {
 
     readonly updateFilterState = this.updater((state, filter: any) => ({ ...state, filter }));
 
+    readonly recipesStateChangeEffect = this.effect(
+        (result$: Observable<IRecipesQueryResponse>) => result$.pipe(
+            tap(({ recipes, message, total}) => {
+                this.updateLoadingState(false);
+                this.updateRecipesState(recipes);
+                this.updateRecipesTotalCount(total);
+
+                console.log(message);
+            }),
+            catchError((error) => {
+                this.updateLoadingState(false);
+                this.updateErrorState(true);
+                
+                console.log(error);
+                return EMPTY;
+            })
+        )
+    );
+
     readonly initializerEffect = this.effect(
         (empty$: Observable<undefined>) => empty$.pipe(
             tap(() => this.updateLoadingState(true)),
             mergeMap(() => this.recipesService.getAll(initialState.page, initialState.limit, initialState.filter).pipe(
                 tap(({ recipes, message, total}) => {
-                    this.updateLoadingState(false);
-                    this.updateRecipesState(recipes);
-                    this.updateRecipesTotalCount(total);
-
-                    console.log(message);
-                }),
-                catchError((error) => {
-                    this.updateLoadingState(false);
-                    this.updateErrorState(true);
-                    
-                    console.log(error);
-                    return EMPTY;
+                    this.recipesStateChangeEffect({ recipes, message, total });
                 })
             ))
         )
     );
 
-    // TODO: Add toggle prev/next page state effec
+    readonly onFiltersChangeEffect = this.effect(
+        (filters$: Observable<Partial<Pick<ILocalState, 'page' | 'limit' | 'filter'>>>) => filters$.pipe(
+            tap(() => {
+                this.updateLoadingState(true);
+            }),
+            map(({ page, limit, filter }) => {
+                page = page ?? initialState.page;
+                limit = limit ?? initialState.limit;
+                filter = filter ?? initialState.filter;
+
+                this.updateCurrentPage(page);
+                this.updateRecipesLimitPerPage(limit);
+                this.updateFilterState(filter);
+                return { page, limit, filter };
+            }),
+            mergeMap(({ page, limit, filter }) => {
+                return this.recipesService.getAll(page, limit, filter).pipe(
+                    tap(({ recipes, message, total }) => {
+                        this.recipesStateChangeEffect({ recipes, message, total });
+                    }),
+                )
+            })
+        )
+    );
 
 }
