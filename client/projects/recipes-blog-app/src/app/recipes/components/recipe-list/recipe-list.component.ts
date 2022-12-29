@@ -1,8 +1,8 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { NgForm } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, Subscription, tap } from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 
-import { RecipeListComponentState } from './recipe-list.component.state';
+import { ILocalState, RecipeListComponentState } from './recipe-list.component.state';
+import { debounce } from 'projects/recipes-blog-app/src/assets/utils/debounce';
 
 @Component({
 	selector: 'app-recipe-list',
@@ -10,17 +10,17 @@ import { RecipeListComponentState } from './recipe-list.component.state';
 	styleUrls: ['./recipe-list.component.css'],
 	providers: [RecipeListComponentState]
 })
-export class RecipeListComponent implements OnInit, AfterViewInit, OnDestroy {
+export class RecipeListComponent implements OnInit, OnDestroy {
 
 	private readonly subscription = new Subscription();
 
 	readonly localState$ = this.componentState.localState$;
 
-	@ViewChild('filterResultsForm') filterResultsForm!: NgForm;
-
 	constructor(
 		private readonly componentState: RecipeListComponentState
-	) { }
+	) {
+		this.titleInputChangeHandler = debounce(this.titleInputChangeHandler, 700);
+	}
 
 	ngOnInit(): void {
 		this.subscription.add(
@@ -28,41 +28,66 @@ export class RecipeListComponent implements OnInit, AfterViewInit, OnDestroy {
 		);
 	}
 
-	ngAfterViewInit(): void {
-
-	}
-
 	ngOnDestroy(): void {
 		this.subscription?.unsubscribe?.();
+	}
+
+	limitSelectChangeHandler(value: any, state: ILocalState) {
+
+		// console.log(value);
+
+		if (value == null) return;
+
+		value = parseInt(value, 10);
+
+		if (isNaN(value)) return;
+
+		if (value === state.pageOptions.pageEntriesLimit) return;
+
+		this.componentState.onFiltersChangeEffect({ pageEntriesLimit: value, pageQueryFilter: { ...state.pageOptions.pageQueryFilter } });
+	}
+
+	titleInputChangeHandler(value: string, state: ILocalState) {
+
+		// console.log(value);
+
+		if (value == null || value === state.pageOptions.pageQueryFilter?.title) {
+			return;
+		}
+
+		value = value.trim();
+		const filters = { ...(value ? { title: value } : {}) };
+		// console.log(filters);
+		this.componentState.onFiltersChangeEffect({ pageQueryFilter: filters }).unsubscribe();
 	}
 
 	getTotalPagesCount(entriesPerPageCount: number, totalEntriesCount: number) {
 		return Math.ceil(totalEntriesCount / entriesPerPageCount);
 	}
 
-	toggleClickedPage(page: number) {
-		console.log(page);
-		this.componentState.onFiltersChangeEffect({ pageIndex: page }).unsubscribe();
+	toggleClickedPage(pageIndex: number, pageEntriesLimit: number, pageQueryFilter: any) {
+		// console.log(pageIndex);
+		this.componentState.onFiltersChangeEffect({ pageIndex, pageEntriesLimit, pageQueryFilter }).unsubscribe();
 	}
 
-	togglePreviousPage(prevPage: number) {
+	togglePreviousPage(pageIndex: number, pageEntriesLimit: number, pageQueryFilter: any) {
 
-		if (prevPage < 1) {
+		if (pageIndex < 1) {
 			return;
 		}
 
-		console.log(prevPage);
-		this.componentState.onFiltersChangeEffect({ pageIndex: prevPage }).unsubscribe();
+		// console.log(pageIndex);
+		this.componentState.onFiltersChangeEffect({ pageIndex, pageEntriesLimit, pageQueryFilter }).unsubscribe();
 	}
 
-	toggleNextPage(nextPage: number, totalPagesCount: number ) {
+	toggleNextPage(pageIndex: number, pageEntriesLimit: number, pageQueryFilter: any, totalPagesCount: number ) {
 
-		if (nextPage > totalPagesCount) {
+		if (pageIndex > totalPagesCount) {
 			return;
 		}
 
-		console.log(nextPage);
-		this.componentState.onFiltersChangeEffect({ pageIndex: nextPage }).unsubscribe();
+		// console.log(pageIndex);
+		this.componentState.onFiltersChangeEffect({ pageIndex, pageEntriesLimit, pageQueryFilter }).unsubscribe();
 	}
 
 }
