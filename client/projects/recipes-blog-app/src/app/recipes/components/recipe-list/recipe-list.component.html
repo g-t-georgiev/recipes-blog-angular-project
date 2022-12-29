@@ -7,10 +7,10 @@
 
     <section>
 
-        <br>Page: <span>{{localState.page}}</span>
-        <br>Entries per page: {{localState.limit}}
-        <br>Total results: {{localState.total}}
-        <br>Total pages: {{getTotalPagesCount(localState.limit, localState.total)}}
+        <br>Page: <span>{{localState.pageOptions.pageIndex}}</span>
+        <br>Entries per page: {{localState.pageOptions.pageEntriesLimit}}
+        <br>Total results: {{localState.recipesCount}}
+        <br>Total pages: {{getTotalPagesCount(localState.pageOptions.pageEntriesLimit, localState.recipesCount)}}
 
     </section>
 
@@ -27,17 +27,17 @@
         >
 
             <ngx-paginator
-                [current]="localState.page" 
-                [total]="getTotalPagesCount(localState.limit, localState.total)" 
+                [current]="localState.pageOptions.pageIndex" 
+                [total]="getTotalPagesCount(localState.pageOptions.pageEntriesLimit, localState.recipesCount)" 
                 (previous)="togglePreviousPage($event)" 
                 (goTo)="toggleClickedPage($event)"
-                (next)="toggleNextPage($event, getTotalPagesCount(localState.limit, localState.total))"
+                (next)="toggleNextPage($event, getTotalPagesCount(localState.pageOptions.pageEntriesLimit, localState.recipesCount))"
             ></ngx-paginator>
 
             <section class="select-row form-row">
 
                 <select 
-                    [ngModel]="localState.limit"
+                    [ngModel]="localState.pageOptions.pageEntriesLimit"
                     class="filter-form-limit-select form-input" 
                     id="limit" 
                     name="limit"
@@ -58,7 +58,7 @@
                 <input 
                     class="filter-form-title-input form-input" 
                     #filterByTitleInput="ngModel" 
-                    [ngModel]="localState.filter?.title" 
+                    [ngModel]="localState.pageOptions.pageQueryFilter?.title ?? ''" 
                     type="text" 
                     name="title" 
                     placeholder="Filter results by title..." 
