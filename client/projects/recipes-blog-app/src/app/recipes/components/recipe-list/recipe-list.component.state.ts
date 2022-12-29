@@ -56,19 +56,29 @@ export class RecipeListComponentState extends ComponentStore<ILocalState> {
     readonly updateRecipesLimitPerPage = this.updater((state, limit: number) => ({ ...state, pageOptions: { ...state.pageOptions, pageEntriesLimit: limit } }));
     readonly updateFilterState = this.updater((state, filter: any) => ({ ...state, pageOptions: { ...state.pageOptions, pageQueryFilter: filter } }));
 
-    readonly recipesStateChangeEffect = this.effect(
+    readonly recipesLoadingSuccessEffect = this.effect(
         (result$: Observable<IRecipesQueryResponse>) => result$.pipe(
             tap(({ recipes, message, total}) => {
                 this.updateLoadingState(false);
                 this.updateRecipesState(recipes);
                 this.updateRecipesTotalCount(total);
-
                 console.log(message);
             }),
             catchError((error) => {
+                console.log(error);
+                return EMPTY;
+            })
+        )
+    );
+
+    readonly recipesLoadingErrorEffect = this.effect(
+        (error$: Observable<any>) => error$.pipe(
+            tap(error => {
                 this.updateLoadingState(false);
                 this.updateErrorState(true);
-                
+                console.log(error);
+            }),
+            catchError((error) => {                
                 console.log(error);
                 return EMPTY;
             })
@@ -84,7 +94,11 @@ export class RecipeListComponentState extends ComponentStore<ILocalState> {
                     initialState.pageOptions.pageQueryFilter
                 ).pipe(
                     tap(({ recipes, message, total}) => {
-                        this.recipesStateChangeEffect({ recipes, message, total });
+                        this.recipesLoadingSuccessEffect({ recipes, message, total });
+                    }),
+                    catchError(error => {
+                        this.recipesLoadingErrorEffect(error);
+                        return EMPTY;
                     })
             ))
         )
@@ -108,8 +122,12 @@ export class RecipeListComponentState extends ComponentStore<ILocalState> {
             mergeMap(({ pageIndex, pageEntriesLimit, pageQueryFilter }) => {
                 return this.recipesService.getAll(pageIndex, pageEntriesLimit, pageQueryFilter).pipe(
                     tap(({ recipes, message, total }) => {
-                        this.recipesStateChangeEffect({ recipes, message, total });
+                        this.recipesLoadingSuccessEffect({ recipes, message, total });
                     }),
+                    catchError(error => {
+                        this.recipesLoadingErrorEffect(error);
+                        return EMPTY;
+                    })
                 )
             })
         )
