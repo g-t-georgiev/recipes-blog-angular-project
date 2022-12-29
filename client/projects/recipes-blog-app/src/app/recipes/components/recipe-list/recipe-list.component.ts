@@ -42,7 +42,7 @@ export class RecipeListComponent implements OnInit, AfterViewInit, OnDestroy {
 
 	toggleClickedPage(page: number) {
 		console.log(page);
-		this.componentState.onFiltersChangeEffect({ pageIndex: page });
+		this.componentState.onFiltersChangeEffect({ pageIndex: page }).unsubscribe();
 	}
 
 	togglePreviousPage(prevPage: number) {
@@ -52,7 +52,7 @@ export class RecipeListComponent implements OnInit, AfterViewInit, OnDestroy {
 		}
 
 		console.log(prevPage);
-		this.componentState.onFiltersChangeEffect({ pageIndex: prevPage });
+		this.componentState.onFiltersChangeEffect({ pageIndex: prevPage }).unsubscribe();
 	}
 
 	toggleNextPage(nextPage: number, totalPagesCount: number ) {
@@ -62,7 +62,7 @@ export class RecipeListComponent implements OnInit, AfterViewInit, OnDestroy {
 		}
 
 		console.log(nextPage);
-		this.componentState.onFiltersChangeEffect({ pageIndex: nextPage });
+		this.componentState.onFiltersChangeEffect({ pageIndex: nextPage }).unsubscribe();
 	}
 
 }
