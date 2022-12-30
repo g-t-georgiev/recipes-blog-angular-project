@@ -5,7 +5,8 @@ import { routerReducer, RouterStateSerializer, StoreRouterConnectingModule } fro
 import { MergedRouterStateSerializer } from "./reducers";
 
 export const routerStateConfig = {
-    stateKey: 'router'
+    stateKey: 'router',
+    serializer: MergedRouterStateSerializer
 }
 
 @NgModule({
