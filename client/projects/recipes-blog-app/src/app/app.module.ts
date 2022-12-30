@@ -2,6 +2,7 @@ import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { StoreModule } from '@ngrx/store';
+import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { Observable } from 'rxjs';
 
 import { AuthService, DarkModeSwitchService as ThemeSwitchService, IUserSignInResponse, ViewportResizeService } from './core/services';
@@ -26,7 +27,8 @@ import { currentUser, IRootState, theme } from './state';
         StoreModule.forRoot<IRootState>({
             darkModeOn: theme.reducers.darkModeReducer,
             currentUser: currentUser.reducers.currentUserReducer
-        })
+        }),
+        StoreRouterConnectingModule.forRoot()
     ],
     providers: [
         {
