@@ -26,8 +26,6 @@ export class PaginatorComponent implements OnInit, OnChanges {
 
 	ngOnInit() {
 
-		// console.log(this.currentPage, this.totalPagesCount);
-
 		if (
 			this.currentPage &&
 			this.totalPagesCount
@@ -42,7 +40,6 @@ export class PaginatorComponent implements OnInit, OnChanges {
 			(changes['current'] && changes['current'].currentValue) ||
 			(changes['total'] && changes['total'].currentValue)
 		) {
-			// console.log(changes['current'].currentValue, changes['total'].currentValue);
 			this.pages = this.getPages(this.currentPage, this.totalPagesCount);
 		}
 	}
