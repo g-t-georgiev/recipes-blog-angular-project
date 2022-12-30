@@ -1,6 +1,9 @@
 import { Injectable } from "@angular/core";
+import { Store} from "@ngrx/store";
 import { ComponentStore } from "@ngrx/component-store";
-import { catchError, combineLatestWith, concatMap, EMPTY, map, mergeMap, Observable, tap } from "rxjs";
+import { catchError, EMPTY, map, mergeMap, Observable, switchMap, tap } from "rxjs";
+
+import { getMergedRouteState } from "../../../state/router/selectors";
 
 import { IRecipesQueryResponse, RecipesService } from "projects/recipes-blog-app/src/app/core/services";
 import { IRecipe } from "projects/recipes-blog-app/src/app/shared/interfaces";
@@ -10,7 +13,7 @@ export interface PageOptions {
     pageIndex: number;
     pageEntriesLimit: number;
     pageQueryFilter: any;
-    pageButtonsCount: number;
+    pageButtonsCount?: number;
 }
 
 export interface ILocalState {
@@ -41,83 +44,38 @@ export class RecipeListComponentState extends ComponentStore<ILocalState> {
     readonly localState$ = this.select(state => state);
 
     constructor(
-        private readonly recipesService: RecipesService
+        private readonly recipesService: RecipesService,
+        private readonly globalState: Store
     ) {
         super(initialState);
     }
 
-    readonly updateRecipesState = this.updater((state, recipes: IRecipe[] | []) => ({ ...state, recipes }));
-    readonly updateRecipesTotalCount = this.updater((state, count: number) => ({ ...state, recipesCount: count }));
 
     readonly updateLoadingState = this.updater((state, loading: boolean) => ({ ...state, loading }));
-    readonly updateErrorState = this.updater((state, error: boolean ) => ({ ...state, error }));
-
-    readonly updateCurrentPage = this.updater((state, page: number) => ({ ...state, pageOptions: { ...state.pageOptions, pageIndex: page } }));
-    readonly updateRecipesLimitPerPage = this.updater((state, limit: number) => ({ ...state, pageOptions: { ...state.pageOptions, pageEntriesLimit: limit } }));
-    readonly updateFilterState = this.updater((state, filter: any) => ({ ...state, pageOptions: { ...state.pageOptions, pageQueryFilter: filter } }));
-
-    readonly recipesLoadingSuccessEffect = this.effect(
-        (result$: Observable<IRecipesQueryResponse>) => result$.pipe(
-            tap(({ recipes, message, total}) => {
-                this.updateLoadingState(false);
-                this.updateRecipesState(recipes);
-                this.updateRecipesTotalCount(total);
-                console.log(message);
-            }),
-            catchError((error) => {
-                console.log(error);
-                return EMPTY;
-            })
-        )
-    );
-
-    readonly recipesLoadingErrorEffect = this.effect(
-        (error$: Observable<any>) => error$.pipe(
-            tap(error => {
-                this.updateLoadingState(false);
-                this.updateErrorState(true);
-                console.log(error);
-            }),
-            catchError((error) => {                
-                console.log(error);
-                return EMPTY;
-            })
-        )
-    );
+    readonly updateLoadedState = this.updater((state, options: Pick<ILocalState, 'loading' | 'error' | 'message' | 'recipes' | 'recipesCount'>) => ({ ...state, ...options }));
+    readonly updatePageOptionsState = this.updater((state, options: Omit<PageOptions, 'pageButtonsCount'>) => ({ ...state, pageOptions: { ...options }}));
 
     readonly initializerEffect = this.effect(
         (empty$: Observable<undefined>) => empty$.pipe(
-            tap(() => this.updateLoadingState(true)),
-            mergeMap(() => this.recipesService.getAll(
-                    initialState.pageOptions.pageIndex, 
-                    initialState.pageOptions.pageEntriesLimit, 
-                    initialState.pageOptions.pageQueryFilter
-                ).pipe(
-                    tap(({ recipes, message, total}) => {
-                        this.recipesLoadingSuccessEffect({ recipes, message, total });
-                    }),
-                    catchError(error => {
-                        this.recipesLoadingErrorEffect(error);
-                        return EMPTY;
-                    })
-            ))
-        )
-    );
-
-    readonly onFiltersChangeEffect = this.effect(
-        (filters$: Observable<Partial<Pick<PageOptions, 'pageIndex' | 'pageEntriesLimit' | 'pageQueryFilter'>>>) => filters$.pipe(
             tap(() => {
                 this.updateLoadingState(true);
             }),
-            map(({  pageIndex, pageEntriesLimit, pageQueryFilter }) => {
-                pageIndex = pageIndex ?? initialState.pageOptions.pageIndex;
-                pageEntriesLimit = pageEntriesLimit ?? initialState.pageOptions.pageEntriesLimit;
-                pageQueryFilter = pageQueryFilter ?? initialState.pageOptions.pageQueryFilter;
-                // console.log(pageIndex, pageEntriesLimit, pageQueryFilter);
+            switchMap(() => this.globalState.select(getMergedRouteState)),
+            map(mergedRoute => {
 
-                this.updateCurrentPage(pageIndex);
-                this.updateRecipesLimitPerPage(pageEntriesLimit);
-                this.updateFilterState(pageQueryFilter);
+                let queryParams: any = mergedRoute.queryParams;
+                let pageIndex = queryParams.page && !isNaN(queryParams.page) ? parseInt(queryParams.page, 10) : initialState.pageOptions.pageIndex;
+                let pageEntriesLimit = queryParams.limit && !isNaN(queryParams.limit) ? parseInt(queryParams.limit, 10) : initialState.pageOptions.pageEntriesLimit;
+                let pageQueryFilter = (
+                    queryParams.title && 
+                    typeof queryParams.title === 'string' && 
+                    queryParams.title.trim().length > 0 
+                    ? { title: queryParams.title.trim() } 
+                    : initialState.pageOptions.pageQueryFilter
+                );
+
+                this.updatePageOptionsState({ pageIndex, pageEntriesLimit, pageQueryFilter });
+
                 return { pageIndex, pageEntriesLimit, pageQueryFilter };
             }),
             mergeMap(({ pageIndex, pageEntriesLimit, pageQueryFilter }) => {
@@ -130,6 +88,32 @@ export class RecipeListComponentState extends ComponentStore<ILocalState> {
                         return EMPTY;
                     })
                 )
+            })
+        )
+    );
+
+    readonly recipesLoadingSuccessEffect = this.effect(
+        (result$: Observable<IRecipesQueryResponse>) => result$.pipe(
+            tap(({ recipes, message, total}) => {
+                console.log(message);
+                this.updateLoadedState({ loading: false, error: false, message:message, recipes, recipesCount: total });
+            }),
+            catchError((error) => {
+                console.log(error);
+                return EMPTY;
+            })
+        )
+    );
+
+    readonly recipesLoadingErrorEffect = this.effect(
+        (error$: Observable<any>) => error$.pipe(
+            tap(error => {
+                console.log(error);
+                this.updateLoadedState({ loading: false, error: true, message: error.message, recipes: [], recipesCount: 0 });
+            }),
+            catchError((error) => {                
+                console.log(error);
+                return EMPTY;
             })
         )
     );
