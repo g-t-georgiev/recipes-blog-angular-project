@@ -47,11 +47,13 @@
 
     <form class="filter-form form" ngForm>
 
-        <ngx-paginator [current]="localState.pageOptions.pageIndex"
+        <ngx-paginator 
+            [current]="localState.pageOptions.pageIndex"
             [total]="getTotalPagesCount(localState.pageOptions.pageEntriesLimit, localState.recipesCount)"
             (previous)="togglePreviousPage($event, localState.pageOptions.pageEntriesLimit, localState.pageOptions.pageQueryFilter)" 
             (goTo)="toggleClickedPage($event, localState.pageOptions.pageEntriesLimit, localState.pageOptions.pageQueryFilter)"
-            (next)="toggleNextPage($event, localState.pageOptions.pageEntriesLimit, localState.pageOptions.pageQueryFilter, getTotalPagesCount(localState.pageOptions.pageEntriesLimit, localState.recipesCount))"></ngx-paginator>
+            (next)="toggleNextPage($event, localState.pageOptions.pageEntriesLimit, localState.pageOptions.pageQueryFilter, getTotalPagesCount(localState.pageOptions.pageEntriesLimit, localState.recipesCount))"
+        ></ngx-paginator>
 
         <section class="select-row form-row">
 
