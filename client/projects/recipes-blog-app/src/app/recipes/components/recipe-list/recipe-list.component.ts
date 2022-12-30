@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 
 import { ILocalState, RecipeListComponentState } from './recipe-list.component.state';
 import { debounce } from 'projects/recipes-blog-app/src/assets/utils/debounce';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
 	selector: 'app-recipe-list',
@@ -17,7 +18,9 @@ export class RecipeListComponent implements OnInit, OnDestroy {
 	readonly localState$ = this.componentState.localState$;
 
 	constructor(
-		private readonly componentState: RecipeListComponentState
+		private readonly componentState: RecipeListComponentState,
+		private activatedRoute: ActivatedRoute,
+		private readonly router: Router
 	) {
 		this.titleInputChangeHandler = debounce(this.titleInputChangeHandler, 700);
 	}
@@ -34,8 +37,6 @@ export class RecipeListComponent implements OnInit, OnDestroy {
 
 	limitSelectChangeHandler(value: any, state: ILocalState) {
 
-		// console.log(value);
-
 		if (value == null) return;
 
 		value = parseInt(value, 10);
@@ -44,50 +45,94 @@ export class RecipeListComponent implements OnInit, OnDestroy {
 
 		if (value === state.pageOptions.pageEntriesLimit) return;
 
-		this.componentState.onFiltersChangeEffect({ pageEntriesLimit: value, pageQueryFilter: { ...state.pageOptions.pageQueryFilter } });
+		this.router.navigate([], {
+			relativeTo: this.activatedRoute,
+			queryParams: {
+				page: 1,
+				limit: value,
+				...(
+					state.pageOptions.pageQueryFilter.title 
+					? { ...state.pageOptions.pageQueryFilter, title: state.pageOptions.pageQueryFilter.title } 
+					: { ...state.pageOptions.pageQueryFilter }
+				)
+			},
+			preserveFragment: true
+		});
 	}
 
 	titleInputChangeHandler(value: string, state: ILocalState) {
 
-		// console.log(value);
-
-		if (value == null || value === state.pageOptions.pageQueryFilter?.title) {
+		if (
+			value == null || 
+			value === state.pageOptions.pageQueryFilter?.title
+		) {
 			return;
 		}
 
 		value = value.trim();
 		const filters = { ...(value ? { title: value } : {}) };
 		// console.log(filters);
-		this.componentState.onFiltersChangeEffect({ pageQueryFilter: filters, pageEntriesLimit: state.pageOptions.pageEntriesLimit }).unsubscribe();
+
+		this.router.navigate([], {
+			relativeTo: this.activatedRoute,
+			queryParams: {
+				page: 1,
+				limit: state.pageOptions.pageEntriesLimit,
+				...filters
+			},
+			preserveFragment: true
+		});
 	}
 
 	getTotalPagesCount(entriesPerPageCount: number, totalEntriesCount: number) {
 		return Math.ceil(totalEntriesCount / entriesPerPageCount);
 	}
 
-	toggleClickedPage(pageIndex: number, pageEntriesLimit: number, pageQueryFilter: any) {
-		// console.log(pageIndex);
-		this.componentState.onFiltersChangeEffect({ pageIndex, pageEntriesLimit, pageQueryFilter }).unsubscribe();
+	toggleClickedPage(pageIndex: number, pageEntriesLimit: number, pageQueryFilter: any = {}) {
+
+		this.router.navigate([], {
+			relativeTo: this.activatedRoute,
+			queryParams: {
+				page: pageIndex,
+				limit: pageEntriesLimit,
+				...(pageQueryFilter.title ? { ...pageQueryFilter, title: pageQueryFilter.title } : { ...pageQueryFilter })
+			},
+			preserveFragment: true
+		});
 	}
 
-	togglePreviousPage(pageIndex: number, pageEntriesLimit: number, pageQueryFilter: any) {
+	togglePreviousPage(pageIndex: number, pageEntriesLimit: number, pageQueryFilter: any = {}) {
 
 		if (pageIndex < 1) {
 			return;
 		}
 
-		// console.log(pageIndex);
-		this.componentState.onFiltersChangeEffect({ pageIndex, pageEntriesLimit, pageQueryFilter }).unsubscribe();
+		this.router.navigate([], {
+			relativeTo: this.activatedRoute,
+			queryParams: {
+				page: pageIndex,
+				limit: pageEntriesLimit,
+				...(pageQueryFilter.title ? { ...pageQueryFilter, title: pageQueryFilter.title } : { ...pageQueryFilter })
+			},
+			preserveFragment: true
+		});
 	}
 
-	toggleNextPage(pageIndex: number, pageEntriesLimit: number, pageQueryFilter: any, totalPagesCount: number ) {
+	toggleNextPage(pageIndex: number, pageEntriesLimit: number, pageQueryFilter: any = {}, totalPagesCount: number ) {
 
 		if (pageIndex > totalPagesCount) {
 			return;
 		}
 
-		// console.log(pageIndex);
-		this.componentState.onFiltersChangeEffect({ pageIndex, pageEntriesLimit, pageQueryFilter }).unsubscribe();
+		this.router.navigate([], {
+			relativeTo: this.activatedRoute,
+			queryParams: {
+				page: pageIndex,
+				limit: pageEntriesLimit,
+				...(pageQueryFilter.title ? { ...pageQueryFilter, title: pageQueryFilter.title } : { ...pageQueryFilter })
+			},
+			preserveFragment: true
+		});
 	}
 
 }
