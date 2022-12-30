@@ -2,7 +2,6 @@ import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { StoreModule } from '@ngrx/store';
-import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { Observable } from 'rxjs';
 
 import { AuthService, DarkModeSwitchService as ThemeSwitchService, IUserSignInResponse, ViewportResizeService } from './core/services';
@@ -13,6 +12,7 @@ import { CoreModule } from './core/core.module';
 import { HomeComponent } from './home/home.component';
 
 import { currentUser, IRootState, theme } from './state';
+import { NgrxRouterStoreModule } from './state/router';
 
 @NgModule({
     declarations: [
@@ -22,13 +22,13 @@ import { currentUser, IRootState, theme } from './state';
     imports: [
         BrowserModule, 
         HttpClientModule,
-        AppRoutingModule,
-        CoreModule.forRoot(),
         StoreModule.forRoot<IRootState>({
             darkModeOn: theme.reducers.darkModeReducer,
             currentUser: currentUser.reducers.currentUserReducer
         }),
-        StoreRouterConnectingModule.forRoot()
+        NgrxRouterStoreModule,
+        AppRoutingModule,
+        CoreModule.forRoot()
     ],
     providers: [
         {
