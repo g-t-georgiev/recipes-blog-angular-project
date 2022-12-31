@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subscription, Observable } from 'rxjs';
 
 import { AuthService } from '../../services';
@@ -24,9 +25,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
 	readonly signingOut$: Observable<boolean> = this.componentState.signingOut$;
 
 	constructor(
+		private readonly router: Router,
 		private readonly authService: AuthService,
 		private readonly vpResizeService: ViewportResizeService,
-		private readonly componentState: HeaderComponentState
+		private readonly componentState: HeaderComponentState, 
 	) { }
 
 	ngOnInit(): void {
@@ -41,6 +43,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
 	ngOnDestroy(): void {
 		this.subscription?.unsubscribe?.();
+	}
+
+	isLinkActive(url: string): boolean {
+		const queryParamsIndex = this.router.url.indexOf('?');
+   		const baseUrl = queryParamsIndex === -1 ? this.router.url : 
+   		this.router.url.slice(0, queryParamsIndex);
+   		return baseUrl === url;
 	}
 
 	onHeaderAreaClick(ev: PointerEvent, showNavigation: boolean) {
