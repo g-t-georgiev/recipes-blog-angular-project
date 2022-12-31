@@ -15,7 +15,7 @@ import {
 })
 export class PaginatorComponent implements OnInit, OnChanges {
 
-	@Input('current') currentPage: number = 0;
+	@Input('current') currentPage: number = 1;
 	@Input('total') totalPagesCount: number = 0;
 
 	@Output() goTo: EventEmitter<number> = new EventEmitter<number>();
@@ -35,18 +35,19 @@ export class PaginatorComponent implements OnInit, OnChanges {
 	}
 
 	ngOnChanges(changes: SimpleChanges): void {
-
-		if (
-			(changes['current'] && changes['current'].currentValue) ||
-			(changes['total'] && changes['total'].currentValue)
-		) {
-			this.pages = this.getPages(this.currentPage, this.totalPagesCount);
-		}
+		// console.log(changes);
+		// console.log(this.getPages(this.currentPage, this.totalPagesCount));
+		this.pages = this.getPages(this.currentPage, this.totalPagesCount);
 	}
 
 	getPages(current: number, total: number): number[] {
 
 		if (total <= 7) {
+			
+			if (total === 0) {
+				return [ 1 ];
+			}
+
 			return [...Array(total).keys()].map(i => ++i);
 		}
 
