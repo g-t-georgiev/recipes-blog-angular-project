@@ -7,10 +7,8 @@
 
     <section>
 
-        <br>Page: <span>{{localState.pageOptions.pageIndex}}</span>
-        <br>Entries per page: {{localState.pageOptions.pageEntriesLimit}}
-        <br>Total results: {{localState.recipesCount}}
-        <br>Total pages: {{getTotalPagesCount(localState.pageOptions.pageEntriesLimit, localState.recipesCount)}}
+        <br>Page <span>{{localState.pageOptions.pageIndex}}</span> of <span>{{localState.totalPagesCount()}}</span>
+        <br>Results <span>{{localState.recipesCountPerPageFrom()}}</span> - <span>{{localState.recipesCountPerPageTo()}}</span> of <span>{{localState.recipesCount}}</span>
 
     </section>
 
@@ -49,10 +47,10 @@
 
         <ngx-paginator 
             [current]="localState.pageOptions.pageIndex"
-            [total]="getTotalPagesCount(localState.pageOptions.pageEntriesLimit, localState.recipesCount)"
+            [total]="localState.totalPagesCount()"
             (previous)="togglePreviousPage($event, localState.pageOptions.pageEntriesLimit, localState.pageOptions.pageQueryFilter)" 
             (goTo)="toggleClickedPage($event, localState.pageOptions.pageEntriesLimit, localState.pageOptions.pageQueryFilter)"
-            (next)="toggleNextPage($event, localState.pageOptions.pageEntriesLimit, localState.pageOptions.pageQueryFilter, getTotalPagesCount(localState.pageOptions.pageEntriesLimit, localState.recipesCount))"
+            (next)="toggleNextPage($event, localState.pageOptions.pageEntriesLimit, localState.pageOptions.pageQueryFilter, localState.totalPagesCount())"
         ></ngx-paginator>
 
         <section class="select-row form-row">
