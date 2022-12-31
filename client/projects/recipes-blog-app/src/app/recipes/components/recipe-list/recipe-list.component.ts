@@ -84,10 +84,6 @@ export class RecipeListComponent implements OnInit, OnDestroy {
 		});
 	}
 
-	getTotalPagesCount(entriesPerPageCount: number, totalEntriesCount: number) {
-		return Math.ceil(totalEntriesCount / entriesPerPageCount);
-	}
-
 	toggleClickedPage(pageIndex: number, pageEntriesLimit: number, pageQueryFilter: any = {}) {
 
 		this.router.navigate([], {
