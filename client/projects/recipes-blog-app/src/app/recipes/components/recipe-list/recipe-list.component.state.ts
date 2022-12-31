@@ -36,7 +36,7 @@ const initialState: ILocalState = {
     recipesCountPerPageFrom(): number {
         // console.log(this.pageOptions.pageIndex, this.pageOptions.pageEntriesLimit);
         const fromRange = (this.pageOptions.pageIndex - 1) * this.pageOptions.pageEntriesLimit;
-        return fromRange + 1;
+        return this.recipesCount && fromRange + 1;
     },
     recipesCountPerPageTo(): number {
         return (
@@ -47,7 +47,7 @@ const initialState: ILocalState = {
     },
     totalPagesCount(): number {
         // console.log(this.recipesCount, this.pageOptions.pageEntriesLimit);
-        return Math.ceil(this.recipesCount / this.pageOptions.pageEntriesLimit);
+        return Math.ceil(this.recipesCount / this.pageOptions.pageEntriesLimit) || 1;
     },
     pageOptions: {
         pageIndex: 1,
