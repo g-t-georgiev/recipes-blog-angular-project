@@ -9,7 +9,6 @@ import {
 	PasswordsMatchValidatorDirective, 
 	DuplicateCredentialsValidatorDirective, 
 	MaxSizeDirective, 
-	LinkActiveDirective 
 } from './directives';
 
 import { CustomValidatorsService } from './services';
@@ -23,8 +22,7 @@ import { CustomValidatorsService } from './services';
        	MaxlengthValidatorDirective,
         PasswordsMatchValidatorDirective,
         DuplicateCredentialsValidatorDirective,
-        MaxSizeDirective,
-        LinkActiveDirective
+        MaxSizeDirective, 
   ],
 	imports: [
 		CommonModule,
@@ -36,8 +34,7 @@ import { CustomValidatorsService } from './services';
 		MaxlengthValidatorDirective,
 		PasswordsMatchValidatorDirective,
 		DuplicateCredentialsValidatorDirective,
-		MaxSizeDirective,
-		LinkActiveDirective, 
+		MaxSizeDirective, 
 	],
 	providers: [
 		CustomValidatorsService
