@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { FileUploadComponent, PaginatorComponent } from './components';
+import { FileUploadComponent } from './components';
 import { SpreadPipe, RemoveDotsPipe } from './pipes';
 
 import { 
@@ -24,7 +24,6 @@ import { CustomValidatorsService } from './services';
         PasswordsMatchValidatorDirective,
         DuplicateCredentialsValidatorDirective,
         MaxSizeDirective,
-        PaginatorComponent,
         LinkActiveDirective
   ],
 	imports: [
@@ -38,8 +37,7 @@ import { CustomValidatorsService } from './services';
 		PasswordsMatchValidatorDirective,
 		DuplicateCredentialsValidatorDirective,
 		MaxSizeDirective,
-		LinkActiveDirective,
-		PaginatorComponent
+		LinkActiveDirective, 
 	],
 	providers: [
 		CustomValidatorsService
