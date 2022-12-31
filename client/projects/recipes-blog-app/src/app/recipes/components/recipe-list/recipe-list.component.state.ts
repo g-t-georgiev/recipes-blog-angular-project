@@ -22,6 +22,9 @@ export interface ILocalState {
     message?: string;
     recipes: Pick<IRecipe, 'title' | '_id' | 'authorId'>[];
     recipesCount: number;
+    recipesCountPerPageFrom(): number;
+    recipesCountPerPageTo(): number;
+    totalPagesCount(): number;
     pageOptions: PageOptions;
 }
 
@@ -30,6 +33,22 @@ const initialState: ILocalState = {
     error: false,
     recipes: [],
     recipesCount: 0,
+    recipesCountPerPageFrom(): number {
+        // console.log(this.pageOptions.pageIndex, this.pageOptions.pageEntriesLimit);
+        const fromRange = (this.pageOptions.pageIndex - 1) * this.pageOptions.pageEntriesLimit;
+        return fromRange + 1;
+    },
+    recipesCountPerPageTo(): number {
+        return (
+            this.totalPagesCount() === this.pageOptions.pageIndex
+            ? (this.pageOptions.pageEntriesLimit * (this.pageOptions.pageIndex - 1)) + this.recipes.length 
+            : this.pageOptions.pageIndex * this.pageOptions.pageEntriesLimit
+        );
+    },
+    totalPagesCount(): number {
+        // console.log(this.recipesCount, this.pageOptions.pageEntriesLimit);
+        return Math.ceil(this.recipesCount / this.pageOptions.pageEntriesLimit);
+    },
     pageOptions: {
         pageIndex: 1,
         pageEntriesLimit: 3, // 10
