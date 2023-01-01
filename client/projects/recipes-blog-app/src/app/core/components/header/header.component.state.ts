@@ -34,34 +34,38 @@ export class HeaderComponentState extends ComponentStore<ILocalState> {
     readonly showNavigation$: Observable<boolean> = this.select(({ showNavigation }) => showNavigation);
     readonly signingOut$: Observable<boolean> = this.select(({ signingOut }) => signingOut);
 
-    readonly updateNavigationState = this.updater((state: ILocalState, showNavigation: boolean) => ({ ...state, showNavigation }));
-    readonly updateMenuBtnToggleState = this.updater((state: ILocalState, showMenuButton: boolean) => ({ ...state, showMenuButton }));
-    readonly updateSignoutStatus = this.updater((state: ILocalState, signingOut: boolean) => ({ ...state, signingOut }));
+    readonly updateHeaderState = this.updater(
+        (
+            state: ILocalState, 
+            { showMenuButton, showNavigation }: Pick<ILocalState, 'showNavigation' | 'showMenuButton'>
+        ) => ({ 
+            ...state, 
+            showMenuButton, 
+            showNavigation 
+        })
+    );
 
-    // effects 
-
-    readonly toggleNavigation = this.effect(
-        (showNavigation$: Observable<boolean>) => {
-            return showNavigation$.pipe(
-                tap((value: boolean) => {
-
-                    this.updateNavigationState(value);
-                })
-            );
-        }
+    readonly updateSignoutStatus = this.updater(
+        (
+            state: ILocalState, 
+            signingOut: boolean
+        ) => ({ 
+            ...state, 
+            signingOut 
+        })
     );
 
     readonly maxwidthMatchEffect = this.effect(
         (maxwidthMatch$: Observable<boolean>) => {
             return maxwidthMatch$.pipe(
                 mergeMap((matches) => {
-                    this.updateMenuBtnToggleState(matches);
-                    this.toggleNavigation(!matches);
+
+                    this.updateHeaderState({ showMenuButton: matches, showNavigation: !matches }).unsubscribe();
 
                     return this.vpResizeService.onMaxWidth780$.pipe(
                         tap(({ matches }) => {
-                            this.updateMenuBtnToggleState(matches);
-                            this.toggleNavigation(!matches);
+
+                            this.updateHeaderState({ showMenuButton: matches, showNavigation: !matches }).unsubscribe();
                         })
                     )
                 })
@@ -73,20 +77,20 @@ export class HeaderComponentState extends ComponentStore<ILocalState> {
         (empty$: Observable<undefined>) => {
             return empty$.pipe(
                 tap(() => {
-                    this.updateSignoutStatus(true);
+                    this.updateSignoutStatus(true).unsubscribe();
                 }),
                 mergeMap(() => {
                     return this.authService.logout$().pipe(
                         tap(({ message }) => {
                             console.log(message);
-                            this.updateSignoutStatus(false);
+                            this.updateSignoutStatus(false).unsubscribe();
                             this.router.navigate(['/users', 'login']);
                         }),
                         catchError((error) => {
 
                             // console.error(error);
 
-                            this.updateSignoutStatus(false);
+                            this.updateSignoutStatus(false).unsubscribe();
                             let errorMsg;
 
                             if (error.status === 0) {
