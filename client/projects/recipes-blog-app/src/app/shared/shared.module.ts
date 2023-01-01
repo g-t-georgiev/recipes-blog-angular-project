@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { FileUploadComponent } from './components';
+import { FileUploadComponent, LogoutBtnComponent } from './components';
 import { SpreadPipe, RemoveDotsPipe } from './pipes';
 
 import { 
@@ -22,7 +22,8 @@ import { CustomValidatorsService } from './services';
        	MaxlengthValidatorDirective,
         PasswordsMatchValidatorDirective,
         DuplicateCredentialsValidatorDirective,
-        MaxSizeDirective, 
+        MaxSizeDirective,
+        LogoutBtnComponent, 
   ],
 	imports: [
 		CommonModule,
@@ -35,6 +36,7 @@ import { CustomValidatorsService } from './services';
 		PasswordsMatchValidatorDirective,
 		DuplicateCredentialsValidatorDirective,
 		MaxSizeDirective, 
+		LogoutBtnComponent, 
 	],
 	providers: [
 		CustomValidatorsService
