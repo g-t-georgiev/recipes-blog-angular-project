@@ -3,8 +3,7 @@
     [ngTemplateOutletContext]="{ 
         $implicit: localState$ | async, 
         currentUser: currentUser$ | async, 
-        isLoggedIn: isLoggedIn$ | async,
-        signingOut: signingOut$ | async 
+        isLoggedIn: isLoggedIn$ | async
     }"
 ></ng-container>
 
@@ -12,8 +11,9 @@
     <!-- {{localState | json}} -->
     <!-- {{currentUser | json}} -->
     <header 
+        #headerEl
+        class="header" 
         [class.fullscreen]="localState.showNavigation" 
-        (pointerup)="onHeaderAreaClick($event, localState.showNavigation)"
     >
 
         <app-menu-toggle-button 
@@ -39,7 +39,7 @@
 
                 <ng-container *ngIf="isLoggedIn">
                     <a class="nav-link" routerLinkActive="active" ariaCurrentWhenActive="page" [routerLink]="['/users', 'profile', currentUser._id]">Profile</a>
-                    <a href="javascript:void(0);" (pointerup)="logoutHandler()" [attr.disabled]="signingOut" class="nav-link">{{signingOut ? 'Processing...' : 'Signout'}}</a>
+                    <app-logout-btn class="nav-link" aria-current="false"></app-logout-btn>
                 </ng-container>
         
             </section>
