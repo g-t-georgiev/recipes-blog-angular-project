@@ -1,6 +1,14 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { 
+	Component, 
+	OnInit, 
+	OnDestroy, 
+	AfterViewInit,
+	ViewChild, 
+	ElementRef 
+} from '@angular/core';
+
 import { Router } from '@angular/router';
-import { Subscription, Observable } from 'rxjs';
+import { Subscription, Observable, fromEvent } from 'rxjs';
 
 import { AuthService } from '../../services';
 
@@ -15,14 +23,15 @@ import { HeaderComponentState, ILocalState } from './header.component.state';
 	styleUrls: ['./header.component.css'],
 	providers: [HeaderComponentState]
 })
-export class HeaderComponent implements OnInit, OnDestroy {
+export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 
 	private subscription: Subscription = new Subscription();
 
 	readonly currentUser$: Observable<IUser | null> = this.authService.currentUser$;
 	readonly isLoggedIn$: Observable<boolean> = this.authService.isLoggedIn$;
 	readonly localState$: Observable<ILocalState> = this.componentState.localState$;
-	readonly signingOut$: Observable<boolean> = this.componentState.signingOut$;
+
+	@ViewChild('headerEl') private readonly headerEl!: ElementRef<HTMLElement>;
 
 	constructor(
 		private readonly router: Router,
@@ -41,6 +50,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
 	}
 
+	ngAfterViewInit(): void {
+
+		this.subscription.add(
+			this.componentState.collapseNavigationEffect(
+				fromEvent<PointerEvent>(this.headerEl.nativeElement, 'pointerup')
+			)
+		);
+	}
+
 	ngOnDestroy(): void {
 		this.subscription?.unsubscribe?.();
 	}
@@ -52,39 +70,4 @@ export class HeaderComponent implements OnInit, OnDestroy {
    		return baseUrl === url;
 	}
 
-	onHeaderAreaClick(ev: PointerEvent, showNavigation: boolean) {
-
-		if (
-			!this.vpResizeService.hasMatch() ||
-			!showNavigation
-		) { 
-			return; 
-		}
-
-		const tagName = (ev.target as HTMLElement).tagName;
-
-		if ([ 
-				'APP-MENU-TOGGLE-BUTTON', 
-				'APP-DARK-MODE-SWITCH', 
-				'BUTTON', 
-				'svg', 
-				'line',
-				'circle', 
-				'rect', 
-				'mask', 
-				'g'
-			].includes(tagName)
-		) { 
-			return; 
-		}
-
-		this.componentState.toggleNavigation(false);
-
-	}
-
-	logoutHandler() {
-		this.subscription.add(
-			this.componentState.logoutEffect()
-		);
-	}
 }
