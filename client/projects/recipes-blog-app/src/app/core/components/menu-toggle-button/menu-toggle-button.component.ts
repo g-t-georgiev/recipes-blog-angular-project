@@ -1,9 +1,11 @@
 import { 
-	Component, 
+	AfterViewInit,
+	Component, ElementRef, OnDestroy, ViewChild, 
 } from '@angular/core';
 
 import { 
-	Observable, 
+	fromEvent,
+	Observable, Subscription, 
 } from 'rxjs';
 
 import { HeaderComponentState } from '../header/header.component.state';
@@ -20,21 +22,31 @@ enum ToggleNavButtonOptions {
 	templateUrl: './menu-toggle-button.component.html',
 	styleUrls: ['./menu-toggle-button.component.css']
 })
-export class MenuToggleButtonComponent {
+export class MenuToggleButtonComponent implements AfterViewInit, OnDestroy {
 
-	readonly showNavigation$: Observable<boolean> = this.state.showNavigation$;
+	private readonly subscription: Subscription = new Subscription();
+	readonly showNavigation$: Observable<boolean> = this.componentState.showNavigation$;
+
+	@ViewChild('toggleMenuBtnEl') private menuToggleBtnEl!: ElementRef<HTMLButtonElement>;
 
 	constructor(
-		private readonly state: HeaderComponentState
+		private readonly componentState: HeaderComponentState
 	) { }
+
+	ngAfterViewInit(): void {
+		this.subscription.add(
+			this.componentState.toggleBtnClickEffect(
+				fromEvent<PointerEvent>(this.menuToggleBtnEl.nativeElement, 'pointerup')
+			)
+		);
+	}
+
+	ngOnDestroy(): void {
+		this.subscription?.unsubscribe?.();
+	}
 
 	getbtnTextValue(showNavigation: boolean): ToggleNavButtonOptions {
 		return showNavigation ? ToggleNavButtonOptions.OPENED : ToggleNavButtonOptions.CLOSED;
-	}
-
-	toggleNavigation(showNavigation: boolean) {
-		// console.log('Current navigation state: ', showNavigation ? 'opened' : 'closed');
-		this.state.toggleNavigation(!showNavigation);
 	}
 
 }
