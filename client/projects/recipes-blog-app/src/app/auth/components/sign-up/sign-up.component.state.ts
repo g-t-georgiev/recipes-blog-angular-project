@@ -10,11 +10,13 @@ import { AuthService, IUserSignUpDto, IUserSignUpResponse } from 'projects/recip
 export interface ILocalState {
     message: string | null;
     processing: boolean;
+    error: boolean;
 }
 
 const initialState: ILocalState = {
     message: null,
-    processing: false
+    processing: false,
+    error: false
 };
 
 @Injectable()
@@ -29,18 +31,37 @@ export class SignUpComponentState extends ComponentStore<ILocalState> {
 
     readonly localState$: Observable<ILocalState> = this.select((state) => state);
 
-    readonly updateMessageState = this.updater((state: ILocalState, message: string | null) => ({ ...state, message }));
-    readonly updateProcessingState = this.updater((state: ILocalState, processing: boolean) => ({ ...state, processing }));
+    readonly updateProcessingState = this.updater(
+        (
+            state: ILocalState,
+             processing: boolean
+        ) => ({ 
+            ...state, 
+            processing 
+        })
+    );
+
+    readonly updateOnRegisterCompleteState = this.updater(
+        (
+            state: ILocalState, 
+            { processing, message, error }: Pick<ILocalState, 'processing' | 'error' | 'message'>
+        ) => ({ 
+            ...state, 
+            processing, 
+            error, 
+            message 
+        })
+    );
 
     readonly onRegisterEventEffect = this.effect(
         (userData$: Observable<IUserSignUpDto>) => {
             return userData$.pipe(
-                tap(() => this.updateProcessingState(true)),
+                tap(() => this.updateProcessingState(true).unsubscribe()),
                 mergeMap((userData) => {
                     return this.authService.register$(userData).pipe(
                         tap(({ message }: IUserSignUpResponse) => {
-                            this.updateProcessingState(false);
-                            // this.updateMessageState(message);
+
+                            this.updateOnRegisterCompleteState({ processing: false, error: false, message }).unsubscribe();
                             this.router.navigate([ '/users', 'login' ]);
                         }),
                         catchError((error) => {
@@ -48,18 +69,13 @@ export class SignUpComponentState extends ComponentStore<ILocalState> {
                             // console.log(error);
                             let errorMsg;
         
-                            this.updateProcessingState(false);
-        
                             if (error.status === 0) {
                                 errorMsg = 'Connection error';
                             } else {
                                 errorMsg = error.error?.message ?? error?.message ?? error.statusText ?? 'Something went wrong';
                             }
         
-                            this.updateMessageState(errorMsg);
-        
-                            // throwing error completes the stream
-                            // instead return an empty observable
+                            this.updateOnRegisterCompleteState({ processing: false, error: true, message: errorMsg }).unsubscribe();
                             return EMPTY;
                         })
                     );
