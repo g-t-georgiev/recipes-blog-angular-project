@@ -6,6 +6,7 @@
 <ng-template #menuToggleButton let-showNavigation>
     <!-- {{ showNavigation }} -->
     <button 
+        #toggleMenuBtnEl
         type="button" 
         [attr.value]="getbtnTextValue(showNavigation)" 
         class="menu-toggle-btn" 
@@ -13,7 +14,6 @@
         title="Toggle mobile menu" 
         [attr.aria-label]="getbtnTextValue(showNavigation)" 
         aria-live="polite" 
-        (pointerup)="toggleNavigation(showNavigation)"
     >
         <svg 
             class="menu-toggle-icon"
