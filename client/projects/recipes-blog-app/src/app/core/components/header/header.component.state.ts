@@ -1,57 +1,44 @@
 import { Injectable } from '@angular/core';
-import { EMPTY, Observable } from 'rxjs';
-import { tap, mergeMap, catchError } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { tap, mergeMap, withLatestFrom } from 'rxjs/operators';
 import { ComponentStore } from '@ngrx/component-store';
-import { Router } from '@angular/router';
 
-import { AuthService, ViewportResizeService } from '../../services';
+import { ViewportResizeService } from '../../services';
 
 
 export interface ILocalState {
     showNavigation: boolean,
-    showMenuButton: boolean,
-    signingOut: boolean
+    showMenuButton: boolean
 }
 
 const initialState: ILocalState = {
     showNavigation: true,
-    showMenuButton: false,
-    signingOut: false
+    showMenuButton: false
 };
 
 @Injectable()
 export class HeaderComponentState extends ComponentStore<ILocalState> {
 
     constructor(
-        private readonly vpResizeService: ViewportResizeService,
-        private readonly authService: AuthService,
-        private readonly router: Router
+        private readonly vpResizeService: ViewportResizeService, 
     ) {
         super(initialState);
     }
 
     readonly localState$: Observable<ILocalState> = this.select((state) => state);
     readonly showNavigation$: Observable<boolean> = this.select(({ showNavigation }) => showNavigation);
-    readonly signingOut$: Observable<boolean> = this.select(({ signingOut }) => signingOut);
 
     readonly updateHeaderState = this.updater(
         (
             state: ILocalState, 
-            { showMenuButton, showNavigation }: Pick<ILocalState, 'showNavigation' | 'showMenuButton'>
+            { 
+                showMenuButton, 
+                showNavigation 
+            }: Pick<ILocalState, 'showNavigation' | 'showMenuButton'>
         ) => ({ 
             ...state, 
             showMenuButton, 
             showNavigation 
-        })
-    );
-
-    readonly updateSignoutStatus = this.updater(
-        (
-            state: ILocalState, 
-            signingOut: boolean
-        ) => ({ 
-            ...state, 
-            signingOut 
         })
     );
 
@@ -73,38 +60,49 @@ export class HeaderComponentState extends ComponentStore<ILocalState> {
         }
     );
 
-    readonly logoutEffect = this.effect(
-        (empty$: Observable<undefined>) => {
-            return empty$.pipe(
-                tap(() => {
-                    this.updateSignoutStatus(true).unsubscribe();
-                }),
-                mergeMap(() => {
-                    return this.authService.logout$().pipe(
-                        tap(({ message }) => {
-                            console.log(message);
-                            this.updateSignoutStatus(false).unsubscribe();
-                            this.router.navigate(['/users', 'login']);
-                        }),
-                        catchError((error) => {
+    readonly toggleBtnClickEffect = this.effect(
+        (pointerEv$: Observable<PointerEvent>) => pointerEv$.pipe(
+            withLatestFrom(this.showNavigation$),
+            tap(([ , showNavigation]) => {
+                this.updateHeaderState({ showNavigation: !showNavigation, showMenuButton: true });
+            })
+        )
+    );
 
-                            // console.error(error);
+    readonly collapseNavigationEffect = this.effect(
+        (pointerEv$: Observable<PointerEvent>) => pointerEv$.pipe(
+            withLatestFrom(this.showNavigation$),
+            tap(([ pointerEv, showNavigation ]) => {
 
-                            this.updateSignoutStatus(false).unsubscribe();
-                            let errorMsg;
+                if (
+                    !this.vpResizeService.hasMatch() || 
+                    !showNavigation
+                ) {
+                    return;
+                }
 
-                            if (error.status === 0) {
-                                errorMsg = 'Connection error';
-                            } else {
-                                errorMsg = error.error?.message ?? error?.message ?? error.statusText ?? 'Something went wrong';
-                            }
+                const targetEl = (pointerEv.target as HTMLElement);
 
-                            return EMPTY;
-                        })
-                    );
-                })
-            );
-        }
+                if ([ 
+                        'APP-MENU-TOGGLE-BUTTON', 
+                        'APP-DARK-MODE-SWITCH', 
+                        'BUTTON', 
+                        'svg', 
+                        'line',
+                        'circle', 
+                        'rect', 
+                        'mask', 
+                        'g'
+                    ].includes(targetEl.tagName)
+                ) { 
+                    return; 
+                }
+
+
+                this.updateHeaderState({ showNavigation: false, showMenuButton: true });
+
+            })
+        )
     );
     
 }
