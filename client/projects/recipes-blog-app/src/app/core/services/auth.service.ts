@@ -1,11 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { EMPTY, Observable, throwError } from 'rxjs';
+import { EMPTY, Observable } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
-import { IRootState } from 'projects/recipes-blog-app/src/app/state';
-import { login, logout } from 'projects/recipes-blog-app/src/app/state/current-user/current-user.actions';
+import { IRootState, currentUser as currentUserStore } from 'projects/recipes-blog-app/src/app/+store';
 import { IUser } from 'projects/recipes-blog-app/src/app/shared/interfaces';
 import { environment } from 'projects/recipes-blog-app/src/environments/environment';
 
@@ -101,11 +100,11 @@ export class AuthService {
 	}
 
 	loginHandler(newUser: IUser): void {
-		this.state.dispatch(login({ user: newUser }));
+		this.state.dispatch(currentUserStore.actions.login({ user: newUser }));
 	}
 
 	logoutHandler() {
-		this.state.dispatch(logout());
+		this.state.dispatch(currentUserStore.actions.logout());
 	}
 
 }

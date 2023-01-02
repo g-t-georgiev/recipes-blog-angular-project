@@ -8,8 +8,7 @@ import { UsersService } from 'projects/recipes-blog-app/src/app/core/services';
 
 import { IUser } from 'projects/recipes-blog-app/src/app/shared/interfaces';
 
-import { IRootState } from 'projects/recipes-blog-app/src/app/state';
-import { login } from 'projects/recipes-blog-app/src/app/state/current-user/current-user.actions';
+import { IRootState, currentUser as currentUserStore } from 'projects/recipes-blog-app/src/app/+store';
 
 
 interface ILocalState {
@@ -90,7 +89,7 @@ export class ProfileDetailsState extends ComponentStore<ILocalState> {
 
                             if (user) {
                                 this.updateSuccessState({ processing: false, user, message, error: false });
-                                this.globalState.dispatch(login({ user }));
+                                this.globalState.dispatch(currentUserStore.actions.login({ user }));
                                 this.updateEditModeStatus();
                             }
 

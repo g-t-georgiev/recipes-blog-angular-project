@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { tap } from 'rxjs/operators';
 
-import { IRootState } from './state';
+import { IRootState } from './+store';
 import { DarkModeSwitchService } from './core/services/dark-mode-switch.service';
 import { ViewportResizeService } from './core/services/viewport-resize.service';
 

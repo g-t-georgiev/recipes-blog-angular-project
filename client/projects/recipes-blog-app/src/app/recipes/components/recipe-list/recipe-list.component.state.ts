@@ -3,7 +3,7 @@ import { Store} from "@ngrx/store";
 import { ComponentStore } from "@ngrx/component-store";
 import { catchError, EMPTY, map, mergeMap, Observable, switchMap, tap } from "rxjs";
 
-import { getMergedRouteState } from "../../../state/router/selectors";
+import { getMergedRouteState } from "projects/recipes-blog-app/src/app/+router-store";
 
 import { IRecipesQueryResponse, RecipesService } from "projects/recipes-blog-app/src/app/core/services";
 import { IRecipe } from "projects/recipes-blog-app/src/app/shared/interfaces";
