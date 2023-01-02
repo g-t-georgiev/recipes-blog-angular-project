@@ -1,2 +1,2 @@
-export * from './router-store.selectors';
+export * from './router.selectors';
 export * from './ngrx-router.module';
