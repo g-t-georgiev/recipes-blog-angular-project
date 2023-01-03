@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { ILocalState, RecipeListComponentState } from './recipe-list.component.state';
+import { RecipesState, RecipesStore } from './recipe-list.store';
 import { debounce } from 'projects/recipes-blog-app/src/assets/utils/debounce';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -9,16 +9,17 @@ import { ActivatedRoute, Router } from '@angular/router';
 	selector: 'app-recipe-list',
 	templateUrl: './recipe-list.component.html',
 	styleUrls: ['./recipe-list.component.css'],
-	providers: [RecipeListComponentState]
+	providers: [RecipesStore]
 })
 export class RecipeListComponent implements OnInit, OnDestroy {
 
 	private readonly subscription = new Subscription();
 
-	readonly localState$ = this.componentState.localState$;
+	readonly localState$ = this.componentStore.state$;
+	readonly pageOptionsData$ = this.componentStore.pageOptionsData$;
 
 	constructor(
-		private readonly componentState: RecipeListComponentState,
+		private readonly componentStore: RecipesStore,
 		private activatedRoute: ActivatedRoute,
 		private readonly router: Router
 	) {
@@ -27,7 +28,7 @@ export class RecipeListComponent implements OnInit, OnDestroy {
 
 	ngOnInit(): void {
 		this.subscription.add(
-			this.componentState.initializerEffect()
+			this.componentStore.fetchRecipes(this.pageOptionsData$)
 		);
 	}
 
@@ -35,7 +36,7 @@ export class RecipeListComponent implements OnInit, OnDestroy {
 		this.subscription?.unsubscribe?.();
 	}
 
-	limitSelectChangeHandler(value: any, state: ILocalState) {
+	limitSelectChangeHandler(value: any, state: RecipesState) {
 
 		if (value == null) return;
 
@@ -60,7 +61,7 @@ export class RecipeListComponent implements OnInit, OnDestroy {
 		});
 	}
 
-	titleInputChangeHandler(value: string, state: ILocalState) {
+	titleInputChangeHandler(value: string, state: RecipesState) {
 
 		if (
 			value == null || 
