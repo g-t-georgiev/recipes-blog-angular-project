@@ -1,12 +1,21 @@
-export {
-    // dispatch at navigation start
-    routerRequestAction, 
-    // dispatch during navigation, before resolvers/guards run 
-    routerNavigationAction,
-    // dispatch after successful navigation  
-    routerNavigatedAction, 
-    // dispatch on navigation cancellation, e.g. when guard runs
-    routerCancelAction, 
-    // dispatch on error 
-    routerErrorAction
-} from '@ngrx/router-store';
+import { NavigationExtras } from '@angular/router';
+import { createAction, props } from '@ngrx/store';
+
+export enum RouterActionTypes {
+    Go = '[Router] Go', 
+}
+
+export type RouterPayload = {
+    payload: {
+        path: any[],
+        query?: object,
+        relativeToCurrentRoute: boolean,
+        extras?: NavigationExtras
+    }
+}
+
+export class RouterActions {
+
+    static readonly go = createAction(RouterActionTypes.Go, props<RouterPayload>());
+
+}
