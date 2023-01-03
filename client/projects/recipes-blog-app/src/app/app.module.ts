@@ -12,7 +12,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
 import { HomeComponent } from './home/home.component';
-import { EffectsModule } from '@ngrx/effects';
 
 @NgModule({
     declarations: [
@@ -25,8 +24,7 @@ import { EffectsModule } from '@ngrx/effects';
         RootStoreModule,
         NgrxRouterStoreModule,
         AppRoutingModule,
-        CoreModule.forRoot(),
-        EffectsModule.forRoot([])
+        CoreModule.forRoot(), 
     ],
     providers: [
         {
