@@ -1,4 +1,5 @@
 import { NgModule } from "@angular/core";
+import { EffectsModule } from "@ngrx/effects";
 import { StoreModule } from "@ngrx/store";
 
 import { IUser } from "../shared/interfaces";
@@ -17,9 +18,11 @@ export interface IRootState {
             darkModeOn: darkModeReducer,
             currentUser: currentUserReducer
         }),
+        EffectsModule.forRoot([]),
     ],
     exports: [
-        StoreModule
+        StoreModule, 
+        EffectsModule, 
     ]
 })
 export class RootStoreModule { }
