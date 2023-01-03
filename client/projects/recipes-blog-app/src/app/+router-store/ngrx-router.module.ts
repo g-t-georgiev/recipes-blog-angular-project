@@ -1,8 +1,11 @@
 import { NgModule, Optional, Self } from "@angular/core";
 import { Router } from "@angular/router";
 import { StoreModule } from "@ngrx/store";
+import { EffectsModule } from "@ngrx/effects";
 import { routerReducer, RouterStateSerializer, StoreRouterConnectingModule } from '@ngrx/router-store';
+
 import { MergedRouterStateSerializer } from "./merged-route-serializer";
+import { RouterEffects } from "./router.effects";
 
 export const routerStateConfig = {
     stateKey: 'router',
@@ -11,7 +14,8 @@ export const routerStateConfig = {
 
 @NgModule({
     imports: [
-        StoreModule.forFeature(routerStateConfig.stateKey, routerReducer),
+        StoreModule.forFeature(routerStateConfig.stateKey, routerReducer), 
+        EffectsModule.forFeature([ RouterEffects ]),
         StoreRouterConnectingModule.forRoot(routerStateConfig)
     ],
     exports: [
