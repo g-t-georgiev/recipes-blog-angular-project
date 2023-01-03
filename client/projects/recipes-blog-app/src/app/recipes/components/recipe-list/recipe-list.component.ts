@@ -3,7 +3,6 @@ import { Subscription } from 'rxjs';
 
 import { RecipesState, RecipesStore } from './recipe-list.store';
 import { debounce } from 'projects/recipes-blog-app/src/assets/utils/debounce';
-import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
 	selector: 'app-recipe-list',
@@ -19,9 +18,7 @@ export class RecipeListComponent implements OnInit, OnDestroy {
 	readonly pageOptionsData$ = this.componentStore.pageOptionsData$;
 
 	constructor(
-		private readonly componentStore: RecipesStore,
-		private activatedRoute: ActivatedRoute,
-		private readonly router: Router
+		private readonly componentStore: RecipesStore, 
 	) {
 		this.titleInputChangeHandler = debounce(this.titleInputChangeHandler, 700);
 	}
@@ -46,18 +43,23 @@ export class RecipeListComponent implements OnInit, OnDestroy {
 
 		if (value === state.pageOptions.pageEntriesLimit) return;
 
-		this.router.navigate([], {
-			relativeTo: this.activatedRoute,
-			queryParams: {
-				page: 1,
-				limit: value,
-				...(
-					state.pageOptions.pageQueryFilter.title 
-					? { ...state.pageOptions.pageQueryFilter, title: state.pageOptions.pageQueryFilter.title } 
-					: { ...state.pageOptions.pageQueryFilter }
-				)
-			},
-			preserveFragment: true
+		this.componentStore.navigate({
+			payload: {
+				relativeToCurrentRoute: true,
+				path: [],
+				query: {
+					page: 1,
+					limit: value,
+					...(
+						state.pageOptions.pageQueryFilter.title 
+						? { ...state.pageOptions.pageQueryFilter, title: state.pageOptions.pageQueryFilter.title } 
+						: { ...state.pageOptions.pageQueryFilter }
+					)
+				},
+				extras: {
+					preserveFragment: true
+				}
+			}
 		});
 	}
 
@@ -74,27 +76,37 @@ export class RecipeListComponent implements OnInit, OnDestroy {
 		const filters = { ...(value ? { title: value } : {}) };
 		// console.log(filters);
 
-		this.router.navigate([], {
-			relativeTo: this.activatedRoute,
-			queryParams: {
-				page: 1,
-				limit: state.pageOptions.pageEntriesLimit,
-				...filters
-			},
-			preserveFragment: true
+		this.componentStore.navigate({
+			payload: {
+				relativeToCurrentRoute: true,
+				path: [],
+				query: {
+					page: 1,
+					limit: state.pageOptions.pageEntriesLimit,
+					...filters
+				},
+				extras: {
+					preserveFragment: true, 
+				}
+			}
 		});
 	}
 
 	toggleClickedPage(pageIndex: number, pageEntriesLimit: number, pageQueryFilter: any = {}) {
 
-		this.router.navigate([], {
-			relativeTo: this.activatedRoute,
-			queryParams: {
-				page: pageIndex,
-				limit: pageEntriesLimit,
-				...(pageQueryFilter.title ? { ...pageQueryFilter, title: pageQueryFilter.title } : { ...pageQueryFilter })
-			},
-			preserveFragment: true
+		this.componentStore.navigate({
+			payload: {
+				relativeToCurrentRoute: true,
+				path: [],
+				query: {
+					page: pageIndex,
+					limit: pageEntriesLimit,
+					...(pageQueryFilter.title ? { ...pageQueryFilter, title: pageQueryFilter.title } : { ...pageQueryFilter })
+				},
+				extras: {
+					preserveFragment: true, 
+				}
+			}
 		});
 	}
 
@@ -104,14 +116,19 @@ export class RecipeListComponent implements OnInit, OnDestroy {
 			return;
 		}
 
-		this.router.navigate([], {
-			relativeTo: this.activatedRoute,
-			queryParams: {
-				page: pageIndex,
-				limit: pageEntriesLimit,
-				...(pageQueryFilter.title ? { ...pageQueryFilter, title: pageQueryFilter.title } : { ...pageQueryFilter })
-			},
-			preserveFragment: true
+		this.componentStore.navigate({
+			payload: {
+				relativeToCurrentRoute: true,
+				path: [],
+				query: {
+					page: pageIndex,
+					limit: pageEntriesLimit,
+					...(pageQueryFilter.title ? { ...pageQueryFilter, title: pageQueryFilter.title } : { ...pageQueryFilter })
+				},
+				extras: {
+					preserveFragment: true, 
+				}
+			}
 		});
 	}
 
@@ -121,14 +138,19 @@ export class RecipeListComponent implements OnInit, OnDestroy {
 			return;
 		}
 
-		this.router.navigate([], {
-			relativeTo: this.activatedRoute,
-			queryParams: {
-				page: pageIndex,
-				limit: pageEntriesLimit,
-				...(pageQueryFilter.title ? { ...pageQueryFilter, title: pageQueryFilter.title } : { ...pageQueryFilter })
-			},
-			preserveFragment: true
+		this.componentStore.navigate({
+			payload: {
+				relativeToCurrentRoute: true,
+				path: [],
+				query: {
+					page: pageIndex,
+					limit: pageEntriesLimit,
+					...(pageQueryFilter.title ? { ...pageQueryFilter, title: pageQueryFilter.title } : { ...pageQueryFilter })
+				},
+				extras: {
+					preserveFragment: true, 
+				}
+			}
 		});
 	}
 
