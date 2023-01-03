@@ -5,7 +5,7 @@ import { Store} from "@ngrx/store";
 import { ComponentStore } from "@ngrx/component-store";
 import { catchError, EMPTY, Observable, switchMap, tap } from "rxjs";
 
-import { getMergedRouteState } from "projects/recipes-blog-app/src/app/+router-store";
+import { getMergedRouteState, RouterActions, RouterPayload } from "projects/recipes-blog-app/src/app/+router-store";
 
 import { IRecipesQueryResponse, RecipesService } from "projects/recipes-blog-app/src/app/core/services";
 import { IRecipe } from "projects/recipes-blog-app/src/app/shared/interfaces";
@@ -158,6 +158,14 @@ export class RecipesStore extends ComponentStore<RecipesState> {
 
                 this.updateLoadingState(false);
                 this.updateErrorState({ error: true, message: errorMsg });
+            })
+        )
+    );
+
+    readonly navigate = this.effect(
+        (payload$: Observable<RouterPayload>) => payload$.pipe(
+            tap((payload) => {
+                this.globalStore.dispatch(RouterActions.go(payload));
             })
         )
     );
