@@ -7,7 +7,6 @@ import { getMergedRouteState } from "projects/recipes-blog-app/src/app/+router-s
 
 import { IRecipesQueryResponse, RecipesService } from "projects/recipes-blog-app/src/app/core/services";
 import { IRecipe } from "projects/recipes-blog-app/src/app/shared/interfaces";
-import { MergedRoute } from "../../../+router-store/merged-route";
 import { Params } from "@angular/router";
 import { HttpErrorResponse } from "@angular/common/http";
 
