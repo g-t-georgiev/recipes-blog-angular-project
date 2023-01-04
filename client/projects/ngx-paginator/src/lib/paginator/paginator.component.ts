@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
 	Component,
 	OnInit,
@@ -6,12 +7,19 @@ import {
 	Input,
 	Output,
 	EventEmitter,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 
 @Component({
 	selector: 'ngx-paginator',
 	templateUrl: './paginator.component.html',
-	styleUrls: ['./paginator.component.css']
+	styleUrls: ['./paginator.component.css'],
+	standalone: true,
+	changeDetection: ChangeDetectionStrategy.OnPush,
+	imports: [
+		CommonModule
+	],
+	providers: []
 })
 export class PaginatorComponent implements OnInit, OnChanges {
 
