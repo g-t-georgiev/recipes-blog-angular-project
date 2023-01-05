@@ -1,28 +1,9 @@
 <ng-container 
     [ngTemplateOutlet]="recipesList" 
-    [ngTemplateOutletContext]="{ $implicit: localState$ | async, pageOptionsData: pageOptionsData$ | async }"
+    [ngTemplateOutletContext]="{ $implicit: localState$ | async, pageOptionsData: pageQueryParams$ | async }"
 ></ng-container>
 
 <ng-template #recipesList let-localState let-pageOptionsData="pageOptionsData">
-
-    <section>
-
-        <article>
-            Page <span>{{pageOptionsData.pageIndex}}</span> of <span>{{localState.totalPagesCount()}}</span>
-        </article>
-
-        <article>
-            Results 
-            <ng-container *ngIf="localState.recipesCountPerPageFrom() === localState.recipesCountPerPageTo()">
-                <span>{{localState.recipesCountPerPageFrom()}}</span> of <span>{{localState.recipesCount}}</span>
-            </ng-container>
-
-            <ng-container *ngIf="localState.recipesCountPerPageFrom() !== localState.recipesCountPerPageTo()">
-                <span>{{localState.recipesCountPerPageFrom()}}</span> - <span>{{localState.recipesCountPerPageTo()}}</span> of <span>{{localState.recipesCount}}</span>
-            </ng-container>
-        </article>
-
-    </section>
 
     <ng-container *ngIf="localState.loading">
         Loading, please wait...
@@ -30,10 +11,14 @@
 
     <ng-container *ngIf="!localState.loading">
 
-        <ng-container
-            [ngTemplateOutlet]="filterForm" 
-            [ngTemplateOutletContext]="{ $implicit: localState, pageOptionsData: pageOptionsData }"
-        ></ng-container>
+        <ngx-paginator 
+            [pageIndex]="pageOptionsData?.['page'] ?? 1"
+            [length]="localState.recipesCount" 
+            [pageSize]="pageOptionsData?.['limit'] ?? 10" 
+            [pageSizeOptions]="[1, 3, 5, 10, 15]"
+            [pageLength]="localState.recipes.length" 
+            (page)="log($event)"
+        ></ngx-paginator>
 
         <section class="recipes-list" *ngIf="localState.recipes && localState.recipes?.length">
 
@@ -50,54 +35,5 @@
         </ng-container>
 
     </ng-container>
-
-</ng-template>
-
-<ng-template #filterForm let-localState let-pageOptionsData="pageOptionsData">
-
-    <form class="filter-form form" ngForm>
-
-        <ngx-paginator 
-            [current]="pageOptionsData.pageIndex"
-            [total]="localState.totalPagesCount()"
-            (previous)="togglePreviousPage($event, pageOptionsData.pageEntriesLimit, pageOptionsData.pageQueryFilter)" 
-            (goTo)="toggleClickedPage($event, pageOptionsData.pageEntriesLimit, pageOptionsData.pageQueryFilter)"
-            (next)="toggleNextPage($event, pageOptionsData.pageEntriesLimit, pageOptionsData.pageQueryFilter, localState.totalPagesCount())"
-        ></ngx-paginator>
-
-        <section class="select-row form-row">
-
-            <select 
-                (change)="limitSelectChangeHandler(limitSelectControl.control.value, localState)" 
-                #limitSelectControl="ngModel"
-                [ngModel]="pageOptionsData.pageEntriesLimit"
-                class="filter-form-limit-select form-input" 
-                id="limit" 
-                name="limit"
-            >
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="10">10</option>
-                <option value="15">15</option>
-            </select>
-
-        </section>
-
-        <section class="form-row">
-
-            <input 
-                (input)="titleInputChangeHandler(titleInputControl.control.value, localState)"
-                #titleInputControl="ngModel"
-                [ngModel]="pageOptionsData.pageQueryFilter?.title ?? ''"
-                class="filter-form-title-input form-input"  type="text" name="title"
-                placeholder="Filter results by title..." 
-            />
-
-        </section>
-
-    </form>
 
 </ng-template>
