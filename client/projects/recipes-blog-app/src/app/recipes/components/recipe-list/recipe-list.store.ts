@@ -25,10 +25,10 @@ export interface RecipesState {
     message?: string;
     recipes: Pick<IRecipe, 'title' | '_id' | 'authorId'>[];
     recipesCount: number;
-    recipesCountPerPageFrom(): number;
-    recipesCountPerPageTo(): number;
-    totalPagesCount(): number;
-    pageOptions: PageOptions;
+    // recipesCountPerPageFrom(): number;
+    // recipesCountPerPageTo(): number;
+    // totalPagesCount(): number;
+    // pageOptions: PageOptions;
 }
 
 const initialRecipesState: RecipesState = {
@@ -36,28 +36,28 @@ const initialRecipesState: RecipesState = {
     error: false,
     recipes: [],
     recipesCount: 0,
-    recipesCountPerPageFrom(): number {
-        // console.log(this.pageOptions.pageIndex, this.pageOptions.pageEntriesLimit);
-        const fromRange = (this.pageOptions.pageIndex - 1) * this.pageOptions.pageEntriesLimit;
-        return this.recipesCount && fromRange + 1;
-    },
-    recipesCountPerPageTo(): number {
-        return (
-            this.totalPagesCount() === this.pageOptions.pageIndex
-            ? (this.pageOptions.pageEntriesLimit * (this.pageOptions.pageIndex - 1)) + this.recipes.length 
-            : this.pageOptions.pageIndex * this.pageOptions.pageEntriesLimit
-        );
-    },
-    totalPagesCount(): number {
-        // console.log(this.recipesCount, this.pageOptions.pageEntriesLimit);
-        return Math.ceil(this.recipesCount / this.pageOptions.pageEntriesLimit) || 1;
-    },
-    pageOptions: {
-        pageIndex: 1,
-        pageEntriesLimit: 3, // 10
-        pageQueryFilter: {},
-        pageButtonsCount: 5
-    }
+    // recipesCountPerPageFrom(): number {
+    //     // console.log(this.pageOptions.pageIndex, this.pageOptions.pageEntriesLimit);
+    //     const fromRange = (this.pageOptions.pageIndex - 1) * this.pageOptions.pageEntriesLimit;
+    //     return this.recipesCount && fromRange + 1;
+    // },
+    // recipesCountPerPageTo(): number {
+    //     return (
+    //         this.totalPagesCount() === this.pageOptions.pageIndex
+    //         ? (this.pageOptions.pageEntriesLimit * (this.pageOptions.pageIndex - 1)) + this.recipes.length 
+    //         : this.pageOptions.pageIndex * this.pageOptions.pageEntriesLimit
+    //     );
+    // },
+    // totalPagesCount(): number {
+    //     // console.log(this.recipesCount, this.pageOptions.pageEntriesLimit);
+    //     return Math.ceil(this.recipesCount / this.pageOptions.pageEntriesLimit) || 1;
+    // },
+    // pageOptions: {
+    //     pageIndex: 1,
+    //     pageEntriesLimit: 3, // 10
+    //     pageQueryFilter: {},
+    //     pageButtonsCount: 5
+    // }
 }
 
 @Injectable()
@@ -65,58 +65,31 @@ export class RecipesStore extends ComponentStore<RecipesState> {
 
     readonly pageQueryParams$ = this.select(
         this.globalStore.select(getMergedRouteState),
-        (mergedRoute) => mergedRoute.queryParams,
+        (route) => route.queryParams,
         { debounce: true }
     );
-
-    readonly pageOptionsData$ = this.select((state) => state.pageOptions);
 
     constructor(
         private readonly recipesService: RecipesService,
         private readonly globalStore: Store
     ) {
+
         super(initialRecipesState);
 
-        this.initializePageOptionsState(this.pageQueryParams$);
+        this.fetchRecipes(this.pageQueryParams$);
     }
 
     readonly updateLoadingState = this.updater((state, loading: boolean) => ({ ...state, loading }));
     readonly updateRecipesState = this.updater((state, { recipes, recipesCount, message }: Pick<RecipesState, 'recipes' | 'recipesCount' | 'message'>) => ({ ...state, recipes, recipesCount, message }));
     readonly updateErrorState = this.updater((state, { error, message }: Pick<RecipesState, 'error' | 'message'>) => ({ ...state, error, message }));
     
-    readonly initializePageOptionsState = this.effect(
-        (route$: Observable<Params>) => route$.pipe(
-            tap({
-                next: (queryParams) => {
-                    const { page, limit, title } = queryParams;
-                    let pageIndex = page && !isNaN(page) ? parseInt(page, 10) : initialRecipesState.pageOptions.pageIndex;
-                    let pageEntriesLimit = limit && !isNaN(limit) ? parseInt(limit, 10) : initialRecipesState.pageOptions.pageEntriesLimit;
-                    let pageQueryFilter = (
-                        title && 
-                        typeof title === 'string' && 
-                        title.trim().length > 0 
-                        ? { title: title.trim() } 
-                        : initialRecipesState.pageOptions.pageQueryFilter
-                    );
 
-                    this.patchState((state) => ({
-                        pageOptions: {
-                            ...state.pageOptions,
-                            pageIndex,
-                            pageEntriesLimit,
-                            pageQueryFilter
-                        }
-                    }));
-                }
-            })
-        )
-    );
     readonly fetchRecipes = this.effect(
-        (pageOptionsData$: Observable<Pick<PageOptions, 'pageIndex' | 'pageEntriesLimit' | 'pageQueryFilter'>>) => pageOptionsData$.pipe(
+        (pageOptionsData$: Observable<any>) => pageOptionsData$.pipe(
             tap(() => {
                 this.updateLoadingState(true);
             }),
-            switchMap(({ pageIndex, pageEntriesLimit, pageQueryFilter }) => this.recipesService.getAll(pageIndex, pageEntriesLimit, pageQueryFilter).pipe(
+            switchMap(({ page, limit }) => this.recipesService.getAll(page, limit).pipe(
                 tap({
                     next: ({ recipes, message, total}) => {
                         this.addRecipes({ recipes, message, total })
