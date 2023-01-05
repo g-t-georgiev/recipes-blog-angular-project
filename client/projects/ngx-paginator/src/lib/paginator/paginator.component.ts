@@ -1,104 +1,76 @@
 import { CommonModule } from '@angular/common';
 import {
 	Component,
-	OnInit,
-	OnChanges,
-	SimpleChanges,
+	ChangeDetectionStrategy,
 	Input,
 	Output,
-	EventEmitter,
-	ChangeDetectionStrategy,
 } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+
+import { PaginatorStore } from './paginator.store';
 
 @Component({
+	standalone: true,
 	selector: 'ngx-paginator',
 	templateUrl: './paginator.component.html',
 	styleUrls: ['./paginator.component.css'],
-	standalone: true,
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	imports: [
-		CommonModule
-	],
-	providers: []
+	imports: [CommonModule, FormsModule],
+	providers: [PaginatorStore]
 })
-export class PaginatorComponent implements OnInit, OnChanges {
+export class PaginatorComponent {
 
-	@Input('current') currentPage: number = 1;
-	@Input('total') totalPagesCount: number = 0;
-
-	@Output() goTo: EventEmitter<number> = new EventEmitter<number>();
-	@Output() next: EventEmitter<number> = new EventEmitter<number>();
-	@Output() previous: EventEmitter<number> = new EventEmitter<number>();
-
-	pages: number[] = [];
-
-	ngOnInit() {
-
-		if (
-			this.currentPage &&
-			this.totalPagesCount
-		) {
-			this.pages = this.getPages(this.currentPage, this.totalPagesCount);
-		}
+	@Input() set pageIndex(value: string | number) {
+		this.paginatorStore.setPageIndex(value);
 	}
 
-	ngOnChanges(changes: SimpleChanges): void {
-		// console.log(changes);
-		// console.log(this.getPages(this.currentPage, this.totalPagesCount));
-		this.pages = this.getPages(this.currentPage, this.totalPagesCount);
+	@Input() set length(value: string | number) {
+		this.paginatorStore.setLength(value);
 	}
 
-	getPages(current: number, total: number): number[] {
-
-		if (total <= 7) {
-			
-			if (total === 0) {
-				return [ 1 ];
-			}
-
-			return [...Array(total).keys()].map(i => ++i);
-		}
-
-		if (current > 5) {
-
-			if (current >= total - 4) {
-				return [1, -1, total - 4, total - 3, total - 2, total - 1, total];
-			} else {
-				return [1, -1, current - 1, current, current + 1, -1, total];
-			}
-
-		}
-
-		return [1, 2, 3, 4, 5, -1, total];
+	@Input() set pageLength(value: string | number) {
+		this.paginatorStore.setPageLength(value);
 	}
 
-	onGoTo(page: number): void {
-
-		if (page === this.currentPage) {
-			return;
-		}
-
-		this.goTo.emit(page);
+	@Input() set pageSize(value: string | number) {
+		this.paginatorStore.setPageSize(value);
 	}
 
-	onNext(): void {
-
-		if (this.currentPage >= this.totalPagesCount) {
-			return;
-		}
-
-		const nextPage = this.currentPage + 1;
-		this.next.emit(nextPage);
+	@Input() set pageSizeOptions(value: readonly number[]) {
+		this.paginatorStore.setPageSizeOptions(value);
 	}
 
-	onPrevious(): void {
+	// Outputing the event directly from the page$ Observable<PageEvent> property.
+	/** Event emitted when the paginator changes the page size or page index. */
+	@Output() readonly page = this.paginatorStore.page$;
 
-		if (this.currentPage === 1) {
-			return;
-		}
-		
-		const prevPage = this.currentPage - 1;
-		this.previous.emit(prevPage);
+	// ViewModel for the PaginatorComponent
+	readonly vm$ = this.paginatorStore.vm$;
+
+	constructor(private readonly paginatorStore: PaginatorStore) { }
+
+	changePageSize(newPageSize: number | string) {
+		this.paginatorStore.changePageSize(newPageSize);
+	}
+
+	changePageIndex(newPageIndex: number | string) {
+		this.paginatorStore.setPageIndex(newPageIndex);
+	}
+
+	nextPage() {
+		this.paginatorStore.nextPage();
+	}
+
+	firstPage() {
+		this.paginatorStore.firstPage();
+	}
+	
+	previousPage() {
+		this.paginatorStore.previousPage();
+	}
+
+	lastPage() {
+		this.paginatorStore.lastPage();
 	}
 
 }
