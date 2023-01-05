@@ -1,50 +1,162 @@
-{{pages | json}}
+<!-- {{pages | json}} -->
 
-<nav aria-label="pagination">
-    <ul>
-        <li>
+<ng-container
+    [ngTemplateOutlet]="paginator" 
+    [ngTemplateOutletContext]="{ $implicit: vm$ | async }"
+></ng-container>
 
-            <button
-                type="button" 
-                aria-label="Previous page"
-                [attr.aria-disabled]="currentPage === 1" 
-                [disabled]="currentPage === 1" 
-                (pointerdown)="onPrevious()"
+<ng-template #paginator let-vm>
+
+    <section *ngIf="vm.pageIndexOptions.length > 1">
+
+        <label for="page">
+            Page
+        </label>
+
+        <select 
+            [ngModel]="vm.pageIndex" 
+            #selectPageIndex="ngModel"
+            (change)="changePageIndex(selectPageIndex.control.value)" 
+            id="page" 
+            name="page"
+        >
+            <option 
+                *ngFor="let pageIndexOption of vm.pageIndexOptions" 
+                [value]="pageIndexOption" 
             >
-                Prev
-            </button>
+                {{pageIndexOption}}
+            </option>
 
-        </li>
+        </select>
 
-        <li *ngFor="let page of pages">
+    </section>
 
-            <a 
-                href="javascript:void(0);" 
-                [attr.aria-current]="page === currentPage ? page : null" 
-                [attr.aria-label]="page === currentPage ? 'Current page: ' + page : 'Go to page: ' + page" 
-                tabindex="0" 
-                [class.current]="page === currentPage" 
-                [attr.aria-disabled]="page === currentPage" 
-                [attr.disabled]="page === currentPage"
-                (pointerdown)="onGoTo(page)" 
-                (keyup.index)="onGoTo(page)"
+    <section *ngIf="vm.pageIndexOptions.length <= 1">
+        Page {{vm.pageIndex}}
+    </section>
+
+    <section *ngIf="vm.pageSizeOptions.length > 1">
+
+        <label for="size">
+            Items per page
+        </label>
+
+        <select 
+            [ngModel]="vm.pageSize" 
+            #selectPageSizeOption="ngModel"
+            (change)="changePageSize(selectPageSizeOption.control.value)" 
+            id="size" 
+            name="size"
+        >
+            <option 
+                *ngFor="let pageSizeOption of vm.pageSizeOptions" 
+                [value]="pageSizeOption" 
             >
-                {{page}}
-            </a>
+                {{pageSizeOption}}
+            </option>
+    
+        </select>
 
-        </li>
+    </section>
 
-        <li>
+    <section *ngIf="vm.pageSizeOptions.length <= 1">
+        Items per page {{vm.pageSize}}
+    </section>
 
-            <button
-                type="button" 
-                aria-label="Next page"
-                [attr.aria-disabled]="currentPage >= totalPagesCount"
-                [disabled]="currentPage >= totalPagesCount" 
-                (pointerdown)="onNext()"
-            >
-                Next
-            </button>
-        </li>
-    </ul>
-</nav>
+    <nav aria-label="pagination">
+        <ul>
+            <li>
+
+                <button
+                    type="button" 
+                    aria-label="First page" 
+                    title="First page"
+                    [attr.aria-disabled]="!vm.hasPreviousPage" 
+                    [disabled]="!vm.hasPreviousPage" 
+                    (pointerdown)="firstPage()"
+                >
+
+                    &lt;&lt;
+
+                </button>
+
+            </li>
+
+            <li>
+
+                <button
+                    type="button" 
+                    aria-label="Previous page" 
+                    title="Previous page"
+                    [attr.aria-disabled]="!vm.hasPreviousPage" 
+                    [disabled]="!vm.hasPreviousPage" 
+                    (pointerdown)="previousPage()"
+                >
+
+                    &lt;
+
+                </button>
+
+            </li>
+
+            <!-- <li *ngFor="let page of pages">
+
+                <a 
+                    href="javascript:void(0);" 
+                    [attr.aria-current]="page === currentPage ? page : null" 
+                    [attr.aria-label]="page === currentPage ? 'Current page: ' + page : 'Go to page: ' + page" 
+                    tabindex="0" 
+                    [class.current]="page === currentPage" 
+                    [attr.aria-disabled]="page === currentPage" 
+                    [attr.disabled]="page === currentPage"
+                    (pointerdown)="onGoTo(page)" 
+                    (keyup.index)="onGoTo(page)"
+                >
+                    {{page}}
+                </a>
+
+            </li> -->
+
+            <li>
+
+                <button
+                    type="button" 
+                    aria-label="Next page" 
+                    title="Next page"
+                    [attr.aria-disabled]="!vm.hasNextPage"
+                    [disabled]="!vm.hasNextPage" 
+                    (pointerdown)="nextPage()"
+                >
+                    
+                    &gt;
+
+                </button>
+
+            </li>
+
+            <li>
+
+                <button
+                    type="button" 
+                    aria-label="Last page" 
+                    title="Last page"
+                    [attr.aria-disabled]="!vm.hasNextPage"
+                    [disabled]="!vm.hasNextPage" 
+                    (pointerdown)="lastPage()"
+                >
+                    
+                    &gt;&gt;
+
+                </button>
+
+            </li>
+
+
+        </ul>
+    </nav>
+
+    <section>
+        Results {{vm.rangeLabel}}
+    </section>
+
+</ng-template>
