@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { ComponentStore } from "@ngrx/component-store";
 import { Observable } from "rxjs";
-import { filter, map, pairwise, tap, withLatestFrom } from "rxjs/operators";
+import { distinctUntilChanged, filter, map, pairwise, skip, tap, withLatestFrom } from "rxjs/operators";
 
 export interface PaginatorState {
     pageIndex: number;
@@ -31,25 +31,49 @@ export class PaginatorStore extends ComponentStore<PaginatorState> {
 
     // Updaters 
 
-    readonly setPageIndex = this.updater((state, value: number | string) => ({
-        ...state,
-        pageIndex: Number(value)
-    }));
+    readonly setPageIndex = this.updater((state, value: number | string) => {
+        if (state.pageIndex == value) {
+            return state;
+        }
 
-    readonly setPageSize = this.updater((state, value: number | string) => ({
-        ...state,
-        pageSize: Number(value)
-    }));
+        return {
+            ...state,
+            pageIndex: Number(value)
+        };
+    });
 
-    readonly setLength = this.updater((state, value: number | string) => ({
-        ...state,
-        length: Number(value)
-    }));
+    readonly setPageSize = this.updater((state, value: number | string) => {
+        if (state.pageSize == value) {
+            return state;
+        }
 
-    readonly setPageLength = this.updater((state, value: number | string) => ({
-        ...state,
-        pageLength: Number(value)
-    }));
+        return {
+            ...state,
+            pageSize: Number(value)
+        };
+    });
+
+    readonly setLength = this.updater((state, value: number | string) => {
+        if (state.length == value) {
+            return state;
+        }
+
+        return {
+            ...state,
+            length: Number(value)
+        };
+    });
+
+    readonly setPageLength = this.updater((state, value: number | string) => {
+        if (state.pageLength == value) {
+            return state;
+        }
+
+        return {
+            ...state,
+            pageLength: Number(value)
+        };
+    });
 
     readonly setPageSizeOptions = this.updater(
         (state, value: readonly number[]) => {
@@ -63,12 +87,15 @@ export class PaginatorStore extends ComponentStore<PaginatorState> {
 
     readonly changePageSize = this.updater(
         (state, newPageSize: number | string) => {
+            
+            newPageSize = Number(newPageSize);
             const startIndex = ((state.pageIndex - 1) * state.pageSize) + 1;
-            // TODO: Fix pageIndex recalculation on pageSize changes
+            const newPageIndex = Math.ceil(startIndex / newPageSize) || 1;
+
             return {
                 ...state,
                 pageSize: Number(newPageSize),
-                pageIndex: Math.ceil(startIndex / Number(newPageSize)) || 1
+                pageIndex: newPageIndex
             }
         }
     );
@@ -123,15 +150,15 @@ export class PaginatorStore extends ComponentStore<PaginatorState> {
 
     readonly vm$ = this.select(
         this.state$,
-        this.pageIndexOptions$,
+        this.numberOfPages$,
         this.hasPreviousPage$,
         this.hasNextPage$,
         this.rangeLabel$,
-        (state, pageIndexOptions, hasPreviousPage, hasNextPage, rangeLabel) => ({
+        (state, numberOfPages, hasPreviousPage, hasNextPage, rangeLabel) => ({
             pageSize: state.pageSize,
             pageSizeOptions: Array.from(state.pageSizeOptions), 
             pageIndex: state.pageIndex, 
-            pageIndexOptions, 
+            numberOfPages, 
             hasPreviousPage,
             hasNextPage,
             rangeLabel,
