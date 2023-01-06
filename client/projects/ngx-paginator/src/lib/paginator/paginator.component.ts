@@ -6,6 +6,7 @@ import {
 	Output,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { filter, tap } from 'rxjs';
 
 import { PaginatorStore } from './paginator.store';
 
@@ -20,19 +21,44 @@ import { PaginatorStore } from './paginator.store';
 })
 export class PaginatorComponent {
 
-	@Input() set pageIndex(value: string | number) {
+	private _pageIndex!: string | number;
+	private _pageSize!: string | number;
+	private _length!: string | number;
+	private _pageLength!: string | number;
+
+	@Input() 
+	get pageIndex() {
+		return this._pageIndex;
+	}
+	set pageIndex(value: string | number) {
+		this._pageIndex = value;
 		this.paginatorStore.setPageIndex(value);
 	}
 
-	@Input() set length(value: string | number) {
+	@Input() 
+	get length() {
+		return this._length;
+	}
+	set length(value: string | number) {
+		this._length = value;
 		this.paginatorStore.setLength(value);
 	}
 
-	@Input() set pageLength(value: string | number) {
+	@Input() 
+	get pageLength() {
+		return this._pageLength;
+	}
+	set pageLength(value: string | number) {
+		this._pageLength = value;
 		this.paginatorStore.setPageLength(value);
 	}
 
-	@Input() set pageSize(value: string | number) {
+	@Input() 
+	get pageSize() {
+		return this._pageSize;
+	}
+	set pageSize(value: string | number) {
+		this._pageSize = value;
 		this.paginatorStore.setPageSize(value);
 	}
 
@@ -40,11 +66,16 @@ export class PaginatorComponent {
 		this.paginatorStore.setPageSizeOptions(value);
 	}
 
-	// Outputing the event directly from the page$ Observable<PageEvent> property.
 	/** Event emitted when the paginator changes the page size or page index. */
-	@Output() readonly page = this.paginatorStore.page$;
+	@Output() readonly page = this.paginatorStore.page$.pipe(
+		filter((page) => {
+			return (
+				page.pageIndex != this.pageIndex || 
+				page.pageSize != this.pageSize
+			);
+		})
+	);
 
-	// ViewModel for the PaginatorComponent
 	readonly vm$ = this.paginatorStore.vm$;
 
 	constructor(private readonly paginatorStore: PaginatorStore) { }
