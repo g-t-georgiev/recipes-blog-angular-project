@@ -5,20 +5,20 @@
 
 <ng-template #recipesList let-localState let-pageOptionsData="pageOptionsData">
 
+    <ngx-paginator 
+        [pageIndex]="pageOptionsData?.['page']"
+        [length]="localState.recipesCount" 
+        [pageSize]="pageOptionsData?.['limit']" 
+        [pageSizeOptions]="[1, 3, 5, 10, 15]"
+        [pageLength]="localState.recipes.length" 
+        (page)="log($event)"
+    ></ngx-paginator>
+
     <ng-container *ngIf="localState.loading">
         Loading, please wait...
     </ng-container>
 
     <ng-container *ngIf="!localState.loading">
-
-        <ngx-paginator 
-            [pageIndex]="pageOptionsData?.['page'] ?? 1"
-            [length]="localState.recipesCount" 
-            [pageSize]="pageOptionsData?.['limit'] ?? 10" 
-            [pageSizeOptions]="[1, 3, 5, 10, 15]"
-            [pageLength]="localState.recipes.length" 
-            (page)="log($event)"
-        ></ngx-paginator>
 
         <section class="recipes-list" *ngIf="localState.recipes && localState.recipes?.length">
 
