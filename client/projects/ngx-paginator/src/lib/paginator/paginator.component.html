@@ -7,34 +7,6 @@
 
 <ng-template #paginator let-vm>
 
-    <section *ngIf="vm.pageIndexOptions.length > 1">
-
-        <label for="page">
-            Page
-        </label>
-
-        <select 
-            [ngModel]="vm.pageIndex" 
-            #selectPageIndex="ngModel"
-            (change)="changePageIndex(selectPageIndex.control.value)" 
-            id="page" 
-            name="page"
-        >
-            <option 
-                *ngFor="let pageIndexOption of vm.pageIndexOptions" 
-                [value]="pageIndexOption" 
-            >
-                {{pageIndexOption}}
-            </option>
-
-        </select>
-
-    </section>
-
-    <section *ngIf="vm.pageIndexOptions.length <= 1">
-        Page {{vm.pageIndex}}
-    </section>
-
     <section *ngIf="vm.pageSizeOptions.length > 1">
 
         <label for="size">
@@ -66,7 +38,7 @@
     <nav aria-label="pagination">
 
         <ul>
-            
+
             <li>
 
                 <button
@@ -103,6 +75,12 @@
 
             <li>
 
+                <span>Page {{vm.pageIndex}} / {{vm.numberOfPages}}</span>
+
+            </li>
+
+            <li>
+
                 <button
                     type="button" 
                     aria-label="Next page" 
@@ -134,7 +112,6 @@
                 </button>
 
             </li>
-
 
         </ul>
 
