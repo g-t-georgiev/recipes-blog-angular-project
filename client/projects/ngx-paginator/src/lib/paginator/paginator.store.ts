@@ -64,12 +64,11 @@ export class PaginatorStore extends ComponentStore<PaginatorState> {
     readonly changePageSize = this.updater(
         (state, newPageSize: number | string) => {
             const startIndex = ((state.pageIndex - 1) * state.pageSize) + 1;
-            console.log(startIndex, Math.round(startIndex / Number(newPageSize)));
             // TODO: Fix pageIndex recalculation on pageSize changes
             return {
                 ...state,
                 pageSize: Number(newPageSize),
-                pageIndex: Math.floor(startIndex / Number(newPageSize)) || 1
+                pageIndex: Math.ceil(startIndex / Number(newPageSize)) || 1
             }
         }
     );
