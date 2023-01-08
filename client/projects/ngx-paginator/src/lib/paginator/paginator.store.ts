@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { ComponentStore } from "@ngrx/component-store";
 import { Observable } from "rxjs";
-import { distinctUntilChanged, filter, map, pairwise, skip, tap, withLatestFrom } from "rxjs/operators";
+import { distinctUntilChanged, filter, map, pairwise, skip, startWith, tap, withLatestFrom } from "rxjs/operators";
 
 export interface PaginatorState {
     pageIndex: number;
@@ -62,7 +62,7 @@ export class PaginatorStore extends ComponentStore<PaginatorState> {
         return {
             ...state,
             pageSize: newPageSize,
-            pageIndex: newPageIndex
+            ...(state.pageIndex != newPageIndex ? { pageIndex: newPageIndex } : {})
         };
     });
 
@@ -115,7 +115,7 @@ export class PaginatorStore extends ComponentStore<PaginatorState> {
             return {
                 ...state,
                 pageSize: newPageSize,
-                pageIndex: newPageIndex
+                ...(state.pageIndex != newPageIndex ? { pageIndex: newPageIndex } : {})
             }
         }
     );
@@ -131,15 +131,6 @@ export class PaginatorStore extends ComponentStore<PaginatorState> {
             if (!pageSize) return 1;
 
             return Math.ceil(length / pageSize);
-        }
-    );
-
-    private readonly pageIndexOptions$ = this.select(
-        this.numberOfPages$,
-        (numberOfPages) => {
-            const pages = [ ...Array<number>(numberOfPages).keys() ].map((i) => ++i);
-            // console.log(pages);
-            return pages;
         }
     );
 
@@ -185,21 +176,29 @@ export class PaginatorStore extends ComponentStore<PaginatorState> {
         })
     );
 
-    private readonly pageIndexChanges$ = this.state$.pipe(
-        map((state) => state.pageIndex),
-        pairwise()
+    private readonly pageIndexChanges$ = this.select((state) => state.pageIndex).pipe(
+        startWith(this.get().pageIndex),
+        pairwise(),
+        map(([prev, curr]) => ({ previousPageIndex: prev, pageIndex: curr }))
     );
+
+    private readonly pageSizeChanges$ = this.select((state) => state.pageSize);
+
+    private readonly lengthChanges$ = this.select((state) => state.length);
 
     readonly page$: Observable<PageEvent> = this.select(
         this.pageIndexChanges$,
-        this.select((state) => [state.pageSize, state.length]),
-        ([previousPageIndex, pageIndex], [pageSize, length]) => ({
+        this.pageSizeChanges$,
+        this.lengthChanges$,
+        ({ previousPageIndex, pageIndex }, pageSize, length) => ({
             pageIndex,
             previousPageIndex,
             pageSize,
             length,
         }),
         { debounce: true }
+    ).pipe(
+        skip(1)
     );
 
     // Effects
