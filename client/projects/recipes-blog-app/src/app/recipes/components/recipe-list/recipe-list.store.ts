@@ -25,39 +25,15 @@ export interface RecipesState {
     message?: string;
     recipes: Pick<IRecipe, 'title' | '_id' | 'authorId'>[];
     recipesCount: number;
-    // recipesCountPerPageFrom(): number;
-    // recipesCountPerPageTo(): number;
-    // totalPagesCount(): number;
-    // pageOptions: PageOptions;
+    pageSizeOptions: ReadonlyArray<number>;
 }
 
 const initialRecipesState: RecipesState = {
     loading: false,
     error: false,
     recipes: [],
-    recipesCount: 0,
-    // recipesCountPerPageFrom(): number {
-    //     // console.log(this.pageOptions.pageIndex, this.pageOptions.pageEntriesLimit);
-    //     const fromRange = (this.pageOptions.pageIndex - 1) * this.pageOptions.pageEntriesLimit;
-    //     return this.recipesCount && fromRange + 1;
-    // },
-    // recipesCountPerPageTo(): number {
-    //     return (
-    //         this.totalPagesCount() === this.pageOptions.pageIndex
-    //         ? (this.pageOptions.pageEntriesLimit * (this.pageOptions.pageIndex - 1)) + this.recipes.length 
-    //         : this.pageOptions.pageIndex * this.pageOptions.pageEntriesLimit
-    //     );
-    // },
-    // totalPagesCount(): number {
-    //     // console.log(this.recipesCount, this.pageOptions.pageEntriesLimit);
-    //     return Math.ceil(this.recipesCount / this.pageOptions.pageEntriesLimit) || 1;
-    // },
-    // pageOptions: {
-    //     pageIndex: 1,
-    //     pageEntriesLimit: 3, // 10
-    //     pageQueryFilter: {},
-    //     pageButtonsCount: 5
-    // }
+    recipesCount: 0, 
+    pageSizeOptions: [ 1, 3, 5, 10, 15 ]
 }
 
 @Injectable()
@@ -85,24 +61,33 @@ export class RecipesStore extends ComponentStore<RecipesState> {
     
 
     readonly fetchRecipes = this.effect(
-        (pageOptionsData$: Observable<any>) => pageOptionsData$.pipe(
+        (pageQueryOptions$: Observable<any>) => pageQueryOptions$.pipe(
             tap(() => {
                 this.updateLoadingState(true);
             }),
-            switchMap(({ page, limit }) => this.recipesService.getAll(page, limit).pipe(
-                tap({
-                    next: ({ recipes, message, total}) => {
-                        this.addRecipes({ recipes, message, total })
-                    },
-                    error: (error: HttpErrorResponse) => {
-                        this.logError(error);
-                    }
-                }),
-                catchError((error) => {
-                    console.log(error);
-                    return EMPTY;
-                })
-            ))
+            switchMap(({ page, limit }) => {
+
+                page = Number(page);
+                page = isNaN(page) || page < 1 ? 1 : page;
+
+                limit = Number(limit);
+                limit = isNaN(limit) || limit < 1 ? 1 : limit;
+
+                return this.recipesService.getAll(page, limit).pipe(
+                    tap({
+                        next: ({ recipes, message, total}) => {
+                            this.addRecipes({ recipes, message, total })
+                        },
+                        error: (error: HttpErrorResponse) => {
+                            this.logError(error);
+                        }
+                    }),
+                    catchError((error) => {
+                        console.log(error);
+                        return EMPTY;
+                    })
+                )
+            })
         )
     );
 
