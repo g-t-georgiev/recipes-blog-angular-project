@@ -99,6 +99,8 @@ export class PaginatorComponent implements ControlValueAccessor {
 	private _onTouchedCallback: any;
 
 	writeValue(value: any): void {
+		if (!value) return;
+		
 		this.changePageIndex(value.page);
 		this.changePageSize(value.size);
 	}
