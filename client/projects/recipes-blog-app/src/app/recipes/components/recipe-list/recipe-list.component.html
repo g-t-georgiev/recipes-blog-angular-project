@@ -6,12 +6,12 @@
 <ng-template #recipesList let-localState let-pageQueryOptions="pageQueryOptions">
 
     <ngx-paginator 
-        [pageIndex]="pageQueryOptions?.['page']"
-        [length]="localState.recipesCount" 
-        [pageSize]="pageQueryOptions?.['limit']" 
+        [pageIndex]="pageQueryOptions?.['page']" 
+        [pageSize]="pageQueryOptions?.['limit']"
+        [length]="localState.recipesCount"  
         [pageSizeOptions]="localState.pageSizeOptions"
-        [pageLength]="localState.recipes.length" 
-        (page)="onPageChange($event)"
+        [pageLength]="localState.recipes.length"  
+        (page)="onPageChange($event)" 
     ></ngx-paginator>
 
     <ng-container *ngIf="localState.loading">
