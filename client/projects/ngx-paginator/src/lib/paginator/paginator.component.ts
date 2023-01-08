@@ -1,11 +1,13 @@
 import { CommonModule } from '@angular/common';
+
 import {
 	Component,
 	ChangeDetectionStrategy,
 	Input,
 	Output,
+	forwardRef, 
 } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormsModule } from '@angular/forms';
 import { filter, tap } from 'rxjs';
 
 import { PaginatorStore } from './paginator.store';
@@ -17,9 +19,16 @@ import { PaginatorStore } from './paginator.store';
 	styleUrls: ['./paginator.component.css'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	imports: [CommonModule, FormsModule],
-	providers: [PaginatorStore]
+	providers: [
+		PaginatorStore, 
+		{
+			provide: NG_VALUE_ACCESSOR,
+			useExisting: forwardRef(() => PaginatorComponent),
+			multi: true
+		}
+	]
 })
-export class PaginatorComponent {
+export class PaginatorComponent implements ControlValueAccessor {
 
 	private _pageIndex!: string | number;
 	private _pageSize!: string | number;
@@ -73,12 +82,36 @@ export class PaginatorComponent {
 				page.pageIndex != this.pageIndex || 
 				page.pageSize != this.pageSize
 			);
+		}),
+		tap((page) => {
+			this._onChangeCallback(page);
+			this._onTouchedCallback(true);
 		})
 	);
 
 	readonly vm$ = this.paginatorStore.vm$;
 
 	constructor(private readonly paginatorStore: PaginatorStore) { }
+
+	// Form-API related logic
+
+	private _onChangeCallback: any;
+	private _onTouchedCallback: any;
+
+	writeValue(value: any): void {
+		this.changePageIndex(value.page);
+		this.changePageSize(value.size);
+	}
+
+	registerOnChange(fn: any): void {
+		this._onChangeCallback = fn;
+	}
+
+	registerOnTouched(fn: any): void {
+		this._onTouchedCallback = fn;
+	}
+
+	// Pagination-related logic
 
 	changePageSize(newPageSize: number | string) {
 		this.paginatorStore.changePageSize(newPageSize);
