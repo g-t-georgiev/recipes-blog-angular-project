@@ -1,8 +1,6 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component } from '@angular/core';
 
-import { RecipesState, RecipesStore } from './recipe-list.store';
-import { debounce } from 'projects/recipes-blog-app/src/assets/utils/debounce';
+import { RecipesStore } from './recipe-list.store';
 
 @Component({
 	selector: 'app-recipe-list',
@@ -10,40 +8,31 @@ import { debounce } from 'projects/recipes-blog-app/src/assets/utils/debounce';
 	styleUrls: ['./recipe-list.component.css'],
 	providers: [RecipesStore]
 })
-export class RecipeListComponent implements OnInit, OnDestroy {
-
-	private readonly subscription = new Subscription();
+export class RecipeListComponent {
 
 	readonly localState$ = this.componentStore.state$;
-	readonly pageQueryParams$ = this.componentStore.pageQueryParams$;
+	readonly pageQueryOptions$ = this.componentStore.pageQueryParams$;
 
 	constructor(
 		private readonly componentStore: RecipesStore, 
 	) { }
 
-	ngOnInit(): void {
+	onPageChange(data: any) {
 
-	}
-
-	ngOnDestroy(): void {
-		this.subscription?.unsubscribe?.();
-	}
-
-	log(obj: any) {
-		console.log(obj);
 		this.componentStore.navigate({
 			payload: {
 				relativeToCurrentRoute: true,
 				path: [],
 				query: {
-					page: obj?.pageIndex ?? 1,
-					limit: obj?.pageSize ?? 3
+					page: data.pageIndex,
+					limit: data.pageSize
 				},
 				extras: {
 					preserveFragment: true, 
 				}
 			}
 		});
+
 	}
 
 }
