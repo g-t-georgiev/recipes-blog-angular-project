@@ -31,47 +31,66 @@ export class PaginatorStore extends ComponentStore<PaginatorState> {
 
     // Updaters 
 
-    readonly setPageIndex = this.updater((state, value: number | string) => {
-        if (state.pageIndex == value) {
+    readonly setPageIndex = this.updater((state, newPageIndex: number | string) => {
+        if (state.pageIndex == newPageIndex) {
             return state;
         }
 
+        newPageIndex = Number(newPageIndex);
+        newPageIndex = isNaN(newPageIndex) || newPageIndex < 1 ? 1 : newPageIndex;
+
+        const numberOfPages = Math.ceil(state.length / state.pageSize);
+        newPageIndex = newPageIndex > numberOfPages ? 1 : newPageIndex;
+
         return {
             ...state,
-            pageIndex: Number(value)
+            pageIndex: newPageIndex
         };
     });
 
-    readonly setPageSize = this.updater((state, value: number | string) => {
-        if (state.pageSize == value) {
+    readonly setPageSize = this.updater((state, newPageSize: number | string) => {
+        if (state.pageSize == newPageSize) {
             return state;
         }
 
+        newPageSize = Number(newPageSize);
+        newPageSize = isNaN(newPageSize) || newPageSize < 1 ? 1 : newPageSize;
+
+        const startIndex = ((state.pageIndex - 1) * state.pageSize) + 1;
+        const newPageIndex = Math.ceil(startIndex / newPageSize);
+
         return {
             ...state,
-            pageSize: Number(value)
+            pageSize: newPageSize,
+            pageIndex: newPageIndex
         };
     });
 
-    readonly setLength = this.updater((state, value: number | string) => {
-        if (state.length == value) {
+    readonly setLength = this.updater((state, newLength: number | string) => {
+        if (state.length == newLength) {
             return state;
         }
 
+        newLength = Number(newLength);
+        newLength = isNaN(newLength) || newLength < 0 ? 0 : newLength;
+
         return {
             ...state,
-            length: Number(value)
+            length: newLength
         };
     });
 
-    readonly setPageLength = this.updater((state, value: number | string) => {
-        if (state.pageLength == value) {
+    readonly setPageLength = this.updater((state, newPageLength: number | string) => {
+        if (state.pageLength == newPageLength) {
             return state;
         }
 
+        newPageLength = Number(newPageLength);
+        newPageLength = isNaN(newPageLength) || newPageLength < 0 ? 0 : newPageLength;
+
         return {
             ...state,
-            pageLength: Number(value)
+            pageLength: newPageLength
         };
     });
 
@@ -89,12 +108,13 @@ export class PaginatorStore extends ComponentStore<PaginatorState> {
         (state, newPageSize: number | string) => {
             
             newPageSize = Number(newPageSize);
+            newPageSize = isNaN(newPageSize) || newPageSize < 1 ? 1 : newPageSize;
             const startIndex = ((state.pageIndex - 1) * state.pageSize) + 1;
             const newPageIndex = Math.ceil(startIndex / newPageSize) || 1;
 
             return {
                 ...state,
-                pageSize: Number(newPageSize),
+                pageSize: newPageSize,
                 pageIndex: newPageIndex
             }
         }
