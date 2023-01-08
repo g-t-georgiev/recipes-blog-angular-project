@@ -18,6 +18,7 @@ export class RecipeListComponent {
 	) { }
 
 	onPageChange(data: any) {
+		// console.log(data);
 
 		this.componentStore.navigate({
 			payload: {
