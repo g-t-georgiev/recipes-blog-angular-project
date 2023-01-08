@@ -4,11 +4,10 @@ import {
 	Component,
 	ChangeDetectionStrategy,
 	Input,
-	Output,
-	forwardRef, 
+	Output, 
 } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormsModule } from '@angular/forms';
-import { filter, tap } from 'rxjs';
+
+import { FormsModule } from '@angular/forms';
 
 import { PaginatorStore } from './paginator.store';
 
@@ -19,16 +18,9 @@ import { PaginatorStore } from './paginator.store';
 	styleUrls: ['./paginator.component.css'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	imports: [CommonModule, FormsModule],
-	providers: [
-		PaginatorStore, 
-		{
-			provide: NG_VALUE_ACCESSOR,
-			useExisting: forwardRef(() => PaginatorComponent),
-			multi: true
-		}
-	]
+	providers: [PaginatorStore]
 })
-export class PaginatorComponent implements ControlValueAccessor {
+export class PaginatorComponent {
 
 	private _pageIndex!: string | number;
 	private _pageSize!: string | number;
@@ -39,9 +31,13 @@ export class PaginatorComponent implements ControlValueAccessor {
 	get pageIndex() {
 		return this._pageIndex;
 	}
-	set pageIndex(value: string | number) {
-		this._pageIndex = value;
-		this.paginatorStore.setPageIndex(value);
+	set pageIndex(newPageIndex: string | number) {
+		const currentPageIndex = this._pageIndex;
+
+		if (newPageIndex != currentPageIndex) {
+			this.paginatorStore.setPageIndex(newPageIndex);
+			this._pageIndex = newPageIndex;
+		}
 	}
 
 	@Input() 
@@ -66,9 +62,13 @@ export class PaginatorComponent implements ControlValueAccessor {
 	get pageSize() {
 		return this._pageSize;
 	}
-	set pageSize(value: string | number) {
-		this._pageSize = value;
-		this.paginatorStore.setPageSize(value);
+	set pageSize(newPageSize: string | number) {
+		const currentPageSize = this._pageSize;
+
+		if (newPageSize != currentPageSize) {
+			this.paginatorStore.setPageSize(newPageSize);
+			this._pageSize = newPageSize;
+		}
 	}
 
 	@Input() set pageSizeOptions(value: readonly number[]) {
@@ -76,44 +76,11 @@ export class PaginatorComponent implements ControlValueAccessor {
 	}
 
 	/** Event emitted when the paginator changes the page size or page index. */
-	@Output() readonly page = this.paginatorStore.page$.pipe(
-		filter((page) => {
-			return (
-				page.pageIndex != this.pageIndex || 
-				page.pageSize != this.pageSize
-			);
-		}),
-		tap((page) => {
-			this._onChangeCallback(page);
-			this._onTouchedCallback(true);
-		})
-	);
+	@Output() readonly page = this.paginatorStore.page$;
 
 	readonly vm$ = this.paginatorStore.vm$;
 
 	constructor(private readonly paginatorStore: PaginatorStore) { }
-
-	// Form-API related logic
-
-	private _onChangeCallback: any;
-	private _onTouchedCallback: any;
-
-	writeValue(value: any): void {
-		if (!value) return;
-		
-		this.changePageIndex(value.page);
-		this.changePageSize(value.size);
-	}
-
-	registerOnChange(fn: any): void {
-		this._onChangeCallback = fn;
-	}
-
-	registerOnTouched(fn: any): void {
-		this._onTouchedCallback = fn;
-	}
-
-	// Pagination-related logic
 
 	changePageSize(newPageSize: number | string) {
 		this.paginatorStore.changePageSize(newPageSize);
