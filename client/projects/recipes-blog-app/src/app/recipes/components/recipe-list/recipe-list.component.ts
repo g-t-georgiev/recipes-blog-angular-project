@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, AfterViewInit, OnDestroy } from '@angular/core';
+
+import { Subject, Subscription } from 'rxjs';
+import { skip, tap } from 'rxjs/operators';
 
 import { RecipesStore } from './recipe-list.store';
 
@@ -8,32 +11,50 @@ import { RecipesStore } from './recipe-list.store';
 	styleUrls: ['./recipe-list.component.css'],
 	providers: [RecipesStore]
 })
-export class RecipeListComponent {
+export class RecipeListComponent implements AfterViewInit, OnDestroy {
+
+	private readonly subscription = new Subscription();
 
 	readonly localState$ = this.componentStore.state$;
 	readonly pageQueryOptions$ = this.componentStore.pageQueryParams$;
+
+	private readonly page$: Subject<any> = new Subject();
 
 	constructor(
 		private readonly componentStore: RecipesStore, 
 	) { }
 
-	onPageChange(data: any) {
-		// console.log(data);
+	ngAfterViewInit(): void {
+		this.subscription.add(
+			this.page$.pipe(
+				skip(1),
+				tap((data) => {
+					console.log(data);
 
-		this.componentStore.navigate({
-			payload: {
-				relativeToCurrentRoute: true,
-				path: [],
-				query: {
-					page: data.pageIndex,
-					limit: data.pageSize
-				},
-				extras: {
-					preserveFragment: true, 
-				}
-			}
-		});
+					this.componentStore.navigate({
+						payload: {
+							relativeToCurrentRoute: true,
+							path: [],
+							query: {
+								page: data.pageIndex,
+								limit: data.pageSize
+							},
+							extras: {
+								preserveFragment: true, 
+							}
+						}
+					});
+				})
+			).subscribe()
+		);
+	}
 
+	ngOnDestroy(): void {
+		this.subscription.unsubscribe();
+	}
+
+	onPageChange(ev: any) {
+		this.page$.next(ev);
 	}
 
 }
