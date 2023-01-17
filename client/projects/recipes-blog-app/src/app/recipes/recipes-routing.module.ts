@@ -10,12 +10,14 @@ import { AddRecipeComponent } from './components/add-recipe/add-recipe.component
 const routes: Routes = [
     {
         path: '',
-        pathMatch: 'full',
+        pathMatch: 'full', 
+        title: 'Recipes',
         component: RecipeListComponent
     },
     {
         path: 'add', 
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard], 
+        title: 'Create recipe',
         component: AddRecipeComponent
     }
 ];
