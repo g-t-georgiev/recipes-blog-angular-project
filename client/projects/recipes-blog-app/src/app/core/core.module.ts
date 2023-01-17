@@ -21,7 +21,7 @@ import {
 	MenuToggleButtonComponent 
 } from './components';
 
-import { AuthGuard } from './guards';
+import { AuthGuard, PaginatedUrlFormatterGuard } from './guards';
 
 
 
@@ -59,7 +59,8 @@ export class CoreModule {
 				ThemeSwitchService,
 				ViewportResizeService, 
 				AuthService,
-				AuthGuard,
+				AuthGuard, 
+				PaginatedUrlFormatterGuard,
 				UsersService,
 				RecipesService
 			]
