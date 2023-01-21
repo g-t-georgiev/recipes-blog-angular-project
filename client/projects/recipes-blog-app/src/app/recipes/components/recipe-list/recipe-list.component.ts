@@ -37,7 +37,7 @@ export class RecipeListComponent implements AfterViewInit, OnDestroy {
 							path: [],
 							query: {
 								page: data.pageIndex,
-								limit: data.pageSize
+								size: data.pageSize
 							},
 							extras: {
 								preserveFragment: true, 

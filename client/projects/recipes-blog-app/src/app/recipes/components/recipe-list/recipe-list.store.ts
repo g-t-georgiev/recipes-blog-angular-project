@@ -64,15 +64,15 @@ export class RecipesStore extends ComponentStore<RecipesState> {
             tap(() => {
                 this.updateLoadingState(true);
             }),
-            switchMap(({ page, limit }) => {
+            switchMap(({ page, size }) => {
 
                 page = Number(page);
                 page = isNaN(page) || page < 1 ? 1 : page;
 
-                limit = Number(limit);
-                limit = isNaN(limit) || limit < 1 ? 1 : limit;
+                size = Number(size);
+                size = isNaN(size) || size < 1 ? 1 : size;
 
-                return this.recipesService.getAll(page, limit).pipe(
+                return this.recipesService.getAll(page, size).pipe(
                     tap({
                         next: ({ recipes, message, total}) => {
                             this.addRecipes({ recipes, message, total })
