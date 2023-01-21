@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { ComponentStore } from "@ngrx/component-store";
 import { Observable } from "rxjs";
-import { distinctUntilChanged, filter, map, pairwise, skip, startWith, tap, withLatestFrom } from "rxjs/operators";
+import { filter, map, pairwise, skip, startWith, tap, withLatestFrom } from "rxjs/operators";
 
 export interface PaginatorState {
     pageIndex: number;
@@ -56,8 +56,8 @@ export class PaginatorStore extends ComponentStore<PaginatorState> {
         newPageSize = Number(newPageSize);
         newPageSize = isNaN(newPageSize) || newPageSize < 1 ? 1 : newPageSize;
 
-        const startIndex = ((state.pageIndex - 1) * state.pageSize) + 1;
-        const newPageIndex = Math.ceil(startIndex / newPageSize);
+        const startIndex: number = ((state.pageIndex - 1) * state.pageSize) + 1;
+        const newPageIndex: number = Math.ceil(startIndex / newPageSize);
 
         return {
             ...state,
@@ -109,8 +109,8 @@ export class PaginatorStore extends ComponentStore<PaginatorState> {
             
             newPageSize = Number(newPageSize);
             newPageSize = isNaN(newPageSize) || newPageSize < 1 ? 1 : newPageSize;
-            const startIndex = ((state.pageIndex - 1) * state.pageSize) + 1;
-            const newPageIndex = Math.ceil(startIndex / newPageSize) || 1;
+            const startIndex: number = ((state.pageIndex - 1) * state.pageSize) + 1;
+            const newPageIndex: number = Math.ceil(startIndex / newPageSize) || 1;
 
             return {
                 ...state,
