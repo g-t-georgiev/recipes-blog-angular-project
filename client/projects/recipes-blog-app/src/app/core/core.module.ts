@@ -21,7 +21,7 @@ import {
 	MenuToggleButtonComponent 
 } from './components';
 
-import { AuthGuard } from './guards';
+import { AuthGuard, PaginationGuard } from './guards';
 
 
 
@@ -61,7 +61,8 @@ export class CoreModule {
 				AuthService,
 				AuthGuard, 
 				UsersService,
-				RecipesService
+				RecipesService,
+				PaginationGuard
 			]
 		}
 	}
