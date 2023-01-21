@@ -5,7 +5,7 @@ import envConfig from './env.config.js';
 
 const dbConnectOptions = {
 	useNewUrlParser: true,
-    useUnifiedTopology: true,
+    useUnifiedTopology: true, 
     serverSelectionTimeoutMS: 5000,
     autoIndex: false, // Don't build indexes
     maxPoolSize: 10, // Maintain up to 10 socket connections
@@ -15,6 +15,7 @@ const dbConnectOptions = {
 }
 
 export function dbConnector() {
+    mongoose.set('strictQuery', false);
 	return mongoose.connect(envConfig.dbURL, dbConnectOptions);
 };
 
